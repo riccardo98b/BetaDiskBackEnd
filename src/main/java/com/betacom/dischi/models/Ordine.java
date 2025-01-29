@@ -1,4 +1,4 @@
-package com.betacom.terme.models;
+package com.betacom.dischi.models;
 
 import java.time.LocalDate;
 import java.util.List;

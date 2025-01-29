@@ -1,4 +1,4 @@
-package com.betacom.terme.models;
+package com.betacom.dischi.models;
 
 import java.util.List;
 

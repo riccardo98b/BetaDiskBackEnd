@@ -1,4 +1,4 @@
-package com.betacom.terme;
+package com.betacom.dischi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
