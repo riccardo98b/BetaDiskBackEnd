@@ -1,0 +1,135 @@
+package com.betacom.terme.models;
+
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="clienti")
+public class Cliente {
+	
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column
+	private Integer idCliente;
+	
+	@Column(nullable = false , unique=true)
+	private String email;
+	
+	@Column(nullable = false)
+	private String nome;
+	
+	@Column(nullable= false)
+	private String cognome;
+	
+	@Column(nullable = false , unique=true)
+	private String telefono;
+	
+	@OneToMany(mappedBy="cliente", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)
+	private List<Ordine> ordini;
+	
+	@OneToOne(mappedBy= "cliente", cascade= CascadeType.REMOVE)
+	private Carrello carrello;
+	
+	@OneToOne(mappedBy= "cliente", cascade= CascadeType.REMOVE)
+	private Utente utente;
+	
+	@OneToOne(mappedBy= "cliente", cascade= CascadeType.REMOVE)
+    private Wishlist wishlist;
+	
+	@OneToMany(mappedBy="cliente", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)
+    private List<Recensione> recensioni;
+
+	public Integer getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Integer idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getCognome() {
+		return cognome;
+	}
+
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public List<Ordine> getOrdini() {
+		return ordini;
+	}
+
+	public void setOrdini(List<Ordine> ordini) {
+		this.ordini = ordini;
+	}
+
+	public Carrello getCarrello() {
+		return carrello;
+	}
+
+	public void setCarrello(Carrello carrello) {
+		this.carrello = carrello;
+	}
+
+	public Utente getUtente() {
+		return utente;
+	}
+
+	public void setUtente(Utente utente) {
+		this.utente = utente;
+	}
+
+	public Wishlist getWishlist() {
+		return wishlist;
+	}
+
+	public void setWishlist(Wishlist wishlist) {
+		this.wishlist = wishlist;
+	}
+
+	public List<Recensione> getRecensioni() {
+		return recensioni;
+	}
+
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
+	}
+	
+	
+	
+  
+}
