@@ -34,6 +34,9 @@ public class Cliente {
 	@Column(nullable = false , unique=true)
 	private String telefono;
 	
+	@Column
+	private String immagineCliente;
+	
 	@OneToMany(mappedBy="cliente", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)
 	private List<Ordine> ordini;
 	
@@ -128,8 +131,13 @@ public class Cliente {
 	public void setRecensioni(List<Recensione> recensioni) {
 		this.recensioni = recensioni;
 	}
+
+	public String getImmagineCliente() {
+		return immagineCliente;
+	}
+
+	public void setImmagineCliente(String immagineCliente) {
+		this.immagineCliente = immagineCliente;
+	}
 	
-	
-	
-  
 }
