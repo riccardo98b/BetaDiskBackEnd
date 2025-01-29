@@ -22,9 +22,6 @@ public class Cliente {
 	@Column
 	private Integer idCliente;
 	
-	@Column(nullable = false , unique=true)
-	private String email;
-	
 	@Column(nullable = false)
 	private String nome;
 	
@@ -58,14 +55,6 @@ public class Cliente {
 
 	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getNome() {
