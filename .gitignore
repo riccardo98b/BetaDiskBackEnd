@@ -39,3 +39,4 @@ drop.sql
 target/classes/META-INF/maven/com.betacom/finalProject/pom.properties
 target/classes/application.properties
 target/classes/META-INF/MANIFEST.MF
+/target/classes
