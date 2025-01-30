@@ -1,4 +1,4 @@
-package com.betacom.dischi.services;
+package com.betacom.dischi.services.implementations;
 
 import org.springframework.stereotype.Service;
 
