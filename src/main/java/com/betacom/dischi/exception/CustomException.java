@@ -1,14 +1,14 @@
 package com.betacom.dischi.exception;
 
-public class DischiException extends Exception {
+public class CustomException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public DischiException() {
+	public CustomException() {
 		super();
 	}
 	
-	public DischiException(String msg) {
+	public CustomException(String msg) {
 		super(msg);
 	}
 	
