@@ -32,7 +32,8 @@ public class Wishlist {
 	)
 	private List<Prodotto> prodotti;
 	
-	@OneToOne(mappedBy = "wishlist")
+	@OneToOne
+	@JoinColumn(name="id_cliente")
 	private Cliente cliente;
 
 	public Integer getIdWishlist() {

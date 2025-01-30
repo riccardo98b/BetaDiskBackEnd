@@ -34,7 +34,8 @@ public class Carrello {
 	)
 	private List<Prodotto> prodotti;
 	
-	@OneToOne(mappedBy = "carrello")
+	@OneToOne
+	@JoinColumn(name="id_cliente")
 	private Cliente cliente;
 	
 
