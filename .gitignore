@@ -36,3 +36,4 @@ replay_pid*
 .project
 define.sql
 drop.sql
+target/classes/META-INF/maven/com.betacom/finalProject/pom.properties
