@@ -5,11 +5,13 @@ public class OrdineRequest {
 	private Integer idOrdine;
 	private String dataOrdine;
 	private Double totaleImporto;
+	private Boolean spedito;
 	private Integer idCliente;
+
 	@Override
 	public String toString() {
 		return "OrdineRequest [idOrdine=" + idOrdine + ", dataOrdine=" + dataOrdine + ", totaleImporto=" + totaleImporto
-				+ ", idCliente=" + idCliente + "]";
+				+ ", spedito=" + spedito + ", idCliente=" + idCliente + "]";
 	}
 	public Integer getIdOrdine() {
 		return idOrdine;
@@ -35,6 +37,11 @@ public class OrdineRequest {
 	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
 	}
-	
-	
+	public Boolean getSpedito() {
+		return spedito;
+	}
+	public void setSpedito(Boolean spedito) {
+		this.spedito = spedito;
+	}
+		
 }
