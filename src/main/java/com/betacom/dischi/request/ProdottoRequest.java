@@ -106,23 +106,6 @@ public class ProdottoRequest {
 	public void setImmagineProdotto(String immagineProdotto) {
 		this.immagineProdotto = immagineProdotto;
 	}
-
-	public List<OrdineDTO> getOrdini() {
-		return ordini;
-	}
-
-	public void setOrdini(List<OrdineDTO> ordini) {
-		this.ordini = ordini;
-	}
-
-	public List<RecensioneDTO> getRecensioni() {
-		return recensioni;
-	}
-
-	public void setRecensioni(List<RecensioneDTO> recensioni) {
-		this.recensioni = recensioni;
-	}
-
 	
 	
 }
