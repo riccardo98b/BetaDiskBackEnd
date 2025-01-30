@@ -23,15 +23,7 @@ public class ClienteRequest {
 	
 	private String immagineCliente;
 	
-	private List<Ordine> ordini;
-	
-	private Carrello carrello;
-	
-	private Utente utente;
-	
-    private Wishlist wishlist;
-	
-    private List<Recensione> recensioni;
+
 
 	public Integer getIdCliente() {
 		return idCliente;
@@ -73,46 +65,7 @@ public class ClienteRequest {
 		this.immagineCliente = immagineCliente;
 	}
 
-	public List<Ordine> getOrdini() {
-		return ordini;
-	}
 
-	public void setOrdini(List<Ordine> ordini) {
-		this.ordini = ordini;
-	}
-
-	public Carrello getCarrello() {
-		return carrello;
-	}
-
-	public void setCarrello(Carrello carrello) {
-		this.carrello = carrello;
-	}
-
-	public Utente getUtente() {
-		return utente;
-	}
-
-	public void setUtente(Utente utente) {
-		this.utente = utente;
-	}
-
-	public Wishlist getWishlist() {
-		return wishlist;
-	}
-
-	public void setWishlist(Wishlist wishlist) {
-		this.wishlist = wishlist;
-	}
-
-	public List<Recensione> getRecensioni() {
-		return recensioni;
-	}
-
-	public void setRecensioni(List<Recensione> recensioni) {
-		this.recensioni = recensioni;
-	}
-    
     
 
 }
