@@ -19,21 +19,25 @@ public class OrdineDTO {
 	private LocalDate dataOrdine;
 	private String dataFormattata;
 	private Double totaleImporto;
+	private Boolean spedito;
 	private ClienteDTO cliente;
 	private List<ProdottoDTO> prodotti;
 	public OrdineDTO() {
 		super();
 	}
+	
 	public OrdineDTO(Integer idOrdine, LocalDate dataOrdine, String dataFormattata, Double totaleImporto,
-			ClienteDTO cliente, List<ProdottoDTO> prodotti) {
+			Boolean spedito, ClienteDTO cliente, List<ProdottoDTO> prodotti) {
 		super();
 		this.idOrdine = idOrdine;
 		this.dataOrdine = dataOrdine;
 		this.dataFormattata = dataFormattata;
 		this.totaleImporto = totaleImporto;
+		this.spedito = spedito;
 		this.cliente = cliente;
 		this.prodotti = prodotti;
 	}
+
 	public Integer getIdOrdine() {
 		return idOrdine;
 	}
@@ -70,11 +74,19 @@ public class OrdineDTO {
 	public void setProdotti(List<ProdottoDTO> prodotti) {
 		this.prodotti = prodotti;
 	}
+
+	public Boolean getSpedito() {
+		return spedito;
+	}
+	public void setSpedito(Boolean spedito) {
+		this.spedito = spedito;
+	}
+
 	@Override
 	public String toString() {
 		return "OrdineDTO [idOrdine=" + idOrdine + ", dataOrdine=" + dataOrdine + ", dataFormattata=" + dataFormattata
-				+ ", totaleImporto=" + totaleImporto + ", cliente=" + cliente + "]";
+				+ ", totaleImporto=" + totaleImporto + ", spedito=" + spedito + ", cliente=" + cliente + ", prodotti="
+				+ prodotti + "]";
 	}
-	
-	
+		
 }
