@@ -30,6 +30,9 @@ public class Ordine {
 	@Column(nullable=false)
 	private Double totaleImporto;
 	
+	@Column
+	private Boolean spedito;
+	
 	@ManyToOne
 	@JoinColumn(name= "id_cliente" , nullable=false)		
 	private Cliente cliente;
