@@ -47,3 +47,8 @@ target/classes/META-INF/MANIFEST.MF
 target/classes/META-INF/MANIFEST.MF
 target/classes/META-INF/maven/com.betacom/finalProject/pom.properties
 /.metadata
+.classpath
+/target
+.settings/org.eclipse.core.resources.prefs
+target/classes/META-INF/maven/com.betacom/finalProject/pom.properties
+/.metadata
