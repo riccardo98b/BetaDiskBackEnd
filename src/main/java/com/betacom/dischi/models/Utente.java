@@ -35,9 +35,6 @@ public class Utente {
 	@JoinColumn(name="id_cliente", unique = true)
 	private Cliente cliente;
 
-	
-	
-	
 	public Integer getIdUtente() {
 		return idUtente;
 	}
