@@ -22,16 +22,16 @@ public class Cliente {
 	@Column
 	private Integer idCliente;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
 	private String nome;
 	
-	@Column(nullable= false)
+	@Column(nullable= false, length = 50)
 	private String cognome;
 	
-	@Column(nullable = false , unique=true)
+	@Column(nullable = false , unique=true, length = 15)
 	private String telefono;
 	
-	@Column
+	@Column(length = 2000)
 	private String immagineCliente;
 	
 	@OneToMany(mappedBy="cliente", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)

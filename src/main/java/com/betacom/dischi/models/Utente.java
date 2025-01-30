@@ -22,7 +22,7 @@ public class Utente {
 	@Column(nullable = false, length = 25)
 	private String username;
 	
-	@Column(nullable = false)
+	@Column(nullable = false,length = 50)
 	private String email;
 	
 	@Column(nullable = false, length = 20)

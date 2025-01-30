@@ -45,7 +45,7 @@ public class Prodotto {
 	@Column
 	private Integer quantita;
 	
-	@Column
+	@Column(length = 2000)
 	private String immagineProdotto;
 	
 	@ManyToMany(
