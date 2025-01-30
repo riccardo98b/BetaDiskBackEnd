@@ -133,6 +133,13 @@ public class ClienteDTO {
 	public void setRecensioni(List<RecensioneDTO> recensioni) {
 		this.recensioni = recensioni;
 	}
+
+	@Override
+	public String toString() {
+		return "ClienteDTO [idCliente=" + idCliente + ", nome=" + nome + ", cognome=" + cognome + ", telefono="
+				+ telefono + ", immagineCliente=" + immagineCliente + ", ordini=" + ordini + ", carrello=" + carrello
+				+ ", recensioni=" + recensioni + "]";
+	}
     
     
     

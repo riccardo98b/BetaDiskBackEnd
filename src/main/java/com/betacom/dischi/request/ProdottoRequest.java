@@ -2,8 +2,6 @@ package com.betacom.dischi.request;
 
 import java.util.List;
 
-import com.betacom.dischi.DTO.OrdineDTO;
-import com.betacom.dischi.DTO.RecensioneDTO;
 
 public class ProdottoRequest {
 	
@@ -27,12 +25,7 @@ public class ProdottoRequest {
 	
 	private String immagineProdotto;
 	
-	private List<OrdineDTO> ordini;
-	
-	private List<RecensioneDTO> recensioni;
-	
-	
-	
+		
 
 	public Integer getIdProdotto() {
 		return idProdotto;
@@ -113,23 +106,6 @@ public class ProdottoRequest {
 	public void setImmagineProdotto(String immagineProdotto) {
 		this.immagineProdotto = immagineProdotto;
 	}
-
-	public List<OrdineDTO> getOrdini() {
-		return ordini;
-	}
-
-	public void setOrdini(List<OrdineDTO> ordini) {
-		this.ordini = ordini;
-	}
-
-	public List<RecensioneDTO> getRecensioni() {
-		return recensioni;
-	}
-
-	public void setRecensioni(List<RecensioneDTO> recensioni) {
-		this.recensioni = recensioni;
-	}
-
 	
 	
 }
