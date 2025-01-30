@@ -1,4 +1,4 @@
-package com.betacom.dischi.DTO;
+package com.betacom.dischi.request;
 
 import java.util.List;
 
@@ -10,49 +10,28 @@ import com.betacom.dischi.models.Wishlist;
 
 
 
-public class ClienteDTO {
+public class ClienteRequest {
 	
 
 	private Integer idCliente;
 	
-
 	private String nome;
 	
-
 	private String cognome;
 	
-
 	private String telefono;
 	
 	private String immagineCliente;
 	
-	private List<OrdineDTO> ordini;
+	private List<Ordine> ordini;
 	
-	private CarrelloDTO carrello;
+	private Carrello carrello;
 	
-	private UtenteDTO utente;
+	private Utente utente;
 	
-    private WishlistDTO wishlist;
+    private Wishlist wishlist;
 	
-    private List<RecensioneDTO> recensioni;
-    
-    public ClienteDTO() {}
-
-	public ClienteDTO(Integer idCliente, String nome, String cognome, String telefono, String immagineCliente,
-			List<OrdineDTO> ordini, CarrelloDTO carrello, UtenteDTO utente, WishlistDTO wishlist,
-			List<RecensioneDTO> recensioni) {
-		super();
-		this.idCliente = idCliente;
-		this.nome = nome;
-		this.cognome = cognome;
-		this.telefono = telefono;
-		this.immagineCliente = immagineCliente;
-		this.ordini = ordini;
-		this.carrello = carrello;
-		this.utente = utente;
-		this.wishlist = wishlist;
-		this.recensioni = recensioni;
-	}
+    private List<Recensione> recensioni;
 
 	public Integer getIdCliente() {
 		return idCliente;
@@ -94,47 +73,46 @@ public class ClienteDTO {
 		this.immagineCliente = immagineCliente;
 	}
 
-	public List<OrdineDTO> getOrdini() {
+	public List<Ordine> getOrdini() {
 		return ordini;
 	}
 
-	public void setOrdini(List<OrdineDTO> ordini) {
+	public void setOrdini(List<Ordine> ordini) {
 		this.ordini = ordini;
 	}
 
-	public CarrelloDTO getCarrello() {
+	public Carrello getCarrello() {
 		return carrello;
 	}
 
-	public void setCarrello(CarrelloDTO carrello) {
+	public void setCarrello(Carrello carrello) {
 		this.carrello = carrello;
 	}
 
-	public UtenteDTO getUtente() {
+	public Utente getUtente() {
 		return utente;
 	}
 
-	public void setUtente(UtenteDTO utente) {
+	public void setUtente(Utente utente) {
 		this.utente = utente;
 	}
 
-	public WishlistDTO getWishlist() {
+	public Wishlist getWishlist() {
 		return wishlist;
 	}
 
-	public void setWishlist(WishlistDTO wishlist) {
+	public void setWishlist(Wishlist wishlist) {
 		this.wishlist = wishlist;
 	}
 
-	public List<RecensioneDTO> getRecensioni() {
+	public List<Recensione> getRecensioni() {
 		return recensioni;
 	}
 
-	public void setRecensioni(List<RecensioneDTO> recensioni) {
+	public void setRecensioni(List<Recensione> recensioni) {
 		this.recensioni = recensioni;
 	}
     
     
-    
-   
+
 }
