@@ -1,4 +1,5 @@
 pom.xml
+application.properties
 
 # Build directories
 /target/
