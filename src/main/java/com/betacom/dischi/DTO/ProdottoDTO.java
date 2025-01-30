@@ -2,9 +2,6 @@ package com.betacom.dischi.DTO;
 
 import java.util.List;
 
-import com.betacom.dischi.DTO.OrdineDTO;
-import com.betacom.dischi.DTO.RecensioneDTO;
-
 public class ProdottoDTO {
 
 	private Integer idProdotto; 
