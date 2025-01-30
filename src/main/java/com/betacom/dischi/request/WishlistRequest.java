@@ -3,31 +3,31 @@ package com.betacom.dischi.request;
 import java.util.List;
 
 public class WishlistRequest {
-	private List<Integer> prodottiId;  
-    private Integer clienteId; 
+	private List<Integer> idProdotto;  
+    private Integer Idcliente; 
 
     
 
 	@Override
 	public String toString() {
-		return "WishListRequest [prodottiId=" + prodottiId + ", clienteId=" + clienteId + ", getProdottiIds()="
+		return "WishListRequest [prodottiId=" + idProdotto + ", clienteId=" + Idcliente + ", getProdottiIds()="
 				+ getProdottiIds() + ", getClienteId()=" + getClienteId() + ", getClass()=" + getClass()
 				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 
 	public List<Integer> getProdottiIds() {
-        return prodottiId;
+        return idProdotto;
     }
 
     public void setProdottiIds(List<Integer> prodottiIds) {
-        this.prodottiId = prodottiIds;
+        this.idProdotto = prodottiIds;
     }
 
     public Integer getClienteId() {
-        return clienteId;
+        return Idcliente;
     }
 
     public void setClienteId(Integer clienteId) {
-        this.clienteId = clienteId;
+        this.Idcliente = clienteId;
     }
 }
