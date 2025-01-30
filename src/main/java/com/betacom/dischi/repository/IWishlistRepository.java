@@ -1,5 +1,9 @@
 package com.betacom.dischi.repository;
 
-public interface IWishlistRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.betacom.dischi.models.Wishlist;
+
+public interface IWishlistRepository extends JpaRepository<Wishlist, Integer>{
 
 }
