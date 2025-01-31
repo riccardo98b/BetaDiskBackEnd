@@ -1,5 +1,108 @@
 package com.betacom.dischi.controller;
 
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.betacom.dischi.DTO.WishlistDTO;
+import com.betacom.dischi.request.WishlistRequest;
+import com.betacom.dischi.response.ResponseBase;
+import com.betacom.dischi.response.ResponseList;
+import com.betacom.dischi.services.interfaces.WishlistService;
+
+@RestController
+@RequestMapping("/rest/wishlist")
 public class WishlistController {
+    
+    @Autowired
+    Logger log;
+    
+    @Autowired
+    WishlistService wishlistService;
+    
+
+    @PostMapping("/create")
+    public ResponseBase create(@RequestBody(required = true) WishlistRequest req) {
+        ResponseBase response = new ResponseBase();
+        response.setRc(true);
+        log.debug(req.toString());
+        try {
+            wishlistService.create(req);
+            response.setMsg("Wishlist creata con successo!");  
+        } catch (Exception e) {
+            response.setMsg(e.getMessage());  
+            response.setRc(false); 
+        }
+        return response;
+    }
+
+    @PostMapping("/update")
+    public ResponseBase update(@RequestBody(required = true) WishlistRequest req) {
+        ResponseBase response = new ResponseBase();
+        response.setRc(true);
+        log.debug(req.toString());
+        try {
+            wishlistService.update(req);
+        } catch (Exception e) {
+            response.setMsg(e.getMessage());
+            response.setRc(false);
+        }        
+        return response;
+    }
+    
+    @PostMapping("/delete")
+    public ResponseBase delete(@RequestBody(required = true) WishlistRequest req) {
+        ResponseBase response = new ResponseBase();
+        try {
+            wishlistService.delete(req);
+            response.setRc(true); 
+            response.setMsg("Wishlist eliminata con successo!");
+        } catch (Exception e) {
+            response.setRc(false); 
+            response.setMsg(e.getMessage());
+        }
+        
+        if (response.getRc() == null) {
+            response.setRc(false);  
+        }
+        return response;
+    }
+    
+    @GetMapping("/listAll")
+    public ResponseList<WishlistDTO> list() {
+        log.debug("Lista di tutte le wishlist: ");
+        ResponseList<WishlistDTO> response = new ResponseList<WishlistDTO>();
+        response.setRc(true);
+        try {
+            response.setDati(wishlistService.listAll()); 
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            response.setMsg(e.getMessage());
+            response.setRc(false);
+        }
+        return response;
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseBase getById(@PathVariable("id") Integer id) {
+        ResponseBase response = new ResponseBase();
+        try {
+          
+            WishlistDTO wishlistDTO = wishlistService.getById(id);
+            
+            
+            if (wishlistDTO == null) {
+                response.setRc(false);
+                response.setMsg("Wishlist non trovata!");
+            } else {
+                response.setRc(true);
+                response.setMsg("Wishlist trovata con successo!");
+            }
+        } catch (Exception e) {
+            response.setRc(false);
+            response.setMsg("Errore: " + e.getMessage());
+        }
+        return response;
+    }
 
 }

@@ -8,7 +8,8 @@ public class WishlistDTO {
 	 private List<Integer> prodottiId;  
 	 private Integer clienteId; 
 
-	
+	public WishlistDTO() {}
+	 
 	public WishlistDTO(Integer idWishlist, List<Integer> prodottiIds, Integer clienteId) {
 		super();
 		this.idWishlist = idWishlist;

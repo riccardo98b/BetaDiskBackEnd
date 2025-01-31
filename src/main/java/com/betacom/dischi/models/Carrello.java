@@ -26,6 +26,9 @@ public class Carrello {
 	@Column
 	private Double totale;
 	
+	@Column
+	private Integer quantita;
+	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "prodotto_carrelli",
@@ -52,6 +55,14 @@ public class Carrello {
 
 	public void setTotale(Double totale) {
 		this.totale = totale;
+	}
+
+	public Integer getQuantita() {
+		return quantita;
+	}
+
+	public void setQuantita(Integer quantita) {
+		this.quantita = quantita;
 	}
 
 	public List<Prodotto> getProdotti() {
