@@ -18,6 +18,4 @@ public class ResponseBase {
 		this.msg = msg;
 	}
 	
-	
-	
 }

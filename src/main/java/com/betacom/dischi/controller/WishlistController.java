@@ -82,5 +82,27 @@ public class WishlistController {
         }
         return response;
     }
+    
+    @GetMapping("/{id}")
+    public ResponseBase getById(@PathVariable("id") Integer id) {
+        ResponseBase response = new ResponseBase();
+        try {
+          
+            WishlistDTO wishlistDTO = wishlistService.getById(id);
+            
+            
+            if (wishlistDTO == null) {
+                response.setrC(false);
+                response.setMsg("Wishlist non trovata!");
+            } else {
+                response.setrC(true);
+                response.setMsg("Wishlist trovata con successo!");
+            }
+        } catch (Exception e) {
+            response.setrC(false);
+            response.setMsg("Errore: " + e.getMessage());
+        }
+        return response;
+    }
 
 }

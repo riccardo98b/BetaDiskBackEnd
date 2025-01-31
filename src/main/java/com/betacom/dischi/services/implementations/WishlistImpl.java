@@ -96,4 +96,16 @@ public class WishlistImpl implements WishlistService {
                         .map(this::convertToDTO)
                         .collect(Collectors.toList());
     }
+    
+    
+    @Override
+    public WishlistDTO getById(Integer id) throws Exception {
+        // Cerca la wishlist nel repository usando l'ID
+        Wishlist wishlist = wishlistRepository.findById(id)
+                                              .orElseThrow(() -> new Exception("Wishlist non trovata"));
+        
+        // Converte la wishlist in un DTO
+        return convertToDTO(wishlist);
+    }
+
 }
