@@ -22,6 +22,7 @@ public class WishlistImpl implements WishlistService {
 
     @Autowired
     private IWishlistRepository wishlistRepository;
+    
     @Autowired 
     Logger logger;
 
@@ -96,6 +97,7 @@ public class WishlistImpl implements WishlistService {
                         .map(this::convertToDTO)
                         .collect(Collectors.toList());
     }
+    
     
     
     @Override
