@@ -59,6 +59,12 @@ public class Prodotto {
 			mappedBy = "prodotti",
 			fetch = FetchType.EAGER)
 	private List<Recensione> recensioni;
+	
+	@ManyToMany(
+            mappedBy = "prodotti",
+            fetch = FetchType.EAGER
+            )
+    private List<Carrello> carrelli;
 
 	
 	
@@ -158,6 +164,14 @@ public class Prodotto {
 
 	public void setFormato(Formato formato) {
 		this.formato = formato;
+	}
+
+	public List<Carrello> getCarrelli() {
+		return carrelli;
+	}
+
+	public void setCarrelli(List<Carrello> carrelli) {
+		this.carrelli = carrelli;
 	}
 	
 }

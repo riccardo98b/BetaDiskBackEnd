@@ -2,14 +2,13 @@ package com.betacom.dischi.response;
 
 public class ResponseBase {
 
-	private Boolean rC;
+	private Boolean rc;
 	private String msg;
-	
-	public Boolean getrC() {
-		return rC;
+	public Boolean getRc() {
+		return rc;
 	}
-	public void setrC(Boolean rC) {
-		this.rC = rC;
+	public void setRc(Boolean rc) {
+		this.rc = rc;
 	}
 	public String getMsg() {
 		return msg;
@@ -17,7 +16,5 @@ public class ResponseBase {
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-	
-	
 	
 }
