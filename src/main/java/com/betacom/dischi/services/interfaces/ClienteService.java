@@ -7,15 +7,11 @@ import com.betacom.dischi.request.ClienteRequest;
 
 public interface ClienteService {
 
-	List<ClienteDTO> listAll();	
-	
+	List<ClienteDTO> listAll();
 
-	
 	void create(ClienteRequest req) throws Exception;
-		
-	 void update(ClienteRequest req) throws Exception;
-	    
-	    
-    
+
+	void update(ClienteRequest req) throws Exception;
+
 	void delete(ClienteRequest req) throws Exception;
 }
