@@ -4,12 +4,11 @@ public class ResponseBase {
 
 	private Boolean rc;
 	private String msg;
-	
-	public Boolean getrC() {
+	public Boolean getRc() {
 		return rc;
 	}
-	public void setrC(Boolean rC) {
-		this.rc = rC;
+	public void setRc(Boolean rc) {
+		this.rc = rc;
 	}
 	public String getMsg() {
 		return msg;

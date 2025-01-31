@@ -24,14 +24,14 @@ public class WishlistController {
     @PostMapping("/create")
     public ResponseBase create(@RequestBody(required = true) WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setrC(true);
+        response.setRc(true);
         log.debug(req.toString());
         try {
             wishlistService.create(req);
             response.setMsg("Wishlist creata con successo!");  
         } catch (Exception e) {
             response.setMsg(e.getMessage());  
-            response.setrC(false); 
+            response.setRc(false); 
         }
         return response;
     }
@@ -39,13 +39,13 @@ public class WishlistController {
     @PostMapping("/update")
     public ResponseBase update(@RequestBody(required = true) WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setrC(true);
+        response.setRc(true);
         log.debug(req.toString());
         try {
             wishlistService.update(req);
         } catch (Exception e) {
             response.setMsg(e.getMessage());
-            response.setrC(false);
+            response.setRc(false);
         }        
         return response;
     }
@@ -55,15 +55,15 @@ public class WishlistController {
         ResponseBase response = new ResponseBase();
         try {
             wishlistService.delete(req);
-            response.setrC(true); 
+            response.setRc(true); 
             response.setMsg("Wishlist eliminata con successo!");
         } catch (Exception e) {
-            response.setrC(false); 
+            response.setRc(false); 
             response.setMsg(e.getMessage());
         }
         
-        if (response.getrC() == null) {
-            response.setrC(false);  
+        if (response.getRc() == null) {
+            response.setRc(false);  
         }
         return response;
     }
@@ -72,13 +72,13 @@ public class WishlistController {
     public ResponseList<WishlistDTO> list() {
         log.debug("Lista di tutte le wishlist: ");
         ResponseList<WishlistDTO> response = new ResponseList<WishlistDTO>();
-        response.setrC(true);
+        response.setRc(true);
         try {
             response.setDati(wishlistService.listAll()); 
         } catch (Exception e) {
             log.error(e.getMessage());
             response.setMsg(e.getMessage());
-            response.setrC(false);
+            response.setRc(false);
         }
         return response;
     }
@@ -92,14 +92,14 @@ public class WishlistController {
             
             
             if (wishlistDTO == null) {
-                response.setrC(false);
+                response.setRc(false);
                 response.setMsg("Wishlist non trovata!");
             } else {
-                response.setrC(true);
+                response.setRc(true);
                 response.setMsg("Wishlist trovata con successo!");
             }
         } catch (Exception e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Errore: " + e.getMessage());
         }
         return response;
