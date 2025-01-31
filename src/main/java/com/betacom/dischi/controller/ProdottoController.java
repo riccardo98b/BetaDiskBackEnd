@@ -25,13 +25,13 @@ public class ProdottoController {
 	public ResponseBase create(@RequestBody(required = true)ProdottoRequest req) {
 		log.debug("Create prodotto: " + req);
 		ResponseBase response = new ResponseBase();
-		response.setrC(true);
+		response.setRc(true);
 		response.setMsg("Prdotto creato con successo!");
 		try {
 			prodottoService.create(req);
 		}catch(Exception e) {
 			response.setMsg(e.getMessage());
-			response.setrC(false);
+			response.setRc(false);
 		}
 		return response;
 		
