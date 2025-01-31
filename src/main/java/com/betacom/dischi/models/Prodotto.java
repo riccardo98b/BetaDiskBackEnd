@@ -54,15 +54,19 @@ public class Prodotto {
 			)
 	private List<Ordine> ordini;
 	
+	
 	@ManyToMany(
 			mappedBy = "prodotti",
 			fetch = FetchType.EAGER)
 	private List<Recensione> recensioni;
 
 	
+	
 	public List<Recensione> getRecensioni() {
 		return recensioni;
 	}
+	
+	
 
 	public void setRecensioni(List<Recensione> recensioni) {
 		this.recensioni = recensioni;
