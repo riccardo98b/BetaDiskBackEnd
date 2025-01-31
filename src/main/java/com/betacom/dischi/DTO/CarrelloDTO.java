@@ -11,15 +11,17 @@ public class CarrelloDTO {
 	private Double totale;
 	private List<ProdottoDTO> prodotti;
 	private ClienteDTO cliente;
+	private Integer quantita;
 	public CarrelloDTO() {
 		super();
 	}
-	public CarrelloDTO(Integer idCarrello, Double totale, List<ProdottoDTO> prodotti, ClienteDTO cliente) {
+	public CarrelloDTO(Integer idCarrello, Double totale, List<ProdottoDTO> prodotti, ClienteDTO cliente, Integer quantita) {
 		super();
 		this.idCarrello = idCarrello;
 		this.totale = totale;
 		this.prodotti = prodotti;
 		this.cliente = cliente;
+		this.quantita = quantita;
 	}
 	public Integer getIdCarrello() {
 		return idCarrello;
@@ -45,11 +47,18 @@ public class CarrelloDTO {
 	public void setCliente(ClienteDTO cliente) {
 		this.cliente = cliente;
 	}
+	public Integer getQuantita() {
+		return quantita;
+	}
+	public void setQuantita(Integer quantita) {
+		this.quantita = quantita;
+	}
 	@Override
 	public String toString() {
-		return "CarrelloDTO [idCarrello=" + idCarrello + ", totale=" + totale + ", cliente=" + cliente + "]";
+		return "CarrelloDTO [idCarrello=" + idCarrello + ", totale=" + totale + ", prodotti=" + prodotti + ", cliente="
+				+ cliente + ", quantita=" + quantita + ", getIdCarrello()=" + getIdCarrello() + ", getTotale()="
+				+ getTotale() + ", getProdotti()=" + getProdotti() + ", getCliente()=" + getCliente()
+				+ ", getQuantita()=" + getQuantita() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
 	}
-
-	
-	
 }
