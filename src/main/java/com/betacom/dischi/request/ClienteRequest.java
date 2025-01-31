@@ -65,6 +65,12 @@ public class ClienteRequest {
 		this.immagineCliente = immagineCliente;
 	}
 
+	@Override
+	public String toString() {
+		return "ClienteRequest [idCliente=" + idCliente + ", nome=" + nome + ", cognome=" + cognome + ", telefono="
+				+ telefono + ", immagineCliente=" + immagineCliente + "]";
+	}
+
 
     
 

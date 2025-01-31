@@ -1,5 +1,6 @@
 package com.betacom.dischi.models;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -33,6 +34,9 @@ public class Cliente {
 	
 	@Column(length = 2000)
 	private String immagineCliente;
+	
+	@Column(nullable=false)
+    private LocalDate dataRegistrazione;	
 	
 	@OneToMany(mappedBy="cliente", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)
 	private List<Ordine> ordini;
@@ -128,5 +132,14 @@ public class Cliente {
 	public void setImmagineCliente(String immagineCliente) {
 		this.immagineCliente = immagineCliente;
 	}
+
+	public LocalDate getDataRegistrazione() {
+		return dataRegistrazione;
+	}
+
+	public void setDataRegistrazione(LocalDate dataRegistrazione) {
+		this.dataRegistrazione = dataRegistrazione;
+	}
+	
 	
 }
