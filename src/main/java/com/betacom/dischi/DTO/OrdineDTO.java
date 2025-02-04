@@ -22,10 +22,10 @@ public class OrdineDTO {
 	private Boolean spedito;
 	private ClienteDTO cliente;
 	private List<ProdottoDTO> prodotti;
+	
 	public OrdineDTO() {
 		super();
 	}
-	
 	public OrdineDTO(Integer idOrdine, LocalDate dataOrdine, String dataFormattata, Double totaleImporto,
 			Boolean spedito, ClienteDTO cliente, List<ProdottoDTO> prodotti) {
 		super();

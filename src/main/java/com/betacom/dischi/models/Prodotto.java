@@ -50,31 +50,20 @@ public class Prodotto {
 	@Column(length = 2000)
 	private String immagineProdotto;
 	
+	@OneToMany(mappedBy = "prodotto",
+			fetch = FetchType.EAGER,
+			cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProdottoOrdine> prodottiOrdine;
 	
 	@ManyToMany(
 			mappedBy = "prodotti",
 			fetch = FetchType.EAGER)
 	private List<Recensione> recensioni;
 	
-
-	
-	 @OneToMany(mappedBy = "prodotto", cascade = CascadeType.ALL, orphanRemoval = true)
-	    private List<ProdottoCarrello> prodottiCarrello ;
-	
-	
-	 @OneToMany(mappedBy = "prodotto", cascade = CascadeType.ALL, orphanRemoval = true)
-	    private List<ProdottoOrdine> prodottiOrdine;
-	 
-	 
-	public List<Recensione> getRecensioni() {
-		return recensioni;
-	}
-	
-	
-
-	public void setRecensioni(List<Recensione> recensioni) {
-		this.recensioni = recensioni;
-	}
+	@OneToMany(mappedBy = "prodotto",
+			fetch = FetchType.EAGER,
+			cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ProdottoCarrello> prodottiCarrello;
 
 	public Integer getIdProdotto() {
 		return idProdotto;
@@ -82,6 +71,14 @@ public class Prodotto {
 
 	public void setIdProdotto(Integer idProdotto) {
 		this.idProdotto = idProdotto;
+	}
+
+	public Formato getFormato() {
+		return formato;
+	}
+
+	public void setFormato(Formato formato) {
+		this.formato = formato;
 	}
 
 	public String getTitolo() {
@@ -148,28 +145,29 @@ public class Prodotto {
 		this.immagineProdotto = immagineProdotto;
 	}
 
-	public List<Ordine> getOrdini() {
-		return ordini;
+	public List<ProdottoOrdine> getProdottiOrdine() {
+		return prodottiOrdine;
 	}
 
-	public void setOrdini(List<Ordine> ordini) {
-		this.ordini = ordini;
+	public void setProdottiOrdine(List<ProdottoOrdine> prodottiOrdine) {
+		this.prodottiOrdine = prodottiOrdine;
 	}
 
-	public Formato getFormato() {
-		return formato;
+	public List<Recensione> getRecensioni() {
+		return recensioni;
 	}
 
-	public void setFormato(Formato formato) {
-		this.formato = formato;
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
 	}
 
-	public List<Carrello> getCarrelli() {
-		return carrelli;
+	public List<ProdottoCarrello> getProdottiCarrello() {
+		return prodottiCarrello;
 	}
 
-	public void setCarrelli(List<Carrello> carrelli) {
-		this.carrelli = carrelli;
+	public void setProdottiCarrello(List<ProdottoCarrello> prodottiCarrello) {
+		this.prodottiCarrello = prodottiCarrello;
 	}
+
 	
 }
