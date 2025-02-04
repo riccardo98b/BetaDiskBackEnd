@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.betacom.dischi.utilities.Formato;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -48,26 +50,22 @@ public class Prodotto {
 	@Column(length = 2000)
 	private String immagineProdotto;
 	
-	@ManyToMany(
-			mappedBy = "prodotti",
-			fetch = FetchType.EAGER
-			)
-	private List<Ordine> ordini;
-	
 	
 	@ManyToMany(
 			mappedBy = "prodotti",
 			fetch = FetchType.EAGER)
 	private List<Recensione> recensioni;
 	
-	@ManyToMany(
-            mappedBy = "prodotti",
-            fetch = FetchType.EAGER
-            )
-    private List<Carrello> carrelli;
 
 	
+	 @OneToMany(mappedBy = "prodotto", cascade = CascadeType.ALL, orphanRemoval = true)
+	    private List<ProdottoCarrello> prodottiCarrello ;
 	
+	
+	 @OneToMany(mappedBy = "prodotto", cascade = CascadeType.ALL, orphanRemoval = true)
+	    private List<ProdottoOrdine> prodottiOrdine;
+	 
+	 
 	public List<Recensione> getRecensioni() {
 		return recensioni;
 	}
