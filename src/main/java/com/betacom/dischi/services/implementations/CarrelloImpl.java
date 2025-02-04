@@ -21,6 +21,8 @@ import com.betacom.dischi.request.CarrelloRequest;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.services.interfaces.CarrelloService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CarrelloImpl implements CarrelloService {
 	
@@ -53,6 +55,7 @@ public class CarrelloImpl implements CarrelloService {
 	}
 
 	@Override
+	@Transactional
 	public void addProdotto(CarrelloRequest request) throws CustomException {
 		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
 		if (cliente.isEmpty()) {
@@ -72,24 +75,16 @@ public class CarrelloImpl implements CarrelloService {
 		if (findRecord.isEmpty()) {
 			ProdottoCarrello row = new ProdottoCarrello(
 					carrello, prodotto, request.getQuantita());
-			prodotto.setQuantita(prodotto.getQuantita()-request.getQuantita());
 			carrello.getProdotti().add(row);
 		} else {
-			
+			ProdottoCarrello row = findRecord.get();
+			row.setQuantita(row.getQuantita()+ request.getQuantita());
 		}
-		
-//		List<Prodotto> prodotti = carrello.getProdotti();
-//		Optional<Prodotto> prodotto = prodottoRepo.findById(prodRequest.getIdProdotto());
-//		if (prodotto.get().getQuantita() < request.getQuantita()) {
-//			throw new CustomException("Quantità in magazzino non disponibile");
-//		}
-//		if (!prodotti.contains(prodotto.get())){
-//			prodotti.add(prodotto.get());
-//		}
-//		double prezzo = prodotto.get().getPrezzo() * request.getQuantita();
-//		carrello.setTotale(carrello.getTotale() + prezzo);
-//		carrello.setProdotti(prodotti);
-//		carrelloRepo.save(carrello);
+		prodotto.setQuantita(prodotto.getQuantita()-request.getQuantita());
+		double prezzo = prodotto.getPrezzo() * request.getQuantita();
+		carrello.setTotale(carrello.getTotale() + prezzo);
+		prodottoRepo.save(prodotto);
+		carrelloRepo.save(carrello);
 	}
 
 	@Override

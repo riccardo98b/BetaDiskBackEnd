@@ -50,6 +50,10 @@ public class ProdottoCarrello {
 	public void setQuantita(Integer quantita) {
 		this.quantita = quantita;
 	}
+	
+	public ProdottoCarrello() {
+		super();
+	}
 	public ProdottoCarrello(Carrello carrello, Prodotto prodotto, Integer quantita) {
 		super();
 		this.carrello = carrello;

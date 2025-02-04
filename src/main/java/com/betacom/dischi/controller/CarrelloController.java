@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.betacom.dischi.DTO.CarrelloDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.CarrelloRequest;
-import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.services.interfaces.CarrelloService;
@@ -26,14 +25,14 @@ public class CarrelloController {
 	CarrelloService carrelloServ;
 	
 	@PostMapping("/add")
-	public ResponseList<CarrelloDTO> addProdotto(@RequestBody(required = true) CarrelloRequest request, @RequestBody ProdottoRequest prodRequest) {
-		log.debug("Aggiungi prodotto: " + prodRequest);
+	public ResponseBase addProdotto(@RequestBody(required = true) CarrelloRequest request) {
+		log.debug("Aggiungi prodotto: " + request);
 		ResponseList<CarrelloDTO> response = new ResponseList<CarrelloDTO>();
 		response.setRc(true);
 		try {
 			carrelloServ.addProdotto(request);
 			response.setMsg("Prodotto aggiunto con successo");
-			response.setDati(carrelloServ.listaProdotti(request.getIdCliente()));
+			//response.setDati(carrelloServ.listaProdotti(request.getIdCliente()));
 		} catch (CustomException e) {
 			log.error(e.getMessage());
 			response.setRc(false);
