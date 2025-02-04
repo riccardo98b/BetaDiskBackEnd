@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.WishlistDTO;
+import com.betacom.dischi.DTO.ProdottoDTO;
+import com.betacom.dischi.DTO.ClienteDTO;
 import com.betacom.dischi.models.Cliente;
 import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Wishlist;
@@ -57,7 +59,6 @@ public class WishlistImpl implements WishlistService {
         Wishlist wishlist = wishlistRepository.findById(req.getIdWishlist())
                                               .orElseThrow(() -> new Exception("Wishlist non trovata"));
 
-        // Recupero e aggiorno i prodotti
         List<Prodotto> prodotti = prodottoRepository.findAllById(req.getProdottiIds());
         wishlist.setProdotti(prodotti);
 
@@ -73,41 +74,34 @@ public class WishlistImpl implements WishlistService {
     }
 
     private WishlistDTO convertToDTO(Wishlist wishlist) {
-        WishlistDTO dto = new WishlistDTO();
-        dto.setIdWishlist(wishlist.getIdWishlist());
+        List<ProdottoDTO> prodottiDTO = wishlist.getProdotti().stream()
+            .map(prodotto -> new ProdottoDTO(prodotto.getIdProdotto(), prodotto.getNome(), prodotto.getPrezzo()))
+            .collect(Collectors.toList());
 
-        // Recupero gli ID dei prodotti
-        List<Integer> prodottiIds = wishlist.getProdotti().stream()
-                                            .map(Prodotto::getIdProdotto)
-                                            .collect(Collectors.toList());
-        dto.setProdottiIds(prodottiIds);
-
-        // Recupero l'ID del cliente
+        ClienteDTO clienteDTO = null;
         if (wishlist.getCliente() != null) {
-            dto.setClienteId(wishlist.getCliente().getIdCliente());
+            Cliente cliente = wishlist.getCliente();
+            clienteDTO = new ClienteDTO(cliente.getIdCliente(), cliente.getNome(), cliente.getCognome(), cliente.getTelefono(), cliente.getImmagineCliente(), null, null, null, null, null);
         }
 
-        return dto;
+        return new WishlistDTO.Builder()
+            .idWishlist(wishlist.getIdWishlist())
+            .prodotti(prodottiDTO)
+            .cliente(clienteDTO)
+            .build();
     }
 
     @Override
     public List<WishlistDTO> listAll() {
-        List<Wishlist> wishlists = wishlistRepository.findAll();
-        return wishlists.stream()
-                        .map(this::convertToDTO)
-                        .collect(Collectors.toList());
+        return wishlistRepository.findAll().stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
     }
-    
-    
     
     @Override
     public WishlistDTO getById(Integer id) throws Exception {
-        // Cerca la wishlist nel repository usando l'ID
         Wishlist wishlist = wishlistRepository.findById(id)
                                               .orElseThrow(() -> new Exception("Wishlist non trovata"));
-        
-        // Converte la wishlist in un DTO
         return convertToDTO(wishlist);
     }
-
 }
