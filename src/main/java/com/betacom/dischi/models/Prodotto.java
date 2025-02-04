@@ -50,7 +50,9 @@ public class Prodotto {
 	@Column(length = 2000)
 	private String immagineProdotto;
 	
-	@OneToMany(mappedBy = "ordine", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "prodotto",
+			fetch = FetchType.EAGER,
+			cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdottoOrdine> prodottiOrdine;
 	
 	@ManyToMany(
@@ -58,8 +60,10 @@ public class Prodotto {
 			fetch = FetchType.EAGER)
 	private List<Recensione> recensioni;
 	
-	  @OneToMany(mappedBy = "carrello", cascade = CascadeType.ALL, orphanRemoval = true)
-	    private List<ProdottoCarrello> prodottiCarrello;
+	@OneToMany(mappedBy = "prodotto",
+			fetch = FetchType.EAGER,
+			cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ProdottoCarrello> prodottiCarrello;
 
 	public Integer getIdProdotto() {
 		return idProdotto;

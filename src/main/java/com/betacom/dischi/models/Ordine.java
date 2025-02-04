@@ -27,7 +27,7 @@ public class Ordine {
 	@JoinColumn(name= "id_cliente" , nullable=false)		
 	private Cliente cliente;
 
-	@OneToMany(mappedBy = "carrello", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "ordine", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdottoOrdine> prodotti;
 
 	@Column(nullable=false)
