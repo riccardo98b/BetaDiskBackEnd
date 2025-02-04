@@ -11,8 +11,8 @@ import com.betacom.dischi.request.ProdottoRequest;
 public interface CarrelloService {
 
 	public Carrello create(CarrelloRequest request) throws CustomException;
-	public void addProdotto(CarrelloRequest request, ProdottoRequest prodRequest) throws CustomException;
-	public void removeProdotto(CarrelloRequest request, ProdottoRequest prodRequest) throws CustomException;
+	public void addProdotto(CarrelloRequest request) throws CustomException;
+	public void removeProdotto(CarrelloRequest request) throws CustomException;
 	public void delete(CarrelloRequest request) throws CustomException;
 	List<CarrelloDTO> listaProdotti(Integer idCliente) throws CustomException;
 	
