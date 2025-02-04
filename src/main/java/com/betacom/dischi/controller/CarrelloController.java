@@ -31,7 +31,7 @@ public class CarrelloController {
 		ResponseList<CarrelloDTO> response = new ResponseList<CarrelloDTO>();
 		response.setRc(true);
 		try {
-			carrelloServ.addProdotto(request, prodRequest);
+			carrelloServ.addProdotto(request);
 			response.setMsg("Prodotto aggiunto con successo");
 			response.setDati(carrelloServ.listaProdotti(request.getIdCliente()));
 		} catch (CustomException e) {
