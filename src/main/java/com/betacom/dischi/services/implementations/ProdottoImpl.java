@@ -1,6 +1,5 @@
 package com.betacom.dischi.services.implementations;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,9 +7,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.betacom.dischi.DTO.OrdineDTO;
 import com.betacom.dischi.DTO.ProdottoDTO;
-import com.betacom.dischi.DTO.RecensioneDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.repository.IProdottoRepository;
@@ -68,25 +65,24 @@ public class ProdottoImpl implements ProdottoService{
 	@Override
 	public List<ProdottoDTO> listAll() {
 		
-//		List<Prodotto> listaProdotti = prodottoRepository.findAll();
-//		
-//		return listaProdotti.stream()
-//				.map(p -> new ProdottoDTO(
-//						p.getIdProdotto(), 
-//						p.getTitolo(), 
-//						p.getArtista(), 
-//						p.getGenere(), 
-//						p.getDescrizione(), 
-//						p.getAnnoPubblicazione(), 
-//						p.getPrezzo(),
-//						p.getQuantita(),
-//						p.getImmagineProdotto(), 
-//						new ArrayList<OrdineDTO>(),
-//						new ArrayList<RecensioneDTO>()
-//						))
-//					.collect(Collectors.toList());
+	List<Prodotto> listaProdotti = prodottoRepository.findAll();
 		
-		return null;
+		return listaProdotti.stream()
+				.map(p -> new ProdottoDTO.Builder()
+						.idProdotto(p.getIdProdotto())
+						.formato(p.getFormato().toString())
+						.titolo(p.getTitolo())
+						.artista(p.getArtista())
+						.genere(p.getGenere())
+						.descrizione(p.getDescrizione())
+						.annoPubblicazione(p.getAnnoPubblicazione())
+						.prezzo(p.getPrezzo())
+						.immagineProdotto(p.getImmagineProdotto())
+						.quantita(p.getQuantita())     
+						.build())
+				.collect(Collectors.toList());
+		
+		
 	}
 
 	@Override
