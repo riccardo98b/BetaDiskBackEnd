@@ -32,18 +32,71 @@ public class RecensioneDTO {
 	private List<ProdottoDTO> prodotti;
 	
 	
-	public RecensioneDTO() {}
+	private RecensioneDTO() {}
+
+    public static class Builder{
+    	private Integer idRecensione;
+    	
+
+    	private String descrizione;
+    	
+
+    	private Integer stelle;
+    	
+    	
+    	private ClienteDTO cliente;
+    	
+
+    	private List<ProdottoDTO> prodotti;
 
 
-	public RecensioneDTO(Integer idRecensione, String descrizione, Integer stelle, ClienteDTO cliente,
-			List<ProdottoDTO> prodotti) {
-		super();
-		this.idRecensione = idRecensione;
-		this.descrizione = descrizione;
-		this.stelle = stelle;
-		this.cliente = cliente;
-		this.prodotti = prodotti;
-	}
+	
+
+		public Builder setIdRecensione(Integer idRecensione) {
+			this.idRecensione = idRecensione;
+			return this;
+		}
+
+
+		public Builder setDescrizione(String descrizione) {
+			this.descrizione = descrizione;
+			return this;
+		}
+
+
+		public Builder setStelle(Integer stelle) {
+			this.stelle = stelle;
+			return this;
+		}
+
+
+		public Builder setCliente(ClienteDTO cliente) {
+			this.cliente = cliente;
+			return this;
+		}
+
+
+		public Builder setProdotti(List<ProdottoDTO> prodotti) {
+			this.prodotti = prodotti;
+			return this;
+		}
+		
+		
+		public RecensioneDTO build() {
+			RecensioneDTO recDTO = new RecensioneDTO();
+			recDTO.idRecensione = this.idRecensione;
+			recDTO.descrizione = this.descrizione;
+			recDTO.stelle = this.stelle;
+			recDTO.cliente = this.cliente;
+			recDTO.prodotti= this.prodotti;
+			return recDTO;
+		}
+    	
+    	
+    }
+
+
+
 
 
 	@Override
@@ -51,8 +104,45 @@ public class RecensioneDTO {
 		return "RecensioneDTO [idRecensione=" + idRecensione + ", descrizione=" + descrizione + ", stelle=" + stelle
 				+ ", cliente=" + cliente + "]";
 	}
+
+
+	public Integer getIdRecensione() {
+		return idRecensione;
+	}
+
+
+
+
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+
+
+
+	public Integer getStelle() {
+		return stelle;
+	}
+
+
 	
+
+
+	public ClienteDTO getCliente() {
+		return cliente;
+	}
+
+
 	
+
+
+	public List<ProdottoDTO> getProdotti() {
+		return prodotti;
+	}
+
+
+
 	
 	
 	

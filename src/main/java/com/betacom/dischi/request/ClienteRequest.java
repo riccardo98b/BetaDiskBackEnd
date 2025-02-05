@@ -1,14 +1,5 @@
 package com.betacom.dischi.request;
 
-import java.util.List;
-
-import com.betacom.dischi.models.Carrello;
-import com.betacom.dischi.models.Ordine;
-import com.betacom.dischi.models.Recensione;
-import com.betacom.dischi.models.Utente;
-import com.betacom.dischi.models.Wishlist;
-
-
 
 public class ClienteRequest {
 	

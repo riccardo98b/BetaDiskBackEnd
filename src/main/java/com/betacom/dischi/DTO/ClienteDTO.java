@@ -2,25 +2,13 @@ package com.betacom.dischi.DTO;
 
 import java.util.List;
 
-import com.betacom.dischi.models.Carrello;
-import com.betacom.dischi.models.Ordine;
-import com.betacom.dischi.models.Recensione;
-import com.betacom.dischi.models.Utente;
-import com.betacom.dischi.models.Wishlist;
-
-
-
-public class ClienteDTO {
-	
-
+public class ClienteDTO { // APPLICO IL PATTERN BUILDER
+	// 1) ATTRIBUTI DTO
 	private Integer idCliente;
 	
-
 	private String nome;
 	
-
 	private String cognome;
-	
 
 	private String telefono;
 	
@@ -36,112 +24,152 @@ public class ClienteDTO {
 	
     private List<RecensioneDTO> recensioni;
     
-    public ClienteDTO() {}
+    
+   // 2) COSTRUTTORE PRIVATO PER DTO(NO ISTANZE AD DI FUORI DI QUESTA CLASSE)
+    private ClienteDTO() {}
+    
+    // INNER CLASS BUILDER PER CLIENTEDTO
+    public static class Builder{
+    	// 1)  riprendo le variabili di oggetto DTO
+    	private Integer idCliente;
+    	
 
-	public ClienteDTO(Integer idCliente, String nome, String cognome, String telefono, String immagineCliente,
-			List<OrdineDTO> ordini, CarrelloDTO carrello, UtenteDTO utente, WishlistDTO wishlist,
-			List<RecensioneDTO> recensioni) {
-		super();
-		this.idCliente = idCliente;
-		this.nome = nome;
-		this.cognome = cognome;
-		this.telefono = telefono;
-		this.immagineCliente = immagineCliente;
-		this.ordini = ordini;
-		this.carrello = carrello;
-		this.utente = utente;
-		this.wishlist = wishlist;
-		this.recensioni = recensioni;
-	}
+    	private String nome;
+    	
 
+    	private String cognome;
+    	
+
+    	private String telefono;
+    	
+    	private String immagineCliente;
+    	
+    	private List<OrdineDTO> ordini;
+    	
+    	private CarrelloDTO carrello;
+    	
+    	private UtenteDTO utente;
+    	
+        private WishlistDTO wishlist;
+    	
+        private List<RecensioneDTO> recensioni;
+
+        //2 FAI SOLO I SET, questi devono tornare tutti Builder(il niome che abbaimo dato a innerclass che applica il pattern)
+		public Builder setIdCliente(Integer idCliente) {
+			this.idCliente = idCliente;
+			return this;
+		}
+
+		public Builder setNome(String nome) {
+			this.nome = nome;
+			return this;
+		}
+
+		public Builder setCognome(String cognome) {
+			this.cognome = cognome;
+			return this;
+		}
+
+		public Builder setTelefono(String telefono) {
+			this.telefono = telefono;
+			return this;
+		}
+
+		public Builder setImmagineCliente(String immagineCliente) {
+			this.immagineCliente = immagineCliente;
+			return this;
+		}
+
+		public Builder setOrdini(List<OrdineDTO> ordini) {
+			this.ordini = ordini;
+			return this;
+		}
+
+		public Builder setCarrello(CarrelloDTO carrello) {
+			this.carrello = carrello;
+			return this;
+
+		}
+
+		public Builder setUtente(UtenteDTO utente) {
+			this.utente = utente;
+			return this;
+
+		}
+
+		public Builder setWishlist(WishlistDTO wishlist) {
+			this.wishlist = wishlist;
+			return this;
+
+		}
+
+		public Builder setRecensioni(List<RecensioneDTO> recensioni) {
+			this.recensioni = recensioni;
+			return this;
+
+		}
+		
+		//3) ORA FAI UN METODO BUILD PER COSTRUIRE IL DTO E RITORNARLO
+		public ClienteDTO build() {
+			ClienteDTO clienteDTO = new ClienteDTO();
+			clienteDTO.idCliente = this.idCliente;
+			clienteDTO.nome= this.nome;
+			clienteDTO.cognome= this.cognome;
+			clienteDTO.telefono = this.telefono;
+			clienteDTO.immagineCliente= this.immagineCliente;
+			clienteDTO.ordini = this.ordini;
+			clienteDTO.carrello= this.carrello;
+			clienteDTO.utente= this.utente;
+			clienteDTO.wishlist= this.wishlist;
+			clienteDTO.recensioni= this.recensioni;
+			return clienteDTO;
+		}
+        
+     
+        
+        
+    }
+
+    // 3 get per l'oggetto DTO, immutabile all'esterno , è consentrita solo la visualzizzazione
 	public Integer getIdCliente() {
 		return idCliente;
-	}
-
-	public void setIdCliente(Integer idCliente) {
-		this.idCliente = idCliente;
 	}
 
 	public String getNome() {
 		return nome;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
 	public String getCognome() {
 		return cognome;
-	}
-
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
 	}
 
 	public String getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
 	public String getImmagineCliente() {
 		return immagineCliente;
-	}
-
-	public void setImmagineCliente(String immagineCliente) {
-		this.immagineCliente = immagineCliente;
 	}
 
 	public List<OrdineDTO> getOrdini() {
 		return ordini;
 	}
 
-	public void setOrdini(List<OrdineDTO> ordini) {
-		this.ordini = ordini;
-	}
-
 	public CarrelloDTO getCarrello() {
 		return carrello;
-	}
-
-	public void setCarrello(CarrelloDTO carrello) {
-		this.carrello = carrello;
 	}
 
 	public UtenteDTO getUtente() {
 		return utente;
 	}
 
-	public void setUtente(UtenteDTO utente) {
-		this.utente = utente;
-	}
-
 	public WishlistDTO getWishlist() {
 		return wishlist;
-	}
-
-	public void setWishlist(WishlistDTO wishlist) {
-		this.wishlist = wishlist;
 	}
 
 	public List<RecensioneDTO> getRecensioni() {
 		return recensioni;
 	}
-
-	public void setRecensioni(List<RecensioneDTO> recensioni) {
-		this.recensioni = recensioni;
-	}
-
-	@Override
-	public String toString() {
-		return "ClienteDTO [idCliente=" + idCliente + ", nome=" + nome + ", cognome=" + cognome + ", telefono="
-				+ telefono + ", immagineCliente=" + immagineCliente + ", ordini=" + ordini + ", carrello=" + carrello
-				+ ", recensioni=" + recensioni + "]";
-	}
     
     
-    
-   
 }

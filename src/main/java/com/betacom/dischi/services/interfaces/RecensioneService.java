@@ -15,4 +15,6 @@ public interface RecensioneService {
 
 	void delete(RecensioneRequest req) throws Exception;
 
+	RecensioneDTO listById(Integer id);
+
 }
