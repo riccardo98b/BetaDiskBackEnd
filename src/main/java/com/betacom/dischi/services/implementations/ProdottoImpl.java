@@ -1,6 +1,7 @@
 package com.betacom.dischi.services.implementations;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -14,6 +15,10 @@ import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.services.interfaces.ProdottoService;
 import com.betacom.dischi.utilities.Formato;
+
+import jakarta.transaction.Transactional;
+
+import static com.betacom.dischi.utilities.Utility.validazioneValoriProdotto;
 
 @Service
 public class ProdottoImpl implements ProdottoService{
@@ -31,22 +36,7 @@ public class ProdottoImpl implements ProdottoService{
 	
 		Prodotto prodotto = new Prodotto();
 		
-		if(req.getFormato() == null)
-			throw new CustomException("Inserisci il formato del prodotto");
-		if(req.getTitolo() == null)
-			throw new CustomException("Inserisci il titolo del prodotto");
-		if(req.getArtista() == null)
-			throw new CustomException("Inserisci l'artista del prodotto");
-		if(req.getGenere() == null)
-			throw new CustomException("Inserisci il genere del prodotto");	
-		if(req.getDescrizione() == null)
-			throw new CustomException("Inserisci una descrizione del prodotto");
-		if(req.getAnnoPubblicazione() == null)
-			throw new CustomException("Inserisci l'anno di pubblicazione del prodotto");
-		if(req.getPrezzo() == null)
-			throw new CustomException("Inserisci il prezzo del prodotto");
-		if(req.getQuantita() == null)
-			throw new CustomException("Inserisci una quantità disponibile del prodotto");
+		validazioneValoriProdotto(req);
 		
 		prodotto.setFormato(Formato.valueOf(req.getFormato()));
 		prodotto.setTitolo(req.getTitolo());
@@ -78,7 +68,7 @@ public class ProdottoImpl implements ProdottoService{
 						.annoPubblicazione(p.getAnnoPubblicazione())
 						.prezzo(p.getPrezzo())
 						.immagineProdotto(p.getImmagineProdotto())
-						.quantita(p.getQuantita())     
+						.quantita(p.getQuantita()) 
 						.build())
 				.collect(Collectors.toList());
 		
@@ -86,16 +76,45 @@ public class ProdottoImpl implements ProdottoService{
 	}
 
 	@Override
-	public void update(ProdottoRequest req) throws Exception {
-
+	public void update(ProdottoRequest req) throws CustomException {
 		
-	}
-
-	@Override
-	public void delete(ProdottoRequest req) throws Exception {
-
+		Optional<Prodotto> prodotto = prodottoRepository.findById(req.getIdProdotto());
+		if(prodotto.isEmpty())
+			throw new CustomException("Prodotto non trovato");
+		
+		Prodotto p = prodotto.get();
+		
+		validazioneValoriProdotto(req);
+		
+		p.setFormato(Formato.valueOf(req.getFormato()));
+		p.setTitolo(req.getTitolo());
+		p.setArtista(req.getArtista());
+		p.setGenere(req.getGenere());
+		p.setDescrizione(req.getDescrizione());
+		p.setAnnoPubblicazione(req.getAnnoPubblicazione());
+		p.setPrezzo(req.getPrezzo());
+		p.setQuantita(req.getQuantita());
+		p.setImmagineProdotto(req.getImmagineProdotto());
+		
+		prodottoRepository.save(p);
 		
 	}
 	
 
+	@Transactional(rollbackOn = CustomException.class)
+	@Override
+	public void delete(ProdottoRequest req) throws CustomException {
+		Optional<Prodotto> prodotto = prodottoRepository.findById(req.getIdProdotto());
+		if(prodotto.isEmpty())
+			throw new CustomException("Prodotto non trovato");
+		
+		Prodotto p = prodotto.get();
+		prodottoRepository.delete(p);
+		
+	}
+	
+
+	
+
+	
 }
