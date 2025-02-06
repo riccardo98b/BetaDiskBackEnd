@@ -1,11 +1,13 @@
 package com.betacom.dischi.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class UtenteDTO {
+	//@JsonIgnore // evito di esporre un campo nel mapping
 
 	private Integer idUtente;
 	private String username;
 	private String email;
-	private String password;
 	private String roles;
 	private ClienteDTO cliente;
 	private UtenteDTO() {
@@ -15,7 +17,6 @@ public class UtenteDTO {
 		private Integer idUtente;
 		private String username;
 		private String email;
-		private String password;
 		private String roles;
 		private ClienteDTO cliente;
 		
@@ -37,11 +38,7 @@ public class UtenteDTO {
 			return this;
 		}
 
-		public Builder setPassword(String password) {
-			this.password = password;
-			return this;
-		}
-
+		
 		public Builder setRoles(String roles) {
 			this.roles = roles;
 			return this;
@@ -56,7 +53,6 @@ public class UtenteDTO {
 			UtenteDTO dto = new UtenteDTO();
 			dto.idUtente= this.idUtente;
 			dto.username= this.username;
-			dto.password= this.password;
 			dto.email = this.email;
 			dto.roles = this.roles;
 			dto.cliente = this.cliente;
@@ -66,16 +62,7 @@ public class UtenteDTO {
 		
 		
 	}
-	public UtenteDTO(Integer idUtente, String username, String email, String password, String roles,
-			ClienteDTO cliente) {
-		super();
-		this.idUtente = idUtente;
-		this.username = username;
-		this.email = email;
-		this.password = password;
-		this.roles = roles;
-		this.cliente = cliente;
-	}
+
 	public Integer getIdUtente() {
 		return idUtente;
 	}
@@ -88,9 +75,7 @@ public class UtenteDTO {
 		return email;
 	}
 	
-	public String getPassword() {
-		return password;
-	}
+
 	
 	public String getRoles() {
 		return roles;
@@ -102,8 +87,7 @@ public class UtenteDTO {
 	
 	@Override
 	public String toString() {
-		return "UtenteDTO [idUtente=" + idUtente + ", username=" + username + ", email=" + email + ", password="
-				+ password + ", roles=" + roles + ", cliente=" + cliente + "]";
+		return "UtenteDTO [idUtente=" + idUtente + ", username=" + username + ", email=" + email  + ", roles=" + roles + ", cliente=" + cliente + "]";
 	}
 	
 	

@@ -1,6 +1,5 @@
 package com.betacom.dischi;
 
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -8,10 +7,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.betacom.dischi.DTO.ClienteDTO;
 import com.betacom.dischi.controller.ClienteController;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.ClienteRequest;
 import com.betacom.dischi.response.ResponseBase;
+import com.betacom.dischi.response.ResponseList;
+import com.betacom.dischi.response.ResponseObject;
+
+
 import org.assertj.core.api.Assertions;
 
 @SpringBootTest
@@ -20,14 +24,11 @@ public class ClienteControllerTest {
 	
 	@Autowired
 	ClienteController clienteController;
-	
-	@Autowired
-	Logger log;
-	
-	
+
+	// convenzione nomi metodi test: nomeMetodo_condizione_risultatoAspettato
 	@Test
 	@Order(1)
-	public void createClienteTest() throws CustomException{
+	public void createCliente_withValidData_shouldCreateCliente() throws CustomException {
 		ClienteRequest req = new ClienteRequest();
 		req.setNome("Matteo");
 		req.setCognome("Bianchi");
@@ -36,5 +37,99 @@ public class ClienteControllerTest {
 		ResponseBase response = clienteController.create(req);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
+	
+	@Test
+	@Order(2)
+	public void createCliente_withoutImage_shouldCreateCliente() throws CustomException {
+		ClienteRequest req = new ClienteRequest();
+		req.setNome("Carla");
+		req.setCognome("Rossi");
+		req.setTelefono("3456401129");	
+		ResponseBase response = clienteController.create(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);
+	}
+	
+	@Test
+	@Order(3)
+	public void createCliente_withInvalidPhoneNumber_shouldThrowException() throws CustomException {
+		ClienteRequest req = new ClienteRequest();
+		req.setNome("Maria");
+		req.setCognome("Bianca");
+		req.setTelefono("dcnsdj23");	
+		req.setImmagineCliente("https://randomuser.me/api/portraits/women/9.jpg");
+		Assertions.assertThatExceptionOfType(CustomException.class)
+        .isThrownBy(() -> clienteController.create(req));
+	}
+	
+	@Test
+	@Order(4)
+	public void createCliente_withoutRequiredFields_shouldReturnErrorAndThrowException() throws CustomException {
+		ClienteRequest req = new ClienteRequest();
+		req.setImmagineCliente("https://randomuser.me/api/portraits/women/9.jpg");
 
+		ResponseBase response = clienteController.create(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+		Assertions.assertThatExceptionOfType(CustomException.class)
+        .isThrownBy(() -> clienteController.create(req));
+	}
+	
+	@Test
+	@Order(5)
+	public void updateCliente_withValidData_shouldUpdateCliente() throws CustomException {
+	    Integer validId = 1;
+	    ClienteRequest req = new ClienteRequest();
+	    req.setIdCliente(validId);
+	    req.setNome("Paolo");
+	    req.setCognome("Cerco");
+	    req.setImmagineCliente("https://google.com");
+	    req.setTelefono("123456789");
+
+	    ResponseBase response = clienteController.update(req);
+	    Assertions.assertThat(response.getRc()).isEqualTo(true);
+	    
+	    ResponseObject<ClienteDTO> updatedCliente = clienteController.listById(validId);
+	    Assertions.assertThat(updatedCliente.getDati().getNome()).isEqualTo("Paolo");
+	    Assertions.assertThat(updatedCliente.getDati().getCognome()).isEqualTo("Cerco");
+	}
+	
+	@Test
+	@Order(6)
+	public void updateCliente_withInvalidId_shouldThrowException() {
+		Integer idInvalid = 2983;
+		ClienteRequest req = new ClienteRequest();
+		req.setIdCliente(idInvalid);
+		req.setNome("Gianni");
+		req.setCognome("Verde");
+		
+		Assertions.assertThatExceptionOfType(CustomException.class)
+		    .isThrownBy(() -> clienteController.update(req));
+	}
+
+	@Test
+	@Order(7)
+	public void listAllClientes_shouldReturnListOfCliente() throws CustomException {
+	    ResponseList<ClienteDTO> responseList = clienteController.list();
+	    Assertions.assertThat(responseList).isNotNull();
+	    Assertions.assertThat(responseList.getDati()).isNotEmpty();
+	}
+	
+	@Test
+	@Order(8)
+	public void listById_withInvalidId_shouldThrowException() {
+		Integer invalidId = 2938;
+		Assertions.assertThatExceptionOfType(CustomException.class)
+		.isThrownBy(() -> clienteController.listById(invalidId));
+	}
+	
+	@Test
+	@Order(9)
+	public void deleteCliente_withValidId_shouldDeleteCliente() {
+		Integer validId = 1;
+		ClienteRequest req = new ClienteRequest();
+		req.setIdCliente(validId);
+		ResponseBase response = clienteController.delete(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);
+		Assertions.assertThatExceptionOfType(CustomException.class)
+		          .isThrownBy(() -> clienteController.listById(validId));
+	}
 }

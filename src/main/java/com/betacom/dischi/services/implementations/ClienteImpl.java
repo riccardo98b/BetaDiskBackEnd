@@ -29,7 +29,6 @@ public class ClienteImpl implements ClienteService {
 	@Override
 	public List<ClienteDTO> listAll() {
 		List<Cliente> listaClienti = clienteRepo.findAll();
-		log.debug("Trovati " + listaClienti.size() + " clienti.");
 		return listaClienti.stream().map(MapperClienteToDTO::mapClienteToDTO).collect(Collectors.toList());
 	}
 

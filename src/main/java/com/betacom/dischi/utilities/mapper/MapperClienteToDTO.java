@@ -32,6 +32,22 @@ public class MapperClienteToDTO {
 				.setOrdini(mapOrdini(cliente)).setRecensioni(mapRecensioni(cliente)).setUtente(mapUtente(cliente))
 				.setWishlist(mapWishlist(cliente)).build();
 	}
+	// TODO: serve builder
+		public static UtenteDTO mapUtente(Cliente cliente) {
+			if (cliente.getUtente() == null) {
+				return null;
+			}
+			Utente utente = cliente.getUtente();
+
+			return new UtenteDTO.Builder()
+					.setIdUtente(utente.getIdUtente())
+					.setUsername(utente.getUsername())
+					.setEmail(utente.getEmail())
+					.setRoles(utente.getRoles().toString())
+					// password non la mostro,e neanche cliente
+					.build();
+		}
+
 
 	public static List<OrdineDTO> mapOrdini(Cliente cliente) {
 		if (cliente.getOrdini() == null) {
@@ -51,12 +67,26 @@ public class MapperClienteToDTO {
 		}
 
 		return ordine.getProdotti().stream()
-				.map(prodotto -> new ProdottoDTO(prodotto.getIdProdotto(), prodotto.getFormato().toString(),
-						prodotto.getTitolo(), prodotto.getArtista(), prodotto.getGenere(), prodotto.getDescrizione(),
-						prodotto.getAnnoPubblicazione(), prodotto.getPrezzo(), prodotto.getQuantita(),
-						prodotto.getImmagineProdotto(), Collections.emptyList(), Collections.emptyList()))
+				.map(prodotto -> new ProdottoDTO.Builder()
+						.idProdotto(prodotto.getId())
+						.formato(prodotto.getProdotto().getFormato().toString())
+						.titolo(prodotto.getProdotto().getTitolo())
+						.artista(prodotto.getProdotto().getArtista())
+						.genere(prodotto.getProdotto().getGenere())
+						.prezzo(prodotto.getProdotto().getPrezzo())
+						.quantita(prodotto.getQuantita())
+						.descrizione(prodotto.getProdotto().getDescrizione())
+						.annoPubblicazione(prodotto.getProdotto().getAnnoPubblicazione())
+						.immagineProdotto(prodotto.getProdotto().getImmagineProdotto())
+						
+						
+				.build())
 				.collect(Collectors.toList());
 	}
+	
+
+	
+
 
 	// TODO: DA SISTEMARE
 	public static List<RecensioneDTO> mapRecensioni(Cliente cliente) {
@@ -90,34 +120,18 @@ public class MapperClienteToDTO {
 		}
 		Carrello carrello = cliente.getCarrello();
 
-		return new CarrelloDTO(carrello.getIdCarrello(), carrello.getTotale(), mapProdotti(carrello), null,
-				carrello.getQuantita());
+		return new CarrelloDTO.Builder()
+				.setIdCarrello(carrello.getIdCarrello())
+				.setCliente(null)
+				.setProdotti(null)
+				.setTotale(carrello.getTotale())
+				
+				.build();
+		
 	}
+	
 
-	// TODO :serve builder
-	public static List<ProdottoDTO> mapProdotti(Carrello carrello) {
-		if (carrello.getProdotti() == null) {
-			return Collections.emptyList();
-		}
 
-		return carrello.getProdotti().stream()
-				.map(prodotto -> new ProdottoDTO(prodotto.getIdProdotto(), prodotto.getFormato().toString(),
-						prodotto.getTitolo(), prodotto.getArtista(), prodotto.getGenere(), prodotto.getDescrizione(),
-						prodotto.getAnnoPubblicazione(), prodotto.getPrezzo(), prodotto.getQuantita(),
-						prodotto.getImmagineProdotto(), Collections.emptyList(), Collections.emptyList()))
-				.collect(Collectors.toList());
-	}
-
-	// TODO: serve builder
-	public static UtenteDTO mapUtente(Cliente cliente) {
-		if (cliente.getUtente() == null) {
-			return null;
-		}
-		Utente utente = cliente.getUtente();
-
-		return new UtenteDTO(utente.getIdUtente(), utente.getUsername(), utente.getEmail(), null,
-				utente.getRoles().toString(), null);
-	}
 
 	// TODO: probabilmente da cancellare
 	private static List<Integer> getProdottiIds(Wishlist wishlist) {

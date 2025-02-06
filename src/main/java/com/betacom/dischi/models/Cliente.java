@@ -140,6 +140,14 @@ public class Cliente {
 	public void setDataRegistrazione(LocalDate dataRegistrazione) {
 		this.dataRegistrazione = dataRegistrazione;
 	}
+
+	@Override
+	public String toString() {
+		return "Cliente [idCliente=" + idCliente + ", nome=" + nome + ", cognome=" + cognome + ", telefono=" + telefono
+				+ ", immagineCliente=" + immagineCliente + ", dataRegistrazione=" + dataRegistrazione + ", ordini="
+				+ ordini + ", carrello=" + carrello + ", utente=" + utente + ", wishlist=" + wishlist + ", recensioni="
+				+ recensioni + "]";
+	}
 	
 	
 }
