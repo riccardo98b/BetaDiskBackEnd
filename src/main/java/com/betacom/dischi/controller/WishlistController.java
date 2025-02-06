@@ -54,6 +54,7 @@ public class WishlistController {
     public ResponseBase delete(@RequestBody(required = true) WishlistRequest req) {
         ResponseBase response = new ResponseBase();
         try {
+            // Call the service's delete method
             wishlistService.delete(req);
             response.setrC(true); 
             response.setMsg("Wishlist eliminata con successo!");
@@ -61,12 +62,10 @@ public class WishlistController {
             response.setrC(false); 
             response.setMsg(e.getMessage());
         }
-        
-        if (response.getrC() == null) {
-            response.setrC(false);  
-        }
+
         return response;
     }
+
     
     @GetMapping("/listAll")
     public ResponseList<WishlistDTO> list() {

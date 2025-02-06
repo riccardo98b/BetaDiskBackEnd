@@ -5,8 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.WishlistDTO;
-import com.betacom.dischi.DTO.ProdottoDTO;
-import com.betacom.dischi.DTO.ClienteDTO;
+
 import com.betacom.dischi.models.Cliente;
 import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Wishlist;
@@ -14,10 +13,11 @@ import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.repository.IWishlistRepository;
 import com.betacom.dischi.request.WishlistRequest;
+import com.betacom.dischi.response.ResponseObject;
 import com.betacom.dischi.services.interfaces.WishlistService;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class WishlistImpl implements WishlistService {
@@ -35,73 +35,81 @@ public class WishlistImpl implements WishlistService {
     private IProdottoRepository prodottoRepository;
 
     @Override
-    public void create(WishlistRequest req) throws Exception {
-        logger.info("Creazione Wishlist per Cliente ID: {}", req.getClienteId());
-        
-        Cliente cliente = clienteRepository.findById(req.getClienteId())
-            .orElseThrow(() -> new Exception("Cliente non trovato"));
+    public ResponseObject<String> create(WishlistRequest req) {
+        ResponseObject<String> response = new ResponseObject<>();
 
-        List<Prodotto> prodotti = prodottoRepository.findAllById(req.getProdottiIds());
-        if (prodotti.isEmpty() || prodotti.size() != req.getProdottiIds().size()) {
-            throw new Exception("Alcuni prodotti non sono stati trovati nel database");
+        try {
+            Cliente cliente = clienteRepository.findById(req.getIdCliente())
+                    .orElseThrow(() -> new Exception("Cliente non trovato"));
+
+            List<Prodotto> prodotti = prodottoRepository.findAllById(req.getIdProdotti());
+            
+            if (prodotti.size() != req.getIdProdotti().size()) {
+                throw new Exception("1 o pi");
+            }
+            Wishlist wishlist = new Wishlist();
+            wishlist.setCliente(cliente);
+            wishlist.setProdotti(prodotti);
+
+            wishlistRepository.save(wishlist);
+
+            response.setrC(true);
+            response.setMsg("Wishlist creata con successo");
+        } catch (Exception e) {
+            logger.error("Errore nella creazione wishlist", e);
+            response.setrC(false);
+            response.setMsg("Error: " + e.getMessage());
         }
 
-        Wishlist wishlist = new Wishlist();
-        wishlist.setCliente(cliente);
-        wishlist.setProdotti(prodotti);
-
-        wishlistRepository.save(wishlist);
-        logger.info("Wishlist creata con successo per Cliente ID: {}", req.getClienteId());
+        return response;
+    }
+    @Override
+    public List<WishlistDTO> listAll() {
+       
+        return null;
     }
 
     @Override
     public void update(WishlistRequest req) throws Exception {
-        Wishlist wishlist = wishlistRepository.findById(req.getIdWishlist())
-                                              .orElseThrow(() -> new Exception("Wishlist non trovata"));
-
-        List<Prodotto> prodotti = prodottoRepository.findAllById(req.getProdottiIds());
-        wishlist.setProdotti(prodotti);
-
-        wishlistRepository.save(wishlist);
+        
     }
 
     @Override
-    public void delete(WishlistRequest req) throws Exception {
-        Wishlist wishlist = wishlistRepository.findById(req.getIdWishlist())
-                                              .orElseThrow(() -> new Exception("Wishlist non trovata"));
+    public ResponseObject<String> delete(WishlistRequest req) {
+        ResponseObject<String> response = new ResponseObject<>();
+        
+        try {
+           
+            Wishlist wishlist = wishlistRepository.findById(req.getIdWishlist())
+                    .orElseThrow(() -> new Exception("Wishlist not found"));
 
-        wishlistRepository.delete(wishlist);
-    }
+          
+            wishlist.getProdotti().clear();  
+           
+            if (wishlist.getCliente() != null) {
+                wishlist.getCliente().setWishlist(null);  
+            }
 
-    private WishlistDTO convertToDTO(Wishlist wishlist) {
-        List<ProdottoDTO> prodottiDTO = wishlist.getProdotti().stream()
-            .map(prodotto -> new ProdottoDTO(prodotto.getIdProdotto(), prodotto.getNome(), prodotto.getPrezzo()))
-            .collect(Collectors.toList());
-
-        ClienteDTO clienteDTO = null;
-        if (wishlist.getCliente() != null) {
-            Cliente cliente = wishlist.getCliente();
-            clienteDTO = new ClienteDTO(cliente.getIdCliente(), cliente.getNome(), cliente.getCognome(), cliente.getTelefono(), cliente.getImmagineCliente(), null, null, null, null, null);
+           
+            wishlistRepository.delete(wishlist);
+            
+            response.setrC(true);
+            response.setMsg("Wishlist successfully deleted.");
+        } catch (Exception e) {
+            logger.error("Error while deleting wishlist", e);
+            response.setrC(false);
+            response.setMsg("Error: " + e.getMessage());
         }
-
-        return new WishlistDTO.Builder()
-            .idWishlist(wishlist.getIdWishlist())
-            .prodotti(prodottiDTO)
-            .cliente(clienteDTO)
-            .build();
+        
+        return response;
     }
 
-    @Override
-    public List<WishlistDTO> listAll() {
-        return wishlistRepository.findAll().stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
-    }
-    
+
+
+
     @Override
     public WishlistDTO getById(Integer id) throws Exception {
-        Wishlist wishlist = wishlistRepository.findById(id)
-                                              .orElseThrow(() -> new Exception("Wishlist non trovata"));
-        return convertToDTO(wishlist);
+      
+        return null;
     }
 }
