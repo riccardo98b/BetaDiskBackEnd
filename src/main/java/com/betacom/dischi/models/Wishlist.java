@@ -2,6 +2,7 @@ package com.betacom.dischi.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,7 +25,8 @@ public class Wishlist {
 	private Integer idWishlist;
 	
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	// @ManyToMany(fetch = FetchType.EAGER) PRIMA DELLA MODIFCA
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "prodotto_wishlist",
 			joinColumns = @JoinColumn(name="id_wishlist"),
@@ -32,7 +34,8 @@ public class Wishlist {
 	)
 	private List<Prodotto> prodotti;
 	
-	@OneToOne
+	// @OneToOne ORIMA DELLE MODICA
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="id_cliente")
 	private Cliente cliente;
 

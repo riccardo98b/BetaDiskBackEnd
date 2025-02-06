@@ -39,16 +39,17 @@ public class WishlistController {
     @PostMapping("/update")
     public ResponseBase update(@RequestBody(required = true) WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setrC(true);
-        log.debug(req.toString());
         try {
             wishlistService.update(req);
+            response.setrC(true);
+            response.setMsg("Wishlist aggiornata con successo!");
         } catch (Exception e) {
             response.setMsg(e.getMessage());
             response.setrC(false);
-        }        
+        }
         return response;
     }
+
     
     @PostMapping("/delete")
     public ResponseBase delete(@RequestBody(required = true) WishlistRequest req) {
