@@ -7,14 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.betacom.dischi.DTO.ClienteDTO;
 import com.betacom.dischi.DTO.SignInDTO;
 import com.betacom.dischi.DTO.UtenteDTO;
+import com.betacom.dischi.request.ClienteRequest;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
+import com.betacom.dischi.response.ResponseObject;
 import com.betacom.dischi.services.interfaces.UtenteService;
 
 @CrossOrigin(origins="*")
@@ -72,6 +76,35 @@ public class UtenteController {
 		return utenteService.signIn(req);
 	}
 	
+	@GetMapping("/listById")
+	public ResponseObject<UtenteDTO> listById(@RequestParam Integer id){
+		log.debug("List " + id );
+		ResponseObject<UtenteDTO> response = new ResponseObject<UtenteDTO>();
+		try {
+			response.setDati(utenteService.listById(id));
+			response.setRc(true);
+	        response.setMsg("Visualizzazione dati cliente con id: "+id);
+
+		}catch(Exception e) {
+			log.error(e.getMessage());
+			response.setMsg(e.getMessage());
+			response.setRc(false);
+		}
+		return response;
+	}
+	@PostMapping("/delete")
+	public ResponseBase delete(@RequestBody(required = true) UtenteRequest req) {
+	    ResponseBase response = new ResponseBase();
+	    try {
+	        utenteService.deleteUser(req.getIdUtente());
+	        response.setRc(true); // 
+	        response.setMsg("Utente eliminato con successo!");
+	    } catch (Exception e) {
+	        response.setRc(false); 
+	        response.setMsg(e.getMessage());
+	    }
+	    return response;
+	}
 	
 	
 

@@ -13,7 +13,7 @@ public class SignInDTO {
 		this.logged = logged;
 		this.role = role;
 	}
-	public Boolean getLogged() {
+	public Boolean isLogged() {
 		return logged;
 	}
 	public String getRole() {

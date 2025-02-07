@@ -60,6 +60,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Dipendenza per il codificatore di password delegato -->
+    <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+    </dependency>
+
 	</dependencies>
 
 	<build>

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.SignInDTO;
@@ -19,6 +20,7 @@ import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
 import com.betacom.dischi.services.interfaces.UtenteService;
 import com.betacom.dischi.utilities.Roles;
+import com.betacom.dischi.utilities.mapper.MapperClienteToDTO;
 
 import jakarta.transaction.Transactional;
 
@@ -34,24 +36,32 @@ public class UtenteImpl implements UtenteService{
 	@Autowired
 	private Logger log;
 	
-
+    @Autowired
+    PasswordEncoder passwordEncoder;
 	
 	public UtenteImpl() {}
 
 	@Override
 	public SignInDTO signIn(SignInRequest req) {
-		log.debug("Signin utente: "+req.getUsername());
-		SignInDTO resp = new SignInDTO();
-		Optional<Utente> utente = utenteRepo.findByUsernameAndPassword(req.getUsername(), req.getPassword());
-		if(utente.isEmpty()) {
-			resp.setLogged(false);
-		}
-		else {
-			resp.setLogged(true);
-			resp.setRole(utente.get().getRoles().toString());
-		}
-		return resp;
+	    log.debug("Signin utente: " + req.getUsername());
+	    SignInDTO resp = new SignInDTO();
+	    
+	    Optional<Utente> utente = utenteRepo.findByUsername(req.getUsername());
+	    
+	    if (utente.isEmpty()) {
+	        resp.setLogged(false); 
+	    } else {
+	        if (passwordEncoder.matches(req.getPassword(), utente.get().getPassword())) {
+	            resp.setLogged(true); 
+	            resp.setRole(utente.get().getRoles().toString());
+	        } else {
+	            resp.setLogged(false); 
+	        }
+	    }
+	    
+	    return resp;
 	}
+
 
 	@Transactional
 	@Override
@@ -72,10 +82,11 @@ public class UtenteImpl implements UtenteService{
      Cliente cliente = optCliente.get();
      if(cliente.getUtente() != null) {
     	 throw new CustomException("Cliente gia associato ad un altro utente");
-
      }
      Utente utente = new Utente();
-     utente.setPassword(req.getPassword());
+
+     utente.setPassword(passwordEncoder.encode(req.getPassword()));
+
      utente.setRoles(Roles.valueOf(req.getRoles()));
      utente.setEmail(req.getEmail());
      utente.setUsername(req.getUsername());
@@ -101,5 +112,30 @@ public class UtenteImpl implements UtenteService{
 	                    .build())
 	            .collect(Collectors.toList());
 	}
-
+	
+	@Transactional
+	@Override
+	public void deleteUser(Integer id) throws CustomException{
+		log.debug("Cancellazione utente con ID: "+id);
+		Utente utente = utenteRepo.findById(id)
+				.orElseThrow(() -> new CustomException("Utente con ID: "+id+" non trovato"));
+		Cliente cliente = utente.getCliente();
+		if(cliente != null) {
+			cliente.setUtente(null);
+			clienteRepo.save(cliente);
+		}
+		utenteRepo.delete(utente);
+		
+	}
+	
+	@Override
+	public UtenteDTO listById(Integer id) throws CustomException {
+		log.debug("Visualizzazione dati utente con ID: " + id);
+	    Utente utente = utenteRepo.findById(id)
+	    		.orElseThrow(() -> new CustomException("Utente con id "+id+" non trovato."));
+		return MapperClienteToDTO.mapUtente(utente.getCliente());
+}
+	
+	
+	
 }

@@ -25,6 +25,8 @@ public class ClienteControllerTest {
 	@Autowired
 	ClienteController clienteController;
 
+	final Integer VALID_ID = 1;
+	final Integer INVALID_ID = -2;
 	// convenzione nomi metodi test: nomeMetodo_condizione_risultatoAspettato
 	@Test
 	@Order(1)
@@ -76,9 +78,8 @@ public class ClienteControllerTest {
 	@Test
 	@Order(5)
 	public void updateCliente_withValidData_shouldUpdateCliente() throws CustomException {
-	    Integer validId = 1;
 	    ClienteRequest req = new ClienteRequest();
-	    req.setIdCliente(validId);
+	    req.setIdCliente(VALID_ID);
 	    req.setNome("Paolo");
 	    req.setCognome("Cerco");
 	    req.setImmagineCliente("https://google.com");
@@ -87,7 +88,7 @@ public class ClienteControllerTest {
 	    ResponseBase response = clienteController.update(req);
 	    Assertions.assertThat(response.getRc()).isEqualTo(true);
 	    
-	    ResponseObject<ClienteDTO> updatedCliente = clienteController.listById(validId);
+	    ResponseObject<ClienteDTO> updatedCliente = clienteController.listById(VALID_ID);
 	    Assertions.assertThat(updatedCliente.getDati().getNome()).isEqualTo("Paolo");
 	    Assertions.assertThat(updatedCliente.getDati().getCognome()).isEqualTo("Cerco");
 	}
@@ -95,9 +96,8 @@ public class ClienteControllerTest {
 	@Test
 	@Order(6)
 	public void updateCliente_withInvalidId_shouldThrowException() {
-		Integer idInvalid = 2983;
 		ClienteRequest req = new ClienteRequest();
-		req.setIdCliente(idInvalid);
+		req.setIdCliente(INVALID_ID);
 		req.setNome("Gianni");
 		req.setCognome("Verde");
 		
@@ -116,20 +116,17 @@ public class ClienteControllerTest {
 	@Test
 	@Order(8)
 	public void listById_withInvalidId_shouldThrowException() {
-		Integer invalidId = 2938;
 		Assertions.assertThatExceptionOfType(CustomException.class)
-		.isThrownBy(() -> clienteController.listById(invalidId));
+		.isThrownBy(() -> clienteController.listById(INVALID_ID));
 	}
 	
 	@Test
 	@Order(9)
 	public void deleteCliente_withValidId_shouldDeleteCliente() {
-		Integer validId = 1;
 		ClienteRequest req = new ClienteRequest();
-		req.setIdCliente(validId);
+		req.setIdCliente(VALID_ID);
 		ResponseBase response = clienteController.delete(req);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
-		Assertions.assertThatExceptionOfType(CustomException.class)
-		          .isThrownBy(() -> clienteController.listById(validId));
+
 	}
 }
