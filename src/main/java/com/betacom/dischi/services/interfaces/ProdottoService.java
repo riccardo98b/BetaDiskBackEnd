@@ -9,10 +9,9 @@ public interface ProdottoService {
 
 	void create(ProdottoRequest req)throws Exception;
 	
-	List<ProdottoDTO> listAll();
-	
 	void update(ProdottoRequest req)throws Exception;
 	
 	void delete(ProdottoRequest req)throws Exception;
 	
+	List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere, Integer annoPubblicazione) throws Exception;
 }

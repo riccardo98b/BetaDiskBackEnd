@@ -84,17 +84,45 @@ public class ProdottoControllerTest {
 	@Order(2)
 	public void listAllProdotti() throws CustomException{
 		
-		ProdottoRequest dto = createProdottoGeneralDTO();
-		ResponseList<ProdottoDTO> lista = prodottoController.list();
-			
+		Integer idProdotto = 1;
+		String titolo = "Among the Living";
+		String artista = "Anthrax";
+		String genere = "Thrash Metal";
+		Integer annoPubblicazione = 1987;
 		
+		ResponseList<ProdottoDTO> lista = prodottoController.listAll(idProdotto, titolo, artista, genere, annoPubblicazione);
+
 		Assertions.assertThat(lista).isNotNull();
+		
+		Assertions.assertThat(lista
+				.getDati()
+				.stream()
+				.anyMatch(t -> t.getIdProdotto()
+						.equals(idProdotto))).isTrue();
+		
 		Assertions.assertThat(lista
 								.getDati()
 								.stream()
 								.anyMatch(t -> t.getTitolo()
-										.equals("Among the Living"))).isTrue();
+										.equals(titolo))).isTrue();
 	
+		Assertions.assertThat(lista
+				.getDati()
+				.stream()
+				.anyMatch(t -> t.getArtista()
+						.equals(artista))).isTrue();
+		
+		Assertions.assertThat(lista
+				.getDati()
+				.stream()
+				.anyMatch(t -> t.getGenere()
+						.equals(genere))).isTrue();
+		
+		Assertions.assertThat(lista
+				.getDati()
+				.stream()
+				.anyMatch(t -> t.getAnnoPubblicazione()
+						.equals(annoPubblicazione))).isTrue();
 	} 
 	
 	

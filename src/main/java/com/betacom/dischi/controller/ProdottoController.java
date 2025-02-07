@@ -41,20 +41,6 @@ public class ProdottoController {
 		return response;
 		
 	}
-
-	@GetMapping("/list")
-	public ResponseList<ProdottoDTO> list() {
-		ResponseList<ProdottoDTO> response = new ResponseList<ProdottoDTO>();
-		response.setRc(true);
-		try {
-			response.setDati(prodottoService.listAll());
-	
-		}catch(Exception e) {
-			response.setRc(false);
-			response.setMsg(e.getMessage());
-		}
-		return response;
-	}
 	
 	@PostMapping("/update")
 	public ResponseBase update(@RequestBody(required = true) ProdottoRequest req) {
@@ -81,6 +67,22 @@ public class ProdottoController {
 		}catch(Exception e) {
 			response.setMsg(e.getMessage());
 			response.setRc(false);
+		}
+		return response;
+	}
+	
+	
+	@GetMapping("/list")
+	public ResponseList<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere, 
+			Integer annoPubblicazione){
+		ResponseList<ProdottoDTO> response = new ResponseList<ProdottoDTO>();
+		response.setRc(true);
+		try {
+			response.setDati(prodottoService.listAll(idProdotto, titolo, artista, genere, annoPubblicazione));
+	
+		}catch(Exception e) {
+			response.setRc(false);
+			response.setMsg(e.getMessage());
 		}
 		return response;
 	}

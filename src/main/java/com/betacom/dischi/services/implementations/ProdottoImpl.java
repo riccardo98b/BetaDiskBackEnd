@@ -52,28 +52,6 @@ public class ProdottoImpl implements ProdottoService{
 	}
 	
 
-	@Override
-	public List<ProdottoDTO> listAll() {
-		
-	List<Prodotto> listaProdotti = prodottoRepository.findAll();
-		
-		return listaProdotti.stream()
-				.map(p -> new ProdottoDTO.Builder()
-						.idProdotto(p.getIdProdotto())
-						.formato(p.getFormato().toString())
-						.titolo(p.getTitolo())
-						.artista(p.getArtista())
-						.genere(p.getGenere())
-						.descrizione(p.getDescrizione())
-						.annoPubblicazione(p.getAnnoPubblicazione())
-						.prezzo(p.getPrezzo())
-						.immagineProdotto(p.getImmagineProdotto())
-						.quantita(p.getQuantita()) 
-						.build())
-				.collect(Collectors.toList());
-		
-		
-	}
 
 	@Override
 	public void update(ProdottoRequest req) throws CustomException {
@@ -112,9 +90,30 @@ public class ProdottoImpl implements ProdottoService{
 		prodottoRepository.delete(p);
 		
 	}
-	
 
-	
 
-	
+	@Override
+	public List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere,
+			Integer annoPubblicazione) throws Exception {
+		
+		List<Prodotto> listaFiltrata = prodottoRepository.prodottiFiltrati(idProdotto,titolo, artista, genere, annoPubblicazione);
+		
+		return listaFiltrata.stream()
+				.map(p -> new ProdottoDTO.Builder()
+						.idProdotto(p.getIdProdotto())
+						.formato(p.getFormato().toString())
+						.titolo(p.getTitolo())
+						.artista(p.getArtista())
+						.genere(p.getGenere())
+						.descrizione(p.getDescrizione())
+						.annoPubblicazione(p.getAnnoPubblicazione())
+						.prezzo(p.getPrezzo())
+						.immagineProdotto(p.getImmagineProdotto())
+						.quantita(p.getQuantita()) 
+						.build())
+				.collect(Collectors.toList());
+		
+		
+	}
 }
+	
