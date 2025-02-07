@@ -40,30 +40,30 @@ public class WishlistImpl implements WishlistService {
         log.debug("Create Wishlist: " + req);
         
         try {
-            // Ensure the Cliente exists
+          
             Cliente cliente = clienteRepository.findById(req.getIdCliente())
                     .orElseThrow(() -> new CustomException("Cliente non trovato"));
 
-            // Ensure the Prodotto exists
+           
             List<Prodotto> prodotti = prodottoRepository.findAllById(req.getIdProdotti());
 
-            // Validate if all prodotti are found
+            
             if (prodotti.size() != req.getIdProdotti().size()) {
                 throw new CustomException("1 o più prodotti non trovati");
             }
 
-            // Create the Wishlist and associate Cliente and Prodotti
+           
             Wishlist wishlist = new Wishlist();
             wishlist.setCliente(cliente);
             wishlist.setProdotti(prodotti);
 
-            // Save the Wishlist in the database
+          
             wishlistRepository.save(wishlist);
 
             log.debug("Wishlist creata con successo con ID: " + wishlist.getIdWishlist());
 
         } catch (Exception e) {
-            // Log the error and throw a CustomException
+          
             log.error("Errore nella creazione della wishlist", e);
             throw new CustomException("Errore nella creazione della wishlist: " + e.getMessage());
         }
@@ -79,37 +79,37 @@ public class WishlistImpl implements WishlistService {
         log.debug("Update Wishlist: " + req);
 
         try {
-            // Troviamo la wishlist esistente con l'ID fornito
+            
             Optional<Wishlist> optWishlist = wishlistRepository.findById(req.getIdWishlist());
 
-            // Se la wishlist non viene trovata, solleviamo un'eccezione
+            
             Wishlist wishlist = optWishlist.orElseThrow(() ->
                 new CustomException("Id: " + req.getIdWishlist() + " del wishlist non trovato.")
             );
 
-            // Se il cliente specificato nel request non esiste, solleviamo un'eccezione
+           
             Cliente cliente = clienteRepository.findById(req.getIdCliente())
                     .orElseThrow(() -> new CustomException("Cliente non trovato"));
 
-            // Recuperiamo i prodotti specificati nel request
+            
             List<Prodotto> prodotti = prodottoRepository.findAllById(req.getIdProdotti());
 
-            // Verifica che tutti i prodotti siano stati trovati
+            
             if (prodotti.size() != req.getIdProdotti().size()) {
                 throw new CustomException("1 o più prodotti non trovati");
             }
 
-            // Aggiorniamo la wishlist con i nuovi dati
+           
             wishlist.setCliente(cliente);
             wishlist.setProdotti(prodotti);
 
-            // Salviamo la wishlist aggiornata nel database
+            
             wishlistRepository.save(wishlist);
 
             log.debug("Wishlist con ID " + req.getIdWishlist() + " aggiornata con successo.");
 
         } catch (Exception e) {
-            // Log dell'errore e sollevamento dell'eccezione
+         
             log.error("Errore nell'aggiornamento della wishlist", e);
             throw new CustomException("Errore nell'aggiornamento della wishlist: " + e.getMessage());
         }
@@ -118,19 +118,16 @@ public class WishlistImpl implements WishlistService {
     @Override
     public void delete(WishlistRequest req) throws CustomException {
         log.debug("Delete Wishlist: " + req);
-        
-        // Find the wishlist by its ID using the provided ID from the request
+     
         Optional<Wishlist> optWishlist = wishlistRepository.findById(req.getIdWishlist());
         
-        // If the wishlist is not found, throw a custom exception
+    
         Wishlist wishlist = optWishlist.orElseThrow(() -> 
             new CustomException("Id: " + req.getIdWishlist() + " del wishlist non trovato.")
         );
-        
-        // Delete the wishlist
+       
         wishlistRepository.delete(wishlist);
-        
-        // Log the successful deletion
+       
         log.debug("Wishlist con Id " + req.getIdWishlist() + " eliminato con successo.");
     }
 
