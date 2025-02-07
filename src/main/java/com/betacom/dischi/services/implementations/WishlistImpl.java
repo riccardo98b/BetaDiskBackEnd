@@ -1,6 +1,7 @@
 package com.betacom.dischi.services.implementations;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -93,6 +94,36 @@ public class WishlistImpl implements WishlistService {
             log.debug("Il prodotto ID " + idProdotto + " non è presente nella Wishlist del cliente ID " + idCliente);
             throw new CustomException("Il prodotto non è presente nella wishlist del cliente.");
         }
+    }
+ 
+    @Override
+    public void clearWishlist(Integer idCliente) throws CustomException {
+        log.debug("Svuotamento della Wishlist per il cliente con ID: " + idCliente);
+        
+        Cliente cliente = clienteRepository.findById(idCliente)
+                .orElseThrow(() -> new CustomException("Cliente con ID: " + idCliente + " non trovato."));
+        
+        Wishlist wishlist = wishlistRepository.findByCliente(cliente)
+                .orElseThrow(() -> new CustomException("Wishlist non trovata per il cliente ID: " + idCliente));
+        
+        wishlist.getProdotti().clear();
+        
+        wishlistRepository.save(wishlist);
+        log.debug("Wishlist svuotata con successo per il cliente ID: " + idCliente);
+    }
+
+    @Override
+    public List<Prodotto> getWishlistProducts(Integer idCliente) throws CustomException {
+        log.debug("Recupero dei prodotti dalla Wishlist per il cliente con ID: " + idCliente);
+        
+        Cliente cliente = clienteRepository.findById(idCliente)
+                .orElseThrow(() -> new CustomException("Cliente con ID: " + idCliente + " non trovato."));
+        
+        Wishlist wishlist = wishlistRepository.findByCliente(cliente)
+                .orElseThrow(() -> new CustomException("Wishlist non trovata per il cliente ID: " + idCliente));
+        
+       
+        return wishlist.getProdotti();
     }
 
 
