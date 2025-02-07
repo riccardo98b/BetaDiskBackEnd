@@ -25,8 +25,7 @@ public class Wishlist {
 	private Integer idWishlist;
 	
 	
-	// @ManyToMany(fetch = FetchType.EAGER) PRIMA DELLA MODIFCA
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "prodotto_wishlist",
 			joinColumns = @JoinColumn(name="id_wishlist"),
@@ -34,8 +33,7 @@ public class Wishlist {
 	)
 	private List<Prodotto> prodotti;
 	
-	// @OneToOne ORIMA DELLE MODICA
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name="id_cliente")
 	private Cliente cliente;
 
