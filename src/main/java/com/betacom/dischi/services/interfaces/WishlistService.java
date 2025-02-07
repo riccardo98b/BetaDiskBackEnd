@@ -13,6 +13,7 @@ public interface WishlistService {
    
     void addProductToWishlist(Integer idCliente, Integer idProdotto) throws CustomException;
 
+    void removeProductFromWishlist(Integer idCliente, Integer idProdotto) throws CustomException;
 
    
 }
