@@ -4,10 +4,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.betacom.dischi.DTO.WishlistDTO;
-import com.betacom.dischi.request.WishlistRequest;
+
 import com.betacom.dischi.response.ResponseBase;
-import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.services.interfaces.WishlistService;
 
 @RestController
