@@ -2,7 +2,7 @@ package com.betacom.dischi.models;
 
 import java.util.List;
 
-import com.betacom.dischi.utilities.Formato;
+import com.betacom.dischi.utilities.enums.Formato;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -1,4 +1,4 @@
-package com.betacom.dischi.utilities;
+package com.betacom.dischi.utilities.enums;
 
 public enum Formato {
 

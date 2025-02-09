@@ -43,7 +43,7 @@ public class UtenteControllerTest {
 		// cliente
 		reqCliente.setNome("Matteo");
 		reqCliente.setCognome("Bianchi");
-		reqCliente.setImmagineCliente("https://randomuser.me/api/portraits/women/9.jpg");
+		reqCliente.setImmagineCliente("https://randomuser.me/api/portraits/men/9.jpg");
 		reqCliente.setTelefono("3456401123");
 		//
         reqUtente = new UtenteRequest();
@@ -65,8 +65,8 @@ public class UtenteControllerTest {
 	
 	@Test
 	@Order(2)
-	public void listAllUtente_shouldReturnListOfUtente() throws CustomException{
-		ResponseList<UtenteDTO> responseList = utenteController.list();
+	public void listAllUtente_shouldReturnListOfUtente(Integer idUtente,String username,String email) throws CustomException{
+		ResponseList<UtenteDTO> responseList = utenteController.list(null, null, null);
 	    Assertions.assertThat(responseList).isNotNull();
 	    Assertions.assertThat(responseList.getDati()).isNotEmpty();
 	}

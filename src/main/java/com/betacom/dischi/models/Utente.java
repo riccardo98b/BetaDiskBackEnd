@@ -1,6 +1,6 @@
 package com.betacom.dischi.models;
 
-import com.betacom.dischi.utilities.Roles;
+import com.betacom.dischi.utilities.enums.Roles;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

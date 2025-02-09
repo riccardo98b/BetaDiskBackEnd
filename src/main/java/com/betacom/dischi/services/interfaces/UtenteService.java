@@ -14,11 +14,12 @@ public interface UtenteService {
 	
 	void createUser(UtenteRequest req) throws CustomException;
 	
-	List<UtenteDTO> listAll();
+	List<UtenteDTO> listAll(Integer idUtente,String username,String email);
 
 	UtenteDTO listById(Integer id) throws CustomException;
 
-	void deleteUser(Integer id) throws CustomException;
+
+	void deleteUtente(Integer id) throws CustomException;
 	
 	
 }

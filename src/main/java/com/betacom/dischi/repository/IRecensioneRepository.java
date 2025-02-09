@@ -13,5 +13,6 @@ public interface IRecensioneRepository extends JpaRepository<Recensione,Integer>
 
 	Optional<Recensione> findByClienteAndProdotti(Cliente cliente,Prodotto prodotto) throws CustomException;
 
+	Boolean existsByClienteAndProdotti(Cliente cliente,Prodotto prodotto) throws CustomException;
 
 }

@@ -8,7 +8,6 @@ import com.betacom.dischi.request.ClienteRequest;
 
 public interface ClienteService {
 
-	List<ClienteDTO> listAll();
 	
 	ClienteDTO listById(Integer id) throws Exception;
 
@@ -17,5 +16,7 @@ public interface ClienteService {
 	void update(ClienteRequest req) throws Exception;
 
 	void delete(ClienteRequest req) throws Exception;
+
+	List<ClienteDTO> listAll(Integer idCliente, String nome, String cognome);
 
 }

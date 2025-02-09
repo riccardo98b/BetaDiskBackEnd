@@ -107,8 +107,8 @@ public class ClienteControllerTest {
 
 	@Test
 	@Order(7)
-	public void listAllClientes_shouldReturnListOfCliente() throws CustomException {
-	    ResponseList<ClienteDTO> responseList = clienteController.list();
+	public void listAllClientes_shouldReturnListOfCliente(Integer idCliente,String nome,String cognome) throws CustomException {
+	    ResponseList<ClienteDTO> responseList = clienteController.list(null,null,null);
 	    Assertions.assertThat(responseList).isNotNull();
 	    Assertions.assertThat(responseList.getDati()).isNotEmpty();
 	}

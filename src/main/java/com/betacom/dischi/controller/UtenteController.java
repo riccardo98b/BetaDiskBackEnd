@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.betacom.dischi.DTO.ClienteDTO;
 import com.betacom.dischi.DTO.SignInDTO;
 import com.betacom.dischi.DTO.UtenteDTO;
-import com.betacom.dischi.request.ClienteRequest;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
 import com.betacom.dischi.response.ResponseBase;
@@ -34,12 +32,12 @@ public class UtenteController {
 	
 	
 	@GetMapping("/listAll")
-	public ResponseList<UtenteDTO>list() {
+	public ResponseList<UtenteDTO>list(Integer idUtente,String username,String email) {
 		log.debug("Lista di tutti gli utenti: ");
 		ResponseList<UtenteDTO> response = new ResponseList<UtenteDTO>();
 		response.setRc(true);
 		try {
-			response.setDati(utenteService.listAll()); 
+			response.setDati(utenteService.listAll(idUtente,username,email)); 
 			response.setRc(true);
 	        response.setMsg("Visualizzazione lista utenti");
 		}catch(Exception e) {
@@ -96,7 +94,7 @@ public class UtenteController {
 	public ResponseBase delete(@RequestBody(required = true) UtenteRequest req) {
 	    ResponseBase response = new ResponseBase();
 	    try {
-	        utenteService.deleteUser(req.getIdUtente());
+	        utenteService.deleteUtente(req.getIdUtente());
 	        response.setRc(true); // 
 	        response.setMsg("Utente eliminato con successo!");
 	    } catch (Exception e) {

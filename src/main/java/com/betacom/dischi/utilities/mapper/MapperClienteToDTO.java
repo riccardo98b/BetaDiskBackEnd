@@ -38,7 +38,6 @@ public class MapperClienteToDTO {
 				return null;
 			}
 			Utente utente = cliente.getUtente();
-
 			return new UtenteDTO.Builder()
 					.setIdUtente(utente.getIdUtente())
 					.setUsername(utente.getUsername())
@@ -47,7 +46,6 @@ public class MapperClienteToDTO {
 					// password non la mostro,e neanche cliente
 					.build();
 		}
-
 
 	public static List<OrdineDTO> mapOrdini(Cliente cliente) {
 		if (cliente.getOrdini() == null) {
@@ -84,20 +82,15 @@ public class MapperClienteToDTO {
 				.collect(Collectors.toList());
 	}
 	
-
-	
-
-
 	// TODO: DA SISTEMARE
 	public static List<RecensioneDTO> mapRecensioni(Cliente cliente) {
 		if (cliente.getRecensioni() == null) {
 			return Collections.emptyList();
 		}
-
 		return cliente.getRecensioni().stream()
 				.map(feed -> new RecensioneDTO.Builder().setIdRecensione(feed.getIdRecensione())
 						.setDescrizione(feed.getDescrizione()).setStelle(feed.getStelle())
-						// .setCliente(null) // non dovrebbe servire
+						 .setCliente(mapClienteToDTO(cliente)) 
 						.setProdotti(null) // da aggiungere,serve Builder
 						.build())
 				.collect(Collectors.toList());

@@ -27,8 +27,8 @@ public class ClienteImpl implements ClienteService {
 	IClienteRepository clienteRepo;
 
 	@Override
-	public List<ClienteDTO> listAll() {
-		List<Cliente> listaClienti = clienteRepo.findAll();
+	public List<ClienteDTO> listAll(Integer idCliente,String nome,String cognome) {
+		List<Cliente> listaClienti = clienteRepo.filteredClients(idCliente, nome, cognome);
 		return listaClienti.stream().map(MapperClienteToDTO::mapClienteToDTO).collect(Collectors.toList());
 	}
 

@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.SignInDTO;
 import com.betacom.dischi.DTO.UtenteDTO;
-import com.betacom.dischi.exception.CustomException;
+import com.betacom.dischi.exception.cliente.ClienteAlreadyAssociatedException;
+import com.betacom.dischi.exception.cliente.ClienteNotFoundException;
+import com.betacom.dischi.exception.utente.UtenteAlreadyExistsException;
+import com.betacom.dischi.exception.utente.UtenteNotFoundException;
 import com.betacom.dischi.models.Cliente;
 import com.betacom.dischi.models.Utente;
 import com.betacom.dischi.repository.IClienteRepository;
@@ -19,7 +22,7 @@ import com.betacom.dischi.repository.IUtenteRepository;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
 import com.betacom.dischi.services.interfaces.UtenteService;
-import com.betacom.dischi.utilities.Roles;
+import com.betacom.dischi.utilities.enums.Roles;
 import com.betacom.dischi.utilities.mapper.MapperClienteToDTO;
 
 import jakarta.transaction.Transactional;
@@ -65,11 +68,11 @@ public class UtenteImpl implements UtenteService{
 
 	@Transactional
 	@Override
-	public void createUser(UtenteRequest req) throws CustomException {
+	public void createUser(UtenteRequest req) throws UtenteAlreadyExistsException,ClienteNotFoundException,ClienteAlreadyAssociatedException {
 	 log.debug("Crea utente: "+req);
      Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());	
      if(optUtente.isPresent()) {
-    	 throw new CustomException("Username esiste gia");
+    	 throw new UtenteAlreadyExistsException();
     	 
      }
      if(req.getRoles() == null) {
@@ -77,11 +80,12 @@ public class UtenteImpl implements UtenteService{
      }
      Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
      if(optCliente.isEmpty()) {
-    	 throw new CustomException("Cliente con ID: "+req.getIdCliente()+ "non trovato");
+         log.debug("Cliente con ID: "+req.getIdCliente()+ "non trovato");
+    	 throw new ClienteNotFoundException();
      }
      Cliente cliente = optCliente.get();
      if(cliente.getUtente() != null) {
-    	 throw new CustomException("Cliente gia associato ad un altro utente");
+    	 throw new ClienteAlreadyAssociatedException();
      }
      Utente utente = new Utente();
 
@@ -100,8 +104,8 @@ public class UtenteImpl implements UtenteService{
 	}
 
 	@Override
-	public List<UtenteDTO> listAll() {
-	    List<Utente> listaUtenti = utenteRepo.findAll();
+	public List<UtenteDTO> listAll(Integer idUtente,String username,String email) {
+	    List<Utente> listaUtenti = utenteRepo.filteredUsers(idUtente, username, email);
 	    return listaUtenti.stream()
 	            .map(u -> new UtenteDTO.Builder()
 	                    .setIdUtente(u.getIdUtente())
@@ -115,10 +119,10 @@ public class UtenteImpl implements UtenteService{
 	
 	@Transactional
 	@Override
-	public void deleteUser(Integer id) throws CustomException{
+	public void deleteUtente(Integer id) throws UtenteNotFoundException{
 		log.debug("Cancellazione utente con ID: "+id);
 		Utente utente = utenteRepo.findById(id)
-				.orElseThrow(() -> new CustomException("Utente con ID: "+id+" non trovato"));
+				.orElseThrow(() -> new UtenteNotFoundException());
 		Cliente cliente = utente.getCliente();
 		if(cliente != null) {
 			cliente.setUtente(null);
@@ -129,10 +133,10 @@ public class UtenteImpl implements UtenteService{
 	}
 	
 	@Override
-	public UtenteDTO listById(Integer id) throws CustomException {
+	public UtenteDTO listById(Integer id) throws UtenteNotFoundException {
 		log.debug("Visualizzazione dati utente con ID: " + id);
 	    Utente utente = utenteRepo.findById(id)
-	    		.orElseThrow(() -> new CustomException("Utente con id "+id+" non trovato."));
+	    		.orElseThrow(() -> new UtenteNotFoundException());
 		return MapperClienteToDTO.mapUtente(utente.getCliente());
 }
 	

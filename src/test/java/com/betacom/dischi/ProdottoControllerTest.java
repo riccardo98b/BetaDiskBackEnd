@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.betacom.dischi.controller.ProdottoController;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
-import com.betacom.dischi.utilities.Formato;
+import com.betacom.dischi.utilities.enums.Formato;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

@@ -31,12 +31,12 @@ import com.betacom.dischi.services.interfaces.ClienteService;
 		
 		@CrossOrigin(origins = "http://localhost:4200")
 		@GetMapping("/listAll")
-		public ResponseList<ClienteDTO>list() {
+		public ResponseList<ClienteDTO>list(Integer idCliente,String nome,String cognome) {
 			log.debug("Lista di tutti i clienti: ");
 			ResponseList<ClienteDTO> response = new ResponseList<ClienteDTO>();
 			response.setRc(true);
 			try {
-				response.setDati(clienteService.listAll()); 
+				response.setDati(clienteService.listAll(idCliente,nome,cognome)); 
 				response.setRc(true);
 		        response.setMsg("Visualizzazione lista clienti");
 			}catch(Exception e) {
