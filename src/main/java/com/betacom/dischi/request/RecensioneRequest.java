@@ -3,13 +3,15 @@ package com.betacom.dischi.request;
 
 public class RecensioneRequest {
 
-
 	private Integer idRecensione;
 	
-
 	private String descrizione;
 	
 	private Integer stelle;
+	
+	private Integer idCliente;
+	
+	private Integer idProdotto;
 
 	public Integer getIdRecensione() {
 		return idRecensione;
@@ -33,6 +35,25 @@ public class RecensioneRequest {
 
 	public void setStelle(Integer stelle) {
 		this.stelle = stelle;
+	}
+	
+
+	public Integer getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Integer idCliente) {
+		this.idCliente = idCliente;
+	}
+	
+	
+
+	public Integer getIdProdotto() {
+		return idProdotto;
+	}
+
+	public void setIdProdotto(Integer idProdotto) {
+		this.idProdotto = idProdotto;
 	}
 
 	@Override

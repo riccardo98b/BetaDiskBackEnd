@@ -1,5 +1,6 @@
 package com.betacom.dischi.models;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -28,6 +29,8 @@ public class Recensione {
 	@Column(nullable = false)
 	private Integer stelle;
 	
+	@Column
+	private LocalDate dataCreazione;
 	@ManyToOne()
 	@JoinColumn(name= "id_cliente" , nullable=false)
 	private Cliente cliente;
@@ -77,6 +80,22 @@ public class Recensione {
 	public void setStelle(Integer stelle) {
 		this.stelle = stelle;
 	}
+
+	public LocalDate getDataCreazione() {
+		return dataCreazione;
+	}
+
+	public void setDataCreazione(LocalDate dataCreazione) {
+		this.dataCreazione = dataCreazione;
+	}
+
+	@Override
+	public String toString() {
+		return "Recensione [idRecensione=" + idRecensione + ", descrizione=" + descrizione + ", stelle=" + stelle
+				+ ", dataCreazione=" + dataCreazione + ", cliente=" + cliente + ", prodotti=" + prodotti + "]";
+	}
+	
+	
 
 
 }

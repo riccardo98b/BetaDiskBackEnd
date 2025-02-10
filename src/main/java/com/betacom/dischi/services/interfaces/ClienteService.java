@@ -3,15 +3,20 @@ package com.betacom.dischi.services.interfaces;
 import java.util.List;
 
 import com.betacom.dischi.DTO.ClienteDTO;
+import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.ClienteRequest;
 
 public interface ClienteService {
 
-	List<ClienteDTO> listAll();
+	
+	ClienteDTO listById(Integer id) throws CustomException;
 
-	void create(ClienteRequest req) throws Exception;
+	void create(ClienteRequest req) throws CustomException;
 
-	void update(ClienteRequest req) throws Exception;
+	void update(ClienteRequest req) throws CustomException;
 
-	void delete(ClienteRequest req) throws Exception;
+	void delete(ClienteRequest req) throws CustomException;
+
+	List<ClienteDTO> listAll(Integer idCliente, String nome, String cognome);
+
 }

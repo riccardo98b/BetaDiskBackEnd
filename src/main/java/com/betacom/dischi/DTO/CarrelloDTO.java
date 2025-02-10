@@ -12,47 +12,66 @@ public class CarrelloDTO {
 	private List<ProdottoDTO> prodotti;
 	private ClienteDTO cliente;
 	private Integer quantita;
-	public CarrelloDTO() {
-		super();
+	private CarrelloDTO() {
 	}
-	public CarrelloDTO(Integer idCarrello, Double totale, List<ProdottoDTO> prodotti, ClienteDTO cliente, Integer quantita) {
-		super();
-		this.idCarrello = idCarrello;
-		this.totale = totale;
-		this.prodotti = prodotti;
-		this.cliente = cliente;
-		this.quantita = quantita;
+	public  static class Builder{
+		private Integer idCarrello;
+		private Double totale;
+		private List<ProdottoDTO> prodotti;
+		private ClienteDTO cliente;
+		private Integer quantita;
+		public Builder setIdCarrello(Integer idCarrello) {
+			this.idCarrello = idCarrello;
+			return this;
+		}
+		public Builder setTotale(Double totale) {
+			this.totale = totale;
+			return this;
+		}
+		public Builder setProdotti(List<ProdottoDTO> prodotti) {
+			this.prodotti = prodotti;
+			return this;
+		}
+		public Builder setCliente(ClienteDTO cliente) {
+			this.cliente = cliente;
+			return this;
+		}
+		public Builder setQuantita(Integer quantita) {
+			this.quantita = quantita;
+			return this;
+		}
+		public CarrelloDTO build() {
+			CarrelloDTO carrelloDTO = new CarrelloDTO();
+			carrelloDTO.idCarrello = this.idCarrello;
+			carrelloDTO.totale= this.totale;
+			carrelloDTO.prodotti= this.prodotti;
+			carrelloDTO.cliente = this.cliente;
+			carrelloDTO.quantita= this.quantita;
+
+			return carrelloDTO;
+		}
+       	
 	}
 	public Integer getIdCarrello() {
 		return idCarrello;
 	}
-	public void setIdCarrello(Integer idCarrello) {
-		this.idCarrello = idCarrello;
-	}
+	
 	public Double getTotale() {
 		return totale;
 	}
-	public void setTotale(Double totale) {
-		this.totale = totale;
-	}
+	
 	public List<ProdottoDTO> getProdotti() {
 		return prodotti;
 	}
-	public void setProdotti(List<ProdottoDTO> prodotti) {
-		this.prodotti = prodotti;
-	}
+	
 	public ClienteDTO getCliente() {
 		return cliente;
 	}
-	public void setCliente(ClienteDTO cliente) {
-		this.cliente = cliente;
-	}
+	
 	public Integer getQuantita() {
 		return quantita;
 	}
-	public void setQuantita(Integer quantita) {
-		this.quantita = quantita;
-	}
+	
 	@Override
 	public String toString() {
 		return "CarrelloDTO [idCarrello=" + idCarrello + ", totale=" + totale + ", prodotti=" + prodotti + ", cliente="

@@ -14,7 +14,7 @@ import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.services.interfaces.ProdottoService;
-import com.betacom.dischi.utilities.Formato;
+import com.betacom.dischi.utilities.enums.Formato;
 
 import jakarta.transaction.Transactional;
 
