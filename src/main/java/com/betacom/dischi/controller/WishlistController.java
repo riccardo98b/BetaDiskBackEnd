@@ -42,11 +42,12 @@ public class WishlistController {
     }
 
     @PostMapping("/addProduct")
-    public ResponseBase addProduct(@RequestParam Integer idCliente, @RequestParam Integer idProdotto) {
+    public ResponseBase addProduct(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
         response.setrC(true);
         try {
-            wishlistService.addProductToWishlist(idCliente, idProdotto);
+            wishlistService.addProductToWishlist(req.getIdCliente(), req.getIdProdotti().get(0)); // Assuming 1 product per request
+            response.setMsg("Prodotto aggiunto alla wishlist con successo.");
         } catch (CustomException e) {
             response.setrC(false);
             response.setMsg(e.getMessage());
@@ -55,12 +56,12 @@ public class WishlistController {
     }
     
     @PostMapping("/removeProduct")
-    public ResponseBase removeProduct(@RequestParam Integer idCliente, @RequestParam Integer idProdotto) {
+    public ResponseBase removeProduct(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
         response.setrC(true);
         try {
-            wishlistService.removeProductFromWishlist(idCliente, idProdotto);
-            response.setMsg("Prodotto rimosso con successo dalla wishlist.");
+            wishlistService.removeProductFromWishlist(req.getIdCliente(), req.getIdProdotti().get(0)); // Assuming 1 product per request
+            response.setMsg("Prodotto rimosso dalla wishlist con successo.");
         } catch (CustomException e) {
             response.setrC(false);
             response.setMsg("Errore durante la rimozione del prodotto: " + e.getMessage());
@@ -72,11 +73,11 @@ public class WishlistController {
     }
     
     @PostMapping("/clearWishlist")
-    public ResponseBase clearWishlist(@RequestParam Integer idCliente) {
+    public ResponseBase clearWishlist(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
         response.setrC(true);
         try {
-            wishlistService.clearWishlist(idCliente);
+            wishlistService.clearWishlist(req.getIdCliente());
             response.setMsg("Tutti i prodotti sono stati rimossi dalla wishlist.");
         } catch (CustomException e) {
             response.setrC(false);
@@ -87,6 +88,7 @@ public class WishlistController {
         }
         return response;
     }
+
     
     @GetMapping("/getAllProducts")
     public ResponseObject<List<Prodotto>> getAllProducts(@RequestParam Integer idCliente) {
