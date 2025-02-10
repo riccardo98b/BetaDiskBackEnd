@@ -36,6 +36,10 @@ public class ClienteControllerTest {
 		req.setCognome("Bianchi");
 		req.setImmagineCliente("https://randomuser.me/api/portraits/women/9.jpg");
 		req.setTelefono("3456401123");	
+		req.setCap("35028");
+		req.setComune("Polverara");
+		req.setProvincia("PD");
+		req.setVia("via Roma,10");
 		ResponseBase response = clienteController.create(req);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
@@ -47,6 +51,10 @@ public class ClienteControllerTest {
 		req.setNome("Carla");
 		req.setCognome("Rossi");
 		req.setTelefono("3456401129");	
+		req.setCap("35028");
+		req.setComune("Polverara");
+		req.setProvincia("PD");
+		req.setVia("via Roma,10");
 		ResponseBase response = clienteController.create(req);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
@@ -59,6 +67,10 @@ public class ClienteControllerTest {
 		req.setCognome("Bianca");
 		req.setTelefono("dcnsdj23");	
 		req.setImmagineCliente("https://randomuser.me/api/portraits/women/9.jpg");
+		req.setCap("35028");
+		req.setComune("Polverara");
+		req.setProvincia("PD");
+		req.setVia("via Roma,10");
 		Assertions.assertThatExceptionOfType(CustomException.class)
         .isThrownBy(() -> clienteController.create(req));
 	}
@@ -84,6 +96,10 @@ public class ClienteControllerTest {
 	    req.setCognome("Cerco");
 	    req.setImmagineCliente("https://google.com");
 	    req.setTelefono("123456789");
+		req.setCap("35028");
+		req.setComune("Polverara");
+		req.setProvincia("PD");
+		req.setVia("via Roma,10");
 
 	    ResponseBase response = clienteController.update(req);
 	    Assertions.assertThat(response.getRc()).isEqualTo(true);
@@ -100,7 +116,10 @@ public class ClienteControllerTest {
 		req.setIdCliente(INVALID_ID);
 		req.setNome("Gianni");
 		req.setCognome("Verde");
-		
+		req.setCap("35028");
+		req.setComune("Polverara");
+		req.setProvincia("PD");
+		req.setVia("via Roma,10");
 		Assertions.assertThatExceptionOfType(CustomException.class)
 		    .isThrownBy(() -> clienteController.update(req));
 	}

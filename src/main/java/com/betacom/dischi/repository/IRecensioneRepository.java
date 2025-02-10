@@ -1,8 +1,11 @@
 package com.betacom.dischi.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Cliente;
@@ -15,4 +18,12 @@ public interface IRecensioneRepository extends JpaRepository<Recensione,Integer>
 
 	Boolean existsByClienteAndProdotti(Cliente cliente,Prodotto prodotto) throws CustomException;
 
+	List<Recensione> findByProdotti(Prodotto prodotto) throws CustomException;
+
+	@Query(name="recensioni.filteredReviews")
+	List<Recensione> filteredReviews(
+			@Param("idRecensione") Integer idRecensione,
+			@Param("stelle") Integer stelle
+			// AND (:dataCreazione IS NULL OR FUNCTION('DATE_FORMAT', c.dataCreazione, '%Y-%m-%d') LIKE CONCAT(:dataCreazione, '%'))
+			);
 }

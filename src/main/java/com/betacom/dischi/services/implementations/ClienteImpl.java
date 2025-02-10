@@ -59,7 +59,7 @@ public class ClienteImpl implements ClienteService {
 		Cliente cliente = optCliente.orElseThrow(
 				() -> new CustomException("Id: " + req.getIdCliente() + " del cliente da eliminare non trovato"));
 		clienteRepo.delete(cliente);
-		log.debug("Cliente con I " + req.getIdCliente() + " eliminato con successo.");
+		log.debug("Cliente con ID: " + req.getIdCliente() + " eliminato con successo.");
 	}
 
 	@Override
@@ -80,6 +80,18 @@ public class ClienteImpl implements ClienteService {
 		if (req.getTelefono() == null || req.getTelefono().isBlank()) {
 			throw new CustomException("Il numero di telefono non può essere nullo o vuoto");
 		}
+		if (req.getComune() == null || req.getComune().isBlank()) {
+			throw new CustomException("Il comune non può essere nullo o vuoto");
+		}
+		if (req.getCap() == null || req.getCap().isBlank()) {
+			throw new CustomException("Il cap non può essere nullo o vuoto");
+		}
+		if (req.getProvincia() == null || req.getProvincia().isBlank()) {
+			throw new CustomException("La provincia non può essere nulla o vuoto");
+		}
+		if (req.getVia() == null || req.getVia().isBlank()) {
+			throw new CustomException("La via non può essere nulla o vuoto");
+		}
 		// ^ -> inizio stringa, \d -> cifra numerica, \\s- -> spazio o trattino, $ fine della stringa
 		// ? -> opzionale
 		String telefonoRegex = "^\\+?\\d{1,3}[\\s-]?\\(?\\d{1,4}\\)?[\\s-]?\\d{1,4}[\\s-]?\\d{1,4}$";
@@ -96,5 +108,9 @@ public class ClienteImpl implements ClienteService {
 		cliente.setCognome(req.getCognome());
 		cliente.setTelefono(req.getTelefono());
 		cliente.setDataRegistrazione(LocalDate.now());
+		cliente.setCap(req.getCap());
+		cliente.setProvincia(req.getProvincia());
+		cliente.setVia(req.getVia());
+		cliente.setComune(req.getComune());
 	}
 }

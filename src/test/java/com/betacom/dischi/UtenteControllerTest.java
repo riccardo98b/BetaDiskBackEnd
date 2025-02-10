@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import com.betacom.dischi.DTO.UtenteDTO;
 import com.betacom.dischi.controller.ClienteController;
 import com.betacom.dischi.controller.UtenteController;
@@ -47,7 +46,6 @@ public class UtenteControllerTest {
 		reqCliente.setTelefono("3456401123");
 		//
         reqUtente = new UtenteRequest();
-
 	}
 
 	@Test

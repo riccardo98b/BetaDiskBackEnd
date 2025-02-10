@@ -3,10 +3,8 @@ package com.betacom.dischi.request;
 
 public class RecensioneRequest {
 
-
 	private Integer idRecensione;
 	
-
 	private String descrizione;
 	
 	private Integer stelle;

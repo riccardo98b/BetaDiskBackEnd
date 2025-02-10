@@ -31,12 +31,12 @@ public class RecensioneController {
 	
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/listAll")
-	public ResponseList<RecensioneDTO>list() {
+	public ResponseList<RecensioneDTO>list(Integer idRecensione,Integer stelle) {
 		log.debug("Lista di tutti i clienti: ");
 		ResponseList<RecensioneDTO> response = new ResponseList<RecensioneDTO>();
 		response.setRc(true);
 		try {
-			response.setDati(recensioneService.listAll()); 
+			response.setDati(recensioneService.listAll(idRecensione,stelle)); 
 			response.setRc(true);
 	        response.setMsg("Visualizzazione lista recensioni");
 		}catch(Exception e) {
@@ -51,12 +51,29 @@ public class RecensioneController {
 	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/listById")
 	public ResponseObject<RecensioneDTO> listById(@RequestParam Integer id){
-		log.debug("List " + id );
+		log.debug("Dati su recensione con id: " + id );
 		ResponseObject<RecensioneDTO> response = new ResponseObject<RecensioneDTO>();
 		try {
 			response.setDati(recensioneService.listById(id));
 			response.setRc(true);
 	        response.setMsg("Visualizzazione dati recensioni con id: "+id);
+
+		}catch(Exception e) {
+			log.error(e.getMessage());
+			response.setMsg(e.getMessage());
+			response.setRc(false);
+		}
+		return response;
+	}
+	@CrossOrigin(origins = "http://localhost:4200")
+	@GetMapping("/listReviewByProduct")
+	public ResponseList<RecensioneDTO> listReviewByProduct(@RequestParam Integer idProdotto){
+		log.debug("Dati su recensione con id: " + idProdotto );
+		ResponseList<RecensioneDTO> response = new ResponseList<RecensioneDTO>();
+		try {
+			response.setDati(recensioneService.listReviewsByProduct(idProdotto));
+			response.setRc(true);
+	        response.setMsg("Visualizzazione dati recensioni per prodotto id: "+idProdotto);
 
 		}catch(Exception e) {
 			log.error(e.getMessage());

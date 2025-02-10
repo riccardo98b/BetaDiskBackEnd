@@ -13,16 +13,9 @@ public class CustomException extends Exception {
 		super(message);
 	}
 
-
-
-	public CustomException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
 	public String getErrorCode() {
 		return errorCode;
 	}
 
 	
-
 }

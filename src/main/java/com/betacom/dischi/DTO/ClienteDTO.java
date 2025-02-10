@@ -2,6 +2,7 @@ package com.betacom.dischi.DTO;
 
 import java.util.List;
 
+
 public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 	// 1) ATTRIBUTI DTO
 	private Integer idCliente;
@@ -13,6 +14,14 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 	private String telefono;
 	
 	private String immagineCliente;
+		
+	private String via;
+	
+	private String cap;
+	
+	private String provincia;
+	
+	private String comune;
 	
 	private List<OrdineDTO> ordini;
 	
@@ -43,6 +52,15 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
     	private String telefono;
     	
     	private String immagineCliente;
+    	
+    	private String via;
+    	
+    	private String cap;
+    	
+    	private String provincia;
+    	
+    	private String comune;
+    
     	
     	private List<OrdineDTO> ordini;
     	
@@ -109,6 +127,28 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 
 		}
 		
+		
+	
+		public Builder setVia(String via) {
+			this.via = via;
+			return this;
+		}
+
+		public Builder setCap(String cap) {
+			this.cap = cap;
+			return this;
+		}
+
+		public Builder setProvincia(String provincia) {
+			this.provincia = provincia;
+			return this;
+		}
+
+		public Builder setComune(String comune) {
+			this.comune = comune;
+			return this;
+		}
+
 		//3) ORA FAI UN METODO BUILD PER COSTRUIRE IL DTO E RITORNARLO
 		public ClienteDTO build() {
 			ClienteDTO clienteDTO = new ClienteDTO();
@@ -122,6 +162,10 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 			clienteDTO.utente= this.utente;
 			clienteDTO.wishlist= this.wishlist;
 			clienteDTO.recensioni= this.recensioni;
+			clienteDTO.cap= this.cap;
+			clienteDTO.comune= this.comune;
+			clienteDTO.provincia=this.provincia;
+			clienteDTO.via= this.via;
 			return clienteDTO;
 		}
         
@@ -149,6 +193,39 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 
 	public String getImmagineCliente() {
 		return immagineCliente;
+	}
+
+	
+	public String getVia() {
+		return via;
+	}
+
+	public String getCap() {
+		return cap;
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public String getComune() {
+		return comune;
+	}
+
+	public void setVia(String via) {
+		this.via = via;
+	}
+
+	public void setCap(String cap) {
+		this.cap = cap;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+
+	public void setComune(String comune) {
+		this.comune = comune;
 	}
 
 	public List<OrdineDTO> getOrdini() {
