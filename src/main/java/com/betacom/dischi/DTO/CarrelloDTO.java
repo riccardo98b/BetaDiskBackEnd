@@ -2,11 +2,6 @@ package com.betacom.dischi.DTO;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
-
-import com.betacom.dischi.DTO.ClienteDTO;
-import com.betacom.dischi.DTO.ProdottoDTO;
-
 public class CarrelloDTO {
 
 	private Integer idCarrello;
