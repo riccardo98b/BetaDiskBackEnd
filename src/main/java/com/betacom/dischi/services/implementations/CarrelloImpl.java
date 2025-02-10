@@ -113,19 +113,6 @@ public class CarrelloImpl implements CarrelloService {
 		} else {
 			throw new CustomException("Prodotto non presente nel carrello");
 		}
-//		Optional<Carrello> carrello = carrelloRepo.findById(request.getIdCarrello());
-//		if (carrello.isEmpty()) {
-//			throw new CustomException("Il carrello non esiste");
-//		}
-//		List<Prodotto> prodotti = carrello.get().getProdotti();
-//		if (prodotti == null) {
-//			throw new CustomException("Non ci sono articoli da eliminare");
-//		}
-//		Optional<Prodotto> prodotto = prodottoRepo.findById(request.getIdProdotto());
-//		prodotti.remove(prodotto.get());
-//		carrello.get().setTotale(carrello.get().getTotale() - prodotto.get().getPrezzo());
-//		carrello.get().setProdotti(prodotti);
-//		carrelloRepo.save(carrello.get());
 	}
 
 	@Override
@@ -140,6 +127,13 @@ public class CarrelloImpl implements CarrelloService {
 			throw new CustomException("Il carrello è vuoto");
 		} else {
 			carrello = cliente.get().getCarrello();
+		}
+		cliente.get().setCarrello(null);
+		clienteRepo.save(cliente.get());
+		for (ProdottoCarrello row : carrello.getProdotti()) {
+			Prodotto prodotto = row.getProdotto();
+			prodotto.setQuantita(prodotto.getQuantita() + row.getQuantita());
+			prodottoRepo.save(prodotto);
 		}
 		carrelloRepo.delete(carrello);
 	}
