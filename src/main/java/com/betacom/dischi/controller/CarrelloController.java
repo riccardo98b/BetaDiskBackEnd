@@ -41,4 +41,37 @@ public class CarrelloController {
 		return response;
 	}
 	
+	@PostMapping("/remove")
+	public ResponseBase removeProdotto(@RequestBody(required = true) CarrelloRequest request) {
+		log.debug("Rimuovi prodotto: " + request);
+		ResponseList<CarrelloDTO> response = new ResponseList<CarrelloDTO>();
+		response.setRc(true);
+		try {
+			carrelloServ.removeProdotto(request);
+			response.setMsg("Prodotto rimosso con successo");
+			//response.setDati(carrelloServ.listaProdotti(request.getIdCliente()));
+		} catch (CustomException e) {
+			log.error(e.getMessage());
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
+	
+	@PostMapping("/delete")
+	public ResponseBase deleteCarrello(@RequestBody(required = true) CarrelloRequest request) {
+		log.debug("cancella carrello: " + request);
+		ResponseBase response = new ResponseBase();
+		response.setRc(true);
+		try {
+			carrelloServ.delete(request);
+			response.setMsg("Carrello eliminato con successo");
+			//response.setDati(carrelloServ.listaProdotti(request.getIdCliente()));
+		} catch (CustomException e) {
+			log.error(e.getMessage());
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
 }

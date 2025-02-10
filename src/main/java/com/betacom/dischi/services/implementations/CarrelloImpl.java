@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.CarrelloDTO;
-import com.betacom.dischi.controller.CarrelloController;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Carrello;
 import com.betacom.dischi.models.Cliente;
@@ -18,7 +17,6 @@ import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.repository.IProdottoCarrelloRepository;
 import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.request.CarrelloRequest;
-import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.services.interfaces.CarrelloService;
 
 import jakarta.transaction.Transactional;
@@ -37,7 +35,7 @@ public class CarrelloImpl implements CarrelloService {
 	
 	@Autowired
 	IProdottoCarrelloRepository joinRepo;
-
+	
 	@Override
 	public Carrello create(CarrelloRequest request) throws CustomException {
 		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
@@ -88,7 +86,33 @@ public class CarrelloImpl implements CarrelloService {
 	}
 
 	@Override
+	@Transactional
 	public void removeProdotto(CarrelloRequest request) throws CustomException {
+		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
+		if (cliente.isEmpty()) {
+			throw new CustomException("Cliente inesistente");
+		}
+		Carrello carrello = cliente.get().getCarrello();
+
+		Prodotto prodotto = prodottoRepo.findById(request.getIdProdotto()).get();
+		Optional<ProdottoCarrello> findRecord = joinRepo.findByCarrelloAndProdotto(carrello, prodotto);
+		if (findRecord.isPresent()) {
+			ProdottoCarrello row = findRecord.get();
+			prodotto.setQuantita(prodotto.getQuantita() + request.getQuantita());
+			double prezzo = prodotto.getPrezzo() * request.getQuantita();
+			carrello.setTotale(carrello.getTotale() - prezzo);
+			if (row.getQuantita()>request.getQuantita()) {
+				row.setQuantita(row.getQuantita() - request.getQuantita());
+				joinRepo.save(row);
+			} else {
+				carrello.getProdotti().remove(row);
+				joinRepo.delete(row);
+			}
+			prodottoRepo.save(prodotto);
+			carrelloRepo.save(carrello);
+		} else {
+			throw new CustomException("Prodotto non presente nel carrello");
+		}
 //		Optional<Carrello> carrello = carrelloRepo.findById(request.getIdCarrello());
 //		if (carrello.isEmpty()) {
 //			throw new CustomException("Il carrello non esiste");
@@ -105,12 +129,19 @@ public class CarrelloImpl implements CarrelloService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(CarrelloRequest request) throws CustomException {
-		Optional<Carrello> carrello = carrelloRepo.findById(request.getIdCarrello());
-		if (carrello.isEmpty()) {
-			throw new CustomException("Il carrello non esiste");
+		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
+		if (cliente.isEmpty()) {
+			throw new CustomException("Cliente inesistente");
 		}
-		carrelloRepo.delete(carrello.get());
+		Carrello carrello = new Carrello();
+		if (cliente.get().getCarrello() == null) {
+			throw new CustomException("Il carrello è vuoto");
+		} else {
+			carrello = cliente.get().getCarrello();
+		}
+		carrelloRepo.delete(carrello);
 	}
 
 	@Override
