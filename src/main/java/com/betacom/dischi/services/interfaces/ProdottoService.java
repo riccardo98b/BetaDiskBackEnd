@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.request.ProdottoRequest;
-import com.betacom.dischi.utilities.Formato;
 
 public interface ProdottoService {
 

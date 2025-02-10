@@ -1,9 +1,9 @@
 package com.betacom.dischi.utilities;
 
-import org.springframework.web.util.UriComponentsBuilder.ParserType;
 
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.ProdottoRequest;
+import com.betacom.dischi.utilities.enums.Formato;
 
 public class Utility {
 

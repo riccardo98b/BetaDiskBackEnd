@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.betacom.dischi.models.Prodotto;
-import com.betacom.dischi.utilities.Formato;
+import com.betacom.dischi.utilities.enums.Formato;
 
 public interface IProdottoRepository extends JpaRepository<Prodotto, Integer>{
 

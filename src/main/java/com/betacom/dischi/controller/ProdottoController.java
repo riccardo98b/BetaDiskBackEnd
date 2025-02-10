@@ -13,7 +13,6 @@ import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.services.interfaces.ProdottoService;
-import com.betacom.dischi.utilities.Formato;
 
 
 @RestController
