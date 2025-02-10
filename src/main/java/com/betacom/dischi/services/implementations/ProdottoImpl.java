@@ -19,6 +19,7 @@ import com.betacom.dischi.utilities.Formato;
 import jakarta.transaction.Transactional;
 
 import static com.betacom.dischi.utilities.Utility.validazioneValoriProdotto;
+import static com.betacom.dischi.utilities.Utility.formatoToString;
 
 @Service
 public class ProdottoImpl implements ProdottoService{
@@ -94,9 +95,10 @@ public class ProdottoImpl implements ProdottoService{
 
 	@Override
 	public List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere,
-			Integer annoPubblicazione) throws Exception {
+			Integer annoPubblicazione, String formato) throws Exception {
 		
-		List<Prodotto> listaFiltrata = prodottoRepository.prodottiFiltrati(idProdotto,titolo, artista, genere, annoPubblicazione);
+	    Formato formatoEnum = formatoToString(formato);
+		List<Prodotto> listaFiltrata = prodottoRepository.prodottiFiltrati(idProdotto,titolo, artista, genere, annoPubblicazione, formatoEnum);
 		
 		return listaFiltrata.stream()
 				.map(p -> new ProdottoDTO.Builder()

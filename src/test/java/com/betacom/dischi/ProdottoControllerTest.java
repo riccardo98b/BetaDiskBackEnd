@@ -1,10 +1,6 @@
 package com.betacom.dischi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.assertj.core.api.Assertions;
-import org.hibernate.grammars.hql.HqlParser.IsTruePredicateContext;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -89,8 +85,9 @@ public class ProdottoControllerTest {
 		String artista = "Anthrax";
 		String genere = "Thrash Metal";
 		Integer annoPubblicazione = 1987;
+		String formato = "VINILE";
 		
-		ResponseList<ProdottoDTO> lista = prodottoController.listAll(idProdotto, titolo, artista, genere, annoPubblicazione);
+		ResponseList<ProdottoDTO> lista = prodottoController.listAll(idProdotto, titolo, artista, genere, annoPubblicazione, formato);
 
 		Assertions.assertThat(lista).isNotNull();
 		
@@ -101,10 +98,10 @@ public class ProdottoControllerTest {
 						.equals(idProdotto))).isTrue();
 		
 		Assertions.assertThat(lista
-								.getDati()
-								.stream()
-								.anyMatch(t -> t.getTitolo()
-										.equals(titolo))).isTrue();
+				.getDati()
+				.stream()
+				.anyMatch(t -> t.getTitolo()
+						.equals(titolo))).isTrue();
 	
 		Assertions.assertThat(lista
 				.getDati()
@@ -123,6 +120,12 @@ public class ProdottoControllerTest {
 				.stream()
 				.anyMatch(t -> t.getAnnoPubblicazione()
 						.equals(annoPubblicazione))).isTrue();
+		
+		Assertions.assertThat(lista
+				.getDati()
+				.stream()
+				.anyMatch(t -> t.getFormato()
+						.equals(formato))).isTrue();
 	} 
 	
 	

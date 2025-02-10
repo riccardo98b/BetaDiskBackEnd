@@ -1,5 +1,7 @@
 package com.betacom.dischi.utilities;
 
+import org.springframework.web.util.UriComponentsBuilder.ParserType;
+
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.ProdottoRequest;
 
@@ -26,5 +28,9 @@ public class Utility {
 			throw new CustomException("Inserisci una quantità disponibile del prodotto");
 	}
 	
+	
+	public static Formato formatoToString(String stringa) {
+		 return Formato.valueOf(stringa.toUpperCase()); 
+	}
 	
 }

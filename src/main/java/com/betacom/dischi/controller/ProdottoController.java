@@ -13,6 +13,7 @@ import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.services.interfaces.ProdottoService;
+import com.betacom.dischi.utilities.Formato;
 
 
 @RestController
@@ -74,11 +75,11 @@ public class ProdottoController {
 	
 	@GetMapping("/list")
 	public ResponseList<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere, 
-			Integer annoPubblicazione){
+			Integer annoPubblicazione, String formato){
 		ResponseList<ProdottoDTO> response = new ResponseList<ProdottoDTO>();
 		response.setRc(true);
 		try {
-			response.setDati(prodottoService.listAll(idProdotto, titolo, artista, genere, annoPubblicazione));
+			response.setDati(prodottoService.listAll(idProdotto, titolo, artista, genere, annoPubblicazione, formato));
 	
 		}catch(Exception e) {
 			response.setRc(false);
