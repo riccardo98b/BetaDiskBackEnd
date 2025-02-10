@@ -1,6 +1,7 @@
 package com.betacom.dischi.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Prodotto;
+import com.betacom.dischi.models.Wishlist;
 import com.betacom.dischi.request.WishlistRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseObject;
@@ -104,5 +106,23 @@ public class WishlistController {
         return response;
     }
 
-
+    @GetMapping("/searchById")
+    public ResponseObject<Wishlist> searchWishlistById(@RequestParam Integer idWishlist) {
+        ResponseObject<Wishlist> response = new ResponseObject<>();
+        response.setrC(true);
+        try {
+            Optional<Wishlist> wishlist = wishlistService.searchWishlistById(idWishlist);
+            if (wishlist.isPresent()) {
+                response.setDati(wishlist.get());
+                response.setMsg("Wishlist trovata con successo.");
+            } else {
+                response.setrC(false);
+                response.setMsg("Wishlist non trovata.");
+            }
+        } catch (CustomException e) {
+            response.setrC(false);
+            response.setMsg(e.getMessage());
+        }
+        return response;
+    }
 }

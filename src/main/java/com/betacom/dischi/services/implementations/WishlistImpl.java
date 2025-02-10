@@ -126,5 +126,9 @@ public class WishlistImpl implements WishlistService {
         return wishlist.getProdotti();
     }
 
-
+    @Override
+    public Optional<Wishlist> searchWishlistById(Integer idWishlist) throws CustomException {
+        log.debug("Ricerca della Wishlist con ID: " + idWishlist);
+        return wishlistRepository.findById(idWishlist);
+    }
 }
