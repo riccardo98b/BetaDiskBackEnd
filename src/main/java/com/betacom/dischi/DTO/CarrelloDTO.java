@@ -6,9 +6,9 @@ public class CarrelloDTO {
 
 	private Integer idCarrello;
 	private Double totale;
-	private List<ProdottoDTO> prodotti;
+	private List<ProdottoCarrelloDTO> prodotti;
 	private ClienteDTO cliente;
-	private Integer quantita;
+	
 	private CarrelloDTO() {
 		super();
 	}	
@@ -18,22 +18,18 @@ public class CarrelloDTO {
 	public Double getTotale() {
 		return totale;
 	}
-	public List<ProdottoDTO> getProdotti() {
+	public List<ProdottoCarrelloDTO> getProdotti() {
 		return prodotti;
 	}
 	public ClienteDTO getCliente() {
 		return cliente;
 	}
-	public Integer getQuantita() {
-		return quantita;
-	}
-	
+		
 	public static class Builder {
 		private Integer idCarrello;
 		private Double totale;
-		private List<ProdottoDTO> prodotti;
+		private List<ProdottoCarrelloDTO> prodotti;
 		private ClienteDTO cliente;
-		private Integer quantita;
 		public Builder() {
 		}
 		public CarrelloDTO build() {
@@ -42,7 +38,6 @@ public class CarrelloDTO {
 			dto.totale = this.totale;
 			dto.prodotti = this.prodotti;
 			dto.cliente = this.cliente;
-			dto.quantita = this.quantita;
 			return dto;
 		}
 		public Builder idCarrello(Integer idCarrello) {
@@ -53,16 +48,12 @@ public class CarrelloDTO {
 			this.totale = totale;
 			return this;
 		}
-		public Builder prodotti(List<ProdottoDTO> prodotti) {
+		public Builder prodotti(List<ProdottoCarrelloDTO> prodotti) {
 			this.prodotti = prodotti;
 			return this;
 		}
 		public Builder cliente(ClienteDTO cliente) {
 			this.cliente = cliente;
-			return this;
-		}
-		public Builder quantita(Integer quantita) {
-			this.quantita = quantita;
 			return this;
 		}
 	}	
