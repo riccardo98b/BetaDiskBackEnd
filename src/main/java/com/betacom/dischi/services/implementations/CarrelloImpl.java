@@ -1,5 +1,6 @@
 package com.betacom.dischi.services.implementations;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,7 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.CarrelloDTO;
-import com.betacom.dischi.controller.CarrelloController;
+import com.betacom.dischi.DTO.ProdottoCarrelloDTO;
+import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Carrello;
 import com.betacom.dischi.models.Cliente;
@@ -18,8 +20,9 @@ import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.repository.IProdottoCarrelloRepository;
 import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.request.CarrelloRequest;
-import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.services.interfaces.CarrelloService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CarrelloImpl implements CarrelloService {
@@ -35,7 +38,7 @@ public class CarrelloImpl implements CarrelloService {
 	
 	@Autowired
 	IProdottoCarrelloRepository joinRepo;
-
+	
 	@Override
 	public Carrello create(CarrelloRequest request) throws CustomException {
 		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
@@ -53,6 +56,7 @@ public class CarrelloImpl implements CarrelloService {
 	}
 
 	@Override
+	@Transactional
 	public void addProdotto(CarrelloRequest request) throws CustomException {
 		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
 		if (cliente.isEmpty()) {
@@ -72,56 +76,102 @@ public class CarrelloImpl implements CarrelloService {
 		if (findRecord.isEmpty()) {
 			ProdottoCarrello row = new ProdottoCarrello(
 					carrello, prodotto, request.getQuantita());
-			prodotto.setQuantita(prodotto.getQuantita()-request.getQuantita());
+			if (carrello.getProdotti()== null) {
+				carrello.setProdotti(new ArrayList<ProdottoCarrello>());
+			}
 			carrello.getProdotti().add(row);
 		} else {
-			
+			ProdottoCarrello row = findRecord.get();
+			row.setQuantita(row.getQuantita() + request.getQuantita());
 		}
-		
-//		List<Prodotto> prodotti = carrello.getProdotti();
-//		Optional<Prodotto> prodotto = prodottoRepo.findById(prodRequest.getIdProdotto());
-//		if (prodotto.get().getQuantita() < request.getQuantita()) {
-//			throw new CustomException("Quantità in magazzino non disponibile");
-//		}
-//		if (!prodotti.contains(prodotto.get())){
-//			prodotti.add(prodotto.get());
-//		}
-//		double prezzo = prodotto.get().getPrezzo() * request.getQuantita();
-//		carrello.setTotale(carrello.getTotale() + prezzo);
-//		carrello.setProdotti(prodotti);
-//		carrelloRepo.save(carrello);
+		prodotto.setQuantita(prodotto.getQuantita() - request.getQuantita());
+		double prezzo = prodotto.getPrezzo() * request.getQuantita();
+		carrello.setTotale(carrello.getTotale() + prezzo);
+		prodottoRepo.save(prodotto);
+		carrelloRepo.save(carrello);
 	}
 
 	@Override
+	@Transactional
 	public void removeProdotto(CarrelloRequest request) throws CustomException {
-//		Optional<Carrello> carrello = carrelloRepo.findById(request.getIdCarrello());
-//		if (carrello.isEmpty()) {
-//			throw new CustomException("Il carrello non esiste");
-//		}
-//		List<Prodotto> prodotti = carrello.get().getProdotti();
-//		if (prodotti == null) {
-//			throw new CustomException("Non ci sono articoli da eliminare");
-//		}
-//		Optional<Prodotto> prodotto = prodottoRepo.findById(request.getIdProdotto());
-//		prodotti.remove(prodotto.get());
-//		carrello.get().setTotale(carrello.get().getTotale() - prodotto.get().getPrezzo());
-//		carrello.get().setProdotti(prodotti);
-//		carrelloRepo.save(carrello.get());
-	}
-
-	@Override
-	public void delete(CarrelloRequest request) throws CustomException {
-		Optional<Carrello> carrello = carrelloRepo.findById(request.getIdCarrello());
-		if (carrello.isEmpty()) {
-			throw new CustomException("Il carrello non esiste");
+		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
+		if (cliente.isEmpty()) {
+			throw new CustomException("Cliente inesistente");
 		}
-		carrelloRepo.delete(carrello.get());
+		Carrello carrello = cliente.get().getCarrello();
+
+		Prodotto prodotto = prodottoRepo.findById(request.getIdProdotto()).get();
+		Optional<ProdottoCarrello> findRecord = joinRepo.findByCarrelloAndProdotto(carrello, prodotto);
+		if (findRecord.isPresent()) {
+			ProdottoCarrello row = findRecord.get();
+			prodotto.setQuantita(prodotto.getQuantita() + request.getQuantita());
+			double prezzo = prodotto.getPrezzo() * request.getQuantita();
+			carrello.setTotale(carrello.getTotale() - prezzo);
+			if (row.getQuantita() > request.getQuantita()) {
+				row.setQuantita(row.getQuantita() - request.getQuantita());
+				joinRepo.save(row);
+			} else {
+				carrello.getProdotti().remove(row);
+				joinRepo.delete(row);
+			}
+			prodottoRepo.save(prodotto);
+			carrelloRepo.save(carrello);
+		} else {
+			throw new CustomException("Prodotto non presente nel carrello");
+		}
 	}
 
 	@Override
-	public List<CarrelloDTO> listaProdotti(Integer idCliente) throws CustomException {
-		
-		return null;
+	@Transactional
+	public void delete(CarrelloRequest request) throws CustomException {
+		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
+		if (cliente.isEmpty()) {
+			throw new CustomException("Cliente inesistente");
+		}
+		Carrello carrello = new Carrello();
+		if (cliente.get().getCarrello() == null) {
+			throw new CustomException("Il carrello è vuoto");
+		} else {
+			carrello = cliente.get().getCarrello();
+		}
+		cliente.get().setCarrello(null);
+		clienteRepo.save(cliente.get());
+		for (ProdottoCarrello row : carrello.getProdotti()) {
+			Prodotto prodotto = row.getProdotto();
+			prodotto.setQuantita(prodotto.getQuantita() + row.getQuantita());
+			prodottoRepo.save(prodotto);
+		}
+		carrelloRepo.delete(carrello);
 	}
 
+	@Override
+	public CarrelloDTO listaProdotti(Integer id) throws CustomException {
+		Optional<Cliente> cliente = clienteRepo.findById(id);
+		if (cliente.isEmpty()) {
+			throw new CustomException("Cliente inesistente");
+		}
+		Carrello carrello = cliente.get().getCarrello();
+		List<ProdottoCarrello> listaProdotti = carrello.getProdotti();
+		return new CarrelloDTO.Builder()
+				.totale(carrello.getTotale())
+				.prodotti(listaProdotti.stream()
+							.map(prodotto -> new ProdottoCarrelloDTO.Builder()
+												.quantita(prodotto.getQuantita())
+												.prodotto(new ProdottoDTO.Builder()
+														.idProdotto(prodotto.getProdotto().getIdProdotto())
+														.titolo(prodotto.getProdotto().getTitolo())
+														.artista(prodotto.getProdotto().getArtista())
+														.prezzo(prodotto.getProdotto().getPrezzo())
+														.immagineProdotto(prodotto.getProdotto().getImmagineProdotto())
+												.build())
+								.build()
+						).toList())
+				.build();
+	}
+
+//	@Override
+//	public List<CarrelloDTO> listaProdotti(Integer idCliente) throws CustomException {
+//		List<Cliente> listaCompleta = clienteRepo.findAll();
+//		return listaCompleta.stream().map(cliente -> new CarrelloDTO.Builder().build()).toList();
+//	}
 }

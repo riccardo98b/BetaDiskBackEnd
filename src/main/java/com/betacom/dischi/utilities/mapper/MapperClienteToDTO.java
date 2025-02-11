@@ -122,10 +122,10 @@ public class MapperClienteToDTO {
 		Carrello carrello = cliente.getCarrello();
 
 		return new CarrelloDTO.Builder()
-				.setIdCarrello(carrello.getIdCarrello())
-				.setCliente(null)
-				.setProdotti(null)
-				.setTotale(carrello.getTotale())
+				.idCarrello(carrello.getIdCarrello())
+				.cliente(null)
+				.prodotti(null)
+				.totale(carrello.getTotale())
 				
 				.build();
 		

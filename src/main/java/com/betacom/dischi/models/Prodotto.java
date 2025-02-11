@@ -51,7 +51,6 @@ public class Prodotto {
 	private String immagineProdotto;
 	
 	@OneToMany(mappedBy = "prodotto",
-			fetch = FetchType.EAGER,
 			cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdottoOrdine> prodottiOrdine;
 	
@@ -61,7 +60,6 @@ public class Prodotto {
 	private List<Recensione> recensioni;
 	
 	@OneToMany(mappedBy = "prodotto",
-			fetch = FetchType.EAGER,
 			cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProdottoCarrello> prodottiCarrello;
 
