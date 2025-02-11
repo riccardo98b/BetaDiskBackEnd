@@ -64,7 +64,15 @@ public class MapperClienteToDTO {
 		}
 
 		return cliente.getOrdini().stream()
-				.map(ordine -> new OrdineDTO.Builder().build()).toList(); // da sistemare
+				.map(ordine -> new OrdineDTO.Builder()
+						.dataOrdine(ordine.getDataOrdine())
+						.idOrdine(ordine.getIdOrdine())
+						.spedito(ordine.getSpedito())
+						.totaleImporto(ordine.getTotaleImporto())
+						.prodotti(null)
+						.cliente(mapClienteToDTO(cliente))
+						
+						.build()).toList(); // da sistemare
 	}
 
 	public static List<ProdottoDTO> mapProdotti(Ordine ordine) {
