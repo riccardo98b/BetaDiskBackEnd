@@ -3,17 +3,6 @@ package com.betacom.dischi.DTO;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.betacom.dischi.DTO.ClienteDTO;
-import com.betacom.dischi.DTO.ProdottoDTO;
-import com.betacom.dischi.models.ProdottoOrdine;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-
 public class OrdineDTO {
 
 	private Integer idOrdine;

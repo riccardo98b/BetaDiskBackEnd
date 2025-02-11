@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.OrdineDTO;
+import com.betacom.dischi.DTO.ProdottoDTO;
+import com.betacom.dischi.DTO.ProdottoOrdineDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Carrello;
 import com.betacom.dischi.models.Cliente;
@@ -125,8 +127,31 @@ public class OrdineImpl implements OrdineService{
 
 	@Override
 	public List<OrdineDTO> listaByCliente(Integer id) throws CustomException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<Cliente> cliente = clienteRepo.findById(id);
+		if (cliente.isEmpty()) {
+			throw new CustomException("Cliente inesistente");
+		}
+		List<Ordine> ordini = cliente.get().getOrdini();
+		return ordini.stream()
+				.map(ordine -> new OrdineDTO.Builder()
+						.idOrdine(ordine.getIdOrdine())
+						.dataOrdine(ordine.getDataOrdine())
+						.spedito(ordine.getSpedito())
+						.totaleImporto(ordine.getTotaleImporto())
+						.prodotti(ordine.getProdotti().stream()
+								.map(prodotto -> new ProdottoOrdineDTO.Builder()
+										.prezzoAcquisto(prodotto.getPrezzoAcquisto())
+										.quantita(prodotto.getQuantita())
+										.prodotto(new ProdottoDTO.Builder()
+														.idProdotto(prodotto.getProdotto().getIdProdotto())
+														.titolo(prodotto.getProdotto().getTitolo())
+														.artista(prodotto.getProdotto().getArtista())
+														.immagineProdotto(prodotto.getProdotto().getImmagineProdotto())
+												.build())
+										.build())
+								.toList())
+						.build())
+				.toList();
 	}
 
 }

@@ -23,105 +23,70 @@ import com.betacom.dischi.response.ResponseObject;
 public class CarrelloControllerTest {
 
 	@Autowired
-	CarrelloController carrelloController;
-	
-	@Autowired
-	ProdottoController prodottoController;
-	
-	@Autowired
-	ClienteController clienteController;
-	
-	public ProdottoRequest createProdottoGeneralRequest() {
-		ProdottoRequest req = new ProdottoRequest();
-		req.setIdProdotto(1);
-		req.setFormato("VINILE");
-		req.setTitolo("Among the Living");
-		req.setArtista("Anthrax");
-		req.setGenere("Thrash Metal");
-		req.setDescrizione("Album iconico del thrash metal, pubblicato nel 1987.");
-		req.setAnnoPubblicazione(1987);
-		req.setPrezzo(24.99);
-		req.setQuantita(8);
-		req.setImmagineProdotto("https://example.com/among-the-living.jpg");
-		return req;
-	}
+	CarrelloController controller;
 	
 	@Test
 	@Order(1)
-	public void createProdottoTest()throws Exception {
-		ProdottoRequest req = createProdottoGeneralRequest();
-		ResponseBase response = prodottoController.create(req);
-		Assertions.assertThat(response.getRc()).isEqualTo(true);	
-	}
-	
-	@Test
-	@Order(2)
-	public void createCliente() {
-		ClienteRequest req = new ClienteRequest();
-		req.setNome("Matteo");
-		req.setCognome("Bianchi");
-		req.setImmagineCliente("https://randomuser.me/api/portraits/women/9.jpg");
-		req.setTelefono("3456401123");	
-		req.setCap("35028");
-		req.setComune("Polverara");
-		req.setProvincia("PD");
-		req.setVia("via Roma,10");
-		ResponseBase response = clienteController.create(req);
-		Assertions.assertThat(response.getRc()).isEqualTo(true);
-	}
-	
-	@Test
-	@Order(3)
 	public void addProdotto(){
 		CarrelloRequest request = new CarrelloRequest();
 		request.setIdCliente(1);
 		request.setIdProdotto(1);
 		request.setQuantita(1);
-		ResponseBase response = carrelloController.addProdotto(request);
+		ResponseBase response = controller.addProdotto(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
 	
 	@Test
-	@Order(4)
+	@Order(2)
 	public void addProdottoErrore(){
 		CarrelloRequest request = new CarrelloRequest();
 		request.setIdCliente(2);
 		request.setIdProdotto(1);
 		request.setQuantita(1);
-		ResponseBase response = carrelloController.addProdotto(request);
+		ResponseBase response = controller.addProdotto(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(false);
 		Assertions.assertThat(response.getMsg()).isEqualTo("Cliente inesistente");
 	}
 	
 	@Test
-	@Order(5)
+	@Order(3)
 	public void listaProdotto() {
 		System.out.println("inizio");
 		addProdotto();
-		ResponseObject<CarrelloDTO> response = carrelloController.listaProdotti(1);
+		ResponseObject<CarrelloDTO> response = controller.listaProdotti(1);
 		System.out.println(response.getMsg()+ "!!");
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
-		response = carrelloController.listaProdotti(2);
+		response = controller.listaProdotti(2);
 		Assertions.assertThat(response.getRc()).isEqualTo(false);
 	}
 	
 	@Test
-	@Order(6)
+	@Order(4)
 	public void removeProdotto(){
 		CarrelloRequest request = new CarrelloRequest();
 		request.setIdCliente(1);
 		request.setIdProdotto(1);
 		request.setQuantita(1);
-		ResponseBase response = carrelloController.removeProdotto(request);
+		ResponseBase response = controller.removeProdotto(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
 	
 	@Test
-	@Order(7)
+	@Order(5)
 	public void svuotaCarrello(){
 		CarrelloRequest request = new CarrelloRequest();
 		request.setIdCliente(1);
-		ResponseBase response = carrelloController.deleteCarrello(request);
+		ResponseBase response = controller.deleteCarrello(request);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);
+	}
+	@Test
+	@Order(6)
+	public void addProdottoPerSuccessivo(){
+		CarrelloRequest request = new CarrelloRequest();
+		request.setIdCliente(1);
+		request.setIdProdotto(1);
+		request.setQuantita(1);
+		ResponseBase response = controller.addProdotto(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
  }
