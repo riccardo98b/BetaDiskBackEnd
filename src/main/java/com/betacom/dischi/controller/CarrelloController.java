@@ -13,7 +13,6 @@ import com.betacom.dischi.DTO.CarrelloDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.CarrelloRequest;
 import com.betacom.dischi.response.ResponseBase;
-import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.response.ResponseObject;
 import com.betacom.dischi.services.interfaces.CarrelloService;
 

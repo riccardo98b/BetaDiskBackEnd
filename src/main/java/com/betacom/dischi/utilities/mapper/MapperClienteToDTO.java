@@ -125,7 +125,7 @@ public class MapperClienteToDTO {
 				.idCarrello(carrello.getIdCarrello())
 				.cliente(null)
 				.prodotti(null)
-				.totale(carrello.getTotale())
+				//da aggiungere calcolo totale
 				
 				.build();
 		

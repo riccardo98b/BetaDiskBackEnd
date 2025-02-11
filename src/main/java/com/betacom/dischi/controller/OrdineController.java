@@ -7,12 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.betacom.dischi.DTO.CarrelloDTO;
 import com.betacom.dischi.exception.CustomException;
-import com.betacom.dischi.request.CarrelloRequest;
 import com.betacom.dischi.request.OrdineRequest;
 import com.betacom.dischi.response.ResponseBase;
-import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.services.interfaces.OrdineService;
 
 @RestController
@@ -37,6 +34,7 @@ public class OrdineController {
 			log.error(e.getMessage());
 			response.setRc(false);
 			response.setMsg(e.getMessage());
+		
 		}
 		return response;
 	}
