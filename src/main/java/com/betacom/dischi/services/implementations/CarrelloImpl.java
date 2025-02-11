@@ -1,12 +1,18 @@
 package com.betacom.dischi.services.implementations;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.CarrelloDTO;
+import com.betacom.dischi.DTO.ProdottoCarrelloDTO;
+import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Carrello;
 import com.betacom.dischi.models.Cliente;
@@ -73,12 +79,15 @@ public class CarrelloImpl implements CarrelloService {
 		if (findRecord.isEmpty()) {
 			ProdottoCarrello row = new ProdottoCarrello(
 					carrello, prodotto, request.getQuantita());
+			if (carrello.getProdotti()== null) {
+				carrello.setProdotti(new ArrayList<ProdottoCarrello>());
+			}
 			carrello.getProdotti().add(row);
 		} else {
 			ProdottoCarrello row = findRecord.get();
-			row.setQuantita(row.getQuantita()+ request.getQuantita());
+			row.setQuantita(row.getQuantita() + request.getQuantita());
 		}
-		prodotto.setQuantita(prodotto.getQuantita()-request.getQuantita());
+		prodotto.setQuantita(prodotto.getQuantita() - request.getQuantita());
 		double prezzo = prodotto.getPrezzo() * request.getQuantita();
 		carrello.setTotale(carrello.getTotale() + prezzo);
 		prodottoRepo.save(prodotto);
@@ -101,7 +110,7 @@ public class CarrelloImpl implements CarrelloService {
 			prodotto.setQuantita(prodotto.getQuantita() + request.getQuantita());
 			double prezzo = prodotto.getPrezzo() * request.getQuantita();
 			carrello.setTotale(carrello.getTotale() - prezzo);
-			if (row.getQuantita()>request.getQuantita()) {
+			if (row.getQuantita() > request.getQuantita()) {
 				row.setQuantita(row.getQuantita() - request.getQuantita());
 				joinRepo.save(row);
 			} else {
@@ -139,9 +148,33 @@ public class CarrelloImpl implements CarrelloService {
 	}
 
 	@Override
-	public List<CarrelloDTO> listaProdotti(Integer idCliente) throws CustomException {
-		
-		return null;
+	public CarrelloDTO listaProdotti(Integer id) throws CustomException {
+		Optional<Cliente> cliente = clienteRepo.findById(id);
+		if (cliente.isEmpty()) {
+			throw new CustomException("Cliente inesistente");
+		}
+		Carrello carrello = cliente.get().getCarrello();
+		List<ProdottoCarrello> listaProdotti = carrello.getProdotti();
+		return new CarrelloDTO.Builder()
+				.totale(carrello.getTotale())
+				.prodotti(listaProdotti.stream()
+							.map(prodotto -> new ProdottoCarrelloDTO.Builder()
+												.quantita(prodotto.getQuantita())
+												.prodotto(new ProdottoDTO.Builder()
+														.idProdotto(prodotto.getProdotto().getIdProdotto())
+														.titolo(prodotto.getProdotto().getTitolo())
+														.artista(prodotto.getProdotto().getArtista())
+														.prezzo(prodotto.getProdotto().getPrezzo())
+														.immagineProdotto(prodotto.getProdotto().getImmagineProdotto())
+												.build())
+								.build()
+						).toList())
+				.build();
 	}
 
+//	@Override
+//	public List<CarrelloDTO> listaProdotti(Integer idCliente) throws CustomException {
+//		List<Cliente> listaCompleta = clienteRepo.findAll();
+//		return listaCompleta.stream().map(cliente -> new CarrelloDTO.Builder().build()).toList();
+//	}
 }

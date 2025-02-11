@@ -6,8 +6,8 @@ import com.betacom.dischi.models.Prodotto;
 public class ProdottoCarrelloDTO {
 
 	private Integer id;
-	private Carrello carrello;
-	private Prodotto prodotto;
+	private CarrelloDTO carrello;
+	private ProdottoDTO prodotto;
 	private Integer quantita;
 	private ProdottoCarrelloDTO() {
 		super();
@@ -15,10 +15,10 @@ public class ProdottoCarrelloDTO {
 	public Integer getId() {
 		return id;
 	}
-	public Carrello getCarrello() {
+	public CarrelloDTO getCarrello() {
 		return carrello;
 	}
-	public Prodotto getProdotto() {
+	public ProdottoDTO getProdotto() {
 		return prodotto;
 	}
 	public Integer getQuantita() {
@@ -27,8 +27,8 @@ public class ProdottoCarrelloDTO {
 	
 	public static class Builder {
 		private Integer id;
-		private Carrello carrello;
-		private Prodotto prodotto;
+		private CarrelloDTO carrello;
+		private ProdottoDTO prodotto;
 		private Integer quantita;
 		public Builder() {
 		}
@@ -44,11 +44,11 @@ public class ProdottoCarrelloDTO {
 			this.id = id;
 			return this;
 		}
-		public Builder carrello(Carrello carrello) {
+		public Builder carrello(CarrelloDTO carrello) {
 			this.carrello = carrello;
 			return this;
 		}
-		public Builder prodotto(Prodotto prodotto) {
+		public Builder prodotto(ProdottoDTO prodotto) {
 			this.prodotto = prodotto;
 			return this;
 		}
