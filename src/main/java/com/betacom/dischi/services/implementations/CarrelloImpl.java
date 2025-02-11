@@ -31,10 +31,10 @@ public class CarrelloImpl implements CarrelloService {
 	IClienteRepository clienteRepo;
 	
 	@Autowired
-	ICarrelloRepository carrelloRepo;
+	IProdottoRepository prodottoRepo;
 	
 	@Autowired
-	IProdottoRepository prodottoRepo;
+	ICarrelloRepository carrelloRepo;
 	
 	@Autowired
 	IProdottoCarrelloRepository joinRepo;

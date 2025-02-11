@@ -30,7 +30,7 @@ public class CarrelloController {
 	@PostMapping("/add")
 	public ResponseBase addProdotto(@RequestBody(required = true) CarrelloRequest request) {
 		log.debug("Aggiungi prodotto: " + request);
-		ResponseList<CarrelloDTO> response = new ResponseList<CarrelloDTO>();
+		ResponseBase response = new ResponseBase();
 		response.setRc(true);
 		try {
 			carrelloServ.addProdotto(request);
@@ -46,7 +46,7 @@ public class CarrelloController {
 	@PostMapping("/remove")
 	public ResponseBase removeProdotto(@RequestBody(required = true) CarrelloRequest request) {
 		log.debug("Rimuovi prodotto: " + request);
-		ResponseList<CarrelloDTO> response = new ResponseList<CarrelloDTO>();
+		ResponseBase response = new ResponseBase();
 		response.setRc(true);
 		try {
 			carrelloServ.removeProdotto(request);
