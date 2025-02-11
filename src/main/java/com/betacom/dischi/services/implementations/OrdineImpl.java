@@ -108,8 +108,19 @@ public class OrdineImpl implements OrdineService{
 
 	@Override
 	public void update(OrdineRequest request) throws CustomException {
-		// TODO Auto-generated method stub
-		
+		Optional<Ordine> ordine = ordineRepo.findById(request.getIdOrdine());
+		if (ordine.isEmpty()) {
+			throw new CustomException("L'ordine non esiste");
+		}
+		if (ordine.get().getSpedito()) {
+			throw new CustomException("L'ordine è già stato spedito, non si può eliminare");
+		}
+		if (request.getSpedito() == null) {
+			ordine.get().setSpedito(false);
+		} else {
+			ordine.get().setSpedito(request.getSpedito());
+		}
+		ordineRepo.save(ordine.get());
 	}
 
 	@Override

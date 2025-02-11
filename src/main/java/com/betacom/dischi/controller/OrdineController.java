@@ -55,4 +55,21 @@ public class OrdineController {
 		}
 		return response;
 	}
+	
+	@PostMapping("/update")
+	public ResponseBase update(@RequestBody(required = true) OrdineRequest request) {
+		log.debug("Elimina ordine: " + request);
+		ResponseBase response = new ResponseBase();
+		response.setRc(true);
+		try {
+			ordineServ.update(request);
+			response.setMsg("Ordine aggiornato con successo");
+		} catch (CustomException e) {
+			log.error(e.getMessage());
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		
+		}
+		return response;
+	}
 }
