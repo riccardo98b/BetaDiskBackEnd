@@ -38,4 +38,21 @@ public class OrdineController {
 		}
 		return response;
 	}
+	
+	@PostMapping("/delete")
+	public ResponseBase delete(@RequestBody(required = true) OrdineRequest request) {
+		log.debug("Elimina ordine: " + request);
+		ResponseBase response = new ResponseBase();
+		response.setRc(true);
+		try {
+			ordineServ.delete(request);
+			response.setMsg("Ordine eliminato con successo");
+		} catch (CustomException e) {
+			log.error(e.getMessage());
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		
+		}
+		return response;
+	}
 }

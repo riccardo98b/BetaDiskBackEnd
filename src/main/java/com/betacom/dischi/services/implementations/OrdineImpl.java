@@ -12,6 +12,7 @@ import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Carrello;
 import com.betacom.dischi.models.Cliente;
 import com.betacom.dischi.models.Ordine;
+import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.ProdottoCarrello;
 import com.betacom.dischi.models.ProdottoOrdine;
 import com.betacom.dischi.repository.ICarrelloRepository;
@@ -96,8 +97,13 @@ public class OrdineImpl implements OrdineService{
 		if (ordine.get().getSpedito()) {
 			throw new CustomException("L'ordine è già stato spedito, non si può eliminare");
 		}
-		
-		
+		for (ProdottoOrdine prodOrd : ordine.get().getProdotti()) {
+			Prodotto prodotto = prodOrd.getProdotto();
+			prodotto.setQuantita(prodotto.getQuantita() + prodOrd.getQuantita());
+			prodottoRepo.save(prodotto);
+		}
+		joinOrdineRepo.deleteAll(ordine.get().getProdotti());
+		ordineRepo.delete(ordine.get());
 	}
 
 	@Override
