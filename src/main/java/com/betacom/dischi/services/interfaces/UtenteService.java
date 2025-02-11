@@ -21,5 +21,7 @@ public interface UtenteService {
 
 	void deleteUtente(Integer id) throws CustomException;
 	
+	void updateUtente(UtenteRequest req) throws CustomException;
+	
 	
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.RecensioneDTO;
@@ -15,7 +14,6 @@ import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.ProdottoOrdine;
 import com.betacom.dischi.models.Recensione;
 import com.betacom.dischi.repository.IClienteRepository;
-import com.betacom.dischi.repository.IOrdineRepository;
 import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.repository.IRecensioneRepository;
 import com.betacom.dischi.request.RecensioneRequest;
@@ -25,16 +23,21 @@ import com.betacom.dischi.utilities.mapper.MapperClienteToDTO;
 @Service
 public class RecensioneImpl implements RecensioneService {
 	
-	@Autowired
-	Logger log;
-	@Autowired
-	IRecensioneRepository recensioneRepo;
-	@Autowired
-	IClienteRepository clienteRepo;
-	@Autowired
-	IProdottoRepository prodottoRepo;
-	@Autowired
-	IOrdineRepository ordineRepo;
+
+	private Logger log;
+	private IRecensioneRepository recensioneRepo;
+	private IClienteRepository clienteRepo;
+	private IProdottoRepository prodottoRepo;
+
+	
+	public RecensioneImpl(Logger log, IRecensioneRepository recensioneRepo, IClienteRepository clienteRepo,
+			IProdottoRepository prodottoRepo) {
+		this.log = log;
+		this.recensioneRepo = recensioneRepo;
+		this.clienteRepo = clienteRepo;
+		this.prodottoRepo = prodottoRepo;
+	}
+
 
 	@Override
 	public List<RecensioneDTO> listAll(Integer idRecensione,Integer stelle) {

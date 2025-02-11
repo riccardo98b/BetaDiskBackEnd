@@ -24,4 +24,5 @@ public interface IUtenteRepository extends JpaRepository<Utente, Integer> {
 			@Param("email") String email
 	);
 
+	
 }

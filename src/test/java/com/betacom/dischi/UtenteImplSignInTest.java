@@ -24,10 +24,8 @@ public class UtenteImplSignInTest {
 	
     @Autowired
     UtenteController utenteController;
-    
     @Autowired
     ClienteController clienteController;
-
     @Autowired
     UtenteService utenteService;
     
@@ -38,7 +36,7 @@ public class UtenteImplSignInTest {
     final String VALID_PASSWORD = "password";
     final String INVALID_PASSWORD = "ppa";
     
-	private ClienteRequest reqCliente;
+	private static ClienteRequest reqCliente;
 	private UtenteRequest reqUtente;
     
     
@@ -51,6 +49,7 @@ public class UtenteImplSignInTest {
 		reqCliente.setImmagineCliente("https://randomuser.me/api/portraits/women/9.jpg");
 		reqCliente.setTelefono("3456401123");
 		ResponseBase responseCliente = clienteController.create(reqCliente);    	
+        Assertions.assertThat(responseCliente.getRc()).isEqualTo(true);
 
 		// utente
 		reqUtente = new UtenteRequest();
@@ -65,7 +64,8 @@ public class UtenteImplSignInTest {
         signInRequest.setUsername(VALID_USERNAME);
         signInRequest.setPassword(VALID_PASSWORD);
         
-        
+        Assertions.assertThat(responseUtente.getRc()).isEqualTo(true);
+
     }
     
     @Test

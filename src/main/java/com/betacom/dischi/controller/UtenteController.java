@@ -104,7 +104,19 @@ public class UtenteController {
 	    return response;
 	}
 	
+	@PostMapping("/update")
+	public ResponseBase update(@RequestBody(required = true) UtenteRequest req) {
+	    ResponseBase response = new ResponseBase();
+	    try {
+	        utenteService.updateUtente(req);
+	        response.setRc(true); // 
+	        response.setMsg("Utente aggiornato con successo!");
+	    } catch (Exception e) {
+	        response.setRc(false); 
+	        response.setMsg(e.getMessage());
+	    }
+	    return response;
+	}
 	
-
-
+	
 }

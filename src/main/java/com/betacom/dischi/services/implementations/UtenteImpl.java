@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +26,21 @@ import jakarta.transaction.Transactional;
 @Service
 public class UtenteImpl implements UtenteService{
 
-	@Autowired
 	private  IUtenteRepository utenteRepo;
-	
-	@Autowired
-	private  IClienteRepository clienteRepo;
-	
-	@Autowired
-	private Logger log;
-	
-    @Autowired
-    PasswordEncoder passwordEncoder;
-	
-	public UtenteImpl() {}
+    private  IClienteRepository clienteRepo;
+    private  Logger log;
+    private  PasswordEncoder passwordEncoder;
+
+    public UtenteImpl(IUtenteRepository utenteRepo, 
+                       IClienteRepository clienteRepo, 
+                       Logger log, 
+                       PasswordEncoder passwordEncoder) {
+        this.utenteRepo = utenteRepo;
+        this.clienteRepo = clienteRepo;
+        this.log = log;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
 	@Override
 	public SignInDTO signIn(SignInRequest req) {
@@ -126,6 +127,26 @@ public class UtenteImpl implements UtenteService{
 			clienteRepo.save(cliente);
 		}
 		utenteRepo.delete(utente);
+		
+	}
+	
+	@Override
+	public void updateUtente(UtenteRequest req) throws CustomException{
+		log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
+		Utente utente =  utenteRepo.findById(req.getIdUtente())
+				.orElseThrow(() -> new CustomException("Utente non trovato"));
+        Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
+		if(!utente.getUsername().equals(req.getUsername())){
+			if(optUtente.isPresent()) {
+				throw new CustomException("Utente con questo username già esistente");
+			}
+			utente.setUsername(req.getUsername());
+		}
+		if(req.getPassword() != null && !req.getPassword().isEmpty()) {
+			utente.setPassword(passwordEncoder.encode(req.getPassword()));
+		}
+		// TODO: EMAIL
+		utenteRepo.save(utente);
 		
 	}
 	

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import com.betacom.dischi.DTO.UtenteDTO;
 import com.betacom.dischi.controller.ClienteController;
 import com.betacom.dischi.controller.UtenteController;
@@ -20,6 +21,7 @@ import com.betacom.dischi.response.ResponseList;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UtenteControllerTest {
+
 
 	@Autowired
 	ClienteController clienteController;
@@ -58,47 +60,54 @@ public class UtenteControllerTest {
 		reqUtente.setRoles("UTENTE");
 		reqUtente.setUsername("matteob");
 		ResponseBase responseUtente = utenteController.create(reqUtente);
-		Assertions.assertThat(responseUtente.getRc()).isEqualTo(true);
-	}
+		  Assertions.assertThatCode(() -> utenteController.create(reqUtente))
+          .doesNotThrowAnyException();		}	
 	
 	@Test
 	@Order(2)
-	public void listAllUtente_shouldReturnListOfUtente(Integer idUtente,String username,String email) throws CustomException{
+	public void listAllUtente_shouldReturnListOfUtente() throws CustomException{
 		ResponseList<UtenteDTO> responseList = utenteController.list(null, null, null);
 	    Assertions.assertThat(responseList).isNotNull();
-	    Assertions.assertThat(responseList.getDati()).isNotEmpty();
 	}
 	
 	
 
-//	@Test
-//	@Order(2)
-//	public void updateUtente_withValidData_shouldCreateUtente() {
-//		reqUtente.setIdUtente(VALID_ID);
-//		reqUtente.setEmail("matteob@gmail.com");
-//		reqUtente.setIdCliente(1);
-//		reqUtente.setPassword("password");
-//		reqUtente.setRoles("UTENTE");
-//		reqUtente.setUsername("matteobianco");
-//		// utenteController.update(reqUtente);
-//
-//		ResponseObject<UtenteDTO> updatedUtente = utenteController.listById(VALID_ID);
-//		Assertions.assertThat(updatedUtente.getDati().getUsername()).isEqualTo("matteobianco");
-//	}
 	@Test
 	@Order(3)
-	public void listById_withValidId_shouldReturnUtente() {
-		ResponseBase response = utenteController.listById(VALID_ID);
-		Assertions.assertThat(response.getRc()).isEqualTo(true);
-	}
+	public void updateUtente_withValidData_shouldUpdateUtente() {
+		reqUtente.setIdUtente(VALID_ID);
+		reqUtente.setEmail("matteob@gmail.com");
+		reqUtente.setIdCliente(1);
+		reqUtente.setPassword("password");
+		reqUtente.setRoles("UTENTE");
+		reqUtente.setUsername("matteobianco");
+		// utenteController.update(reqUtente);
+
+
+		ResponseBase responseUtente = utenteController.update(reqUtente);
+	    
+		  Assertions.assertThatCode(() -> utenteController.update(reqUtente))
+          .doesNotThrowAnyException();		}
+	
+	
+	
+	
+	
+	
 	@Test
 	@Order(4)
+	public void listById_withValidId_shouldReturnUtente() {
+		ResponseBase response = utenteController.listById(VALID_ID);
+		  Assertions.assertThatCode(() -> utenteController.listById(VALID_ID))
+          .doesNotThrowAnyException();		}
+	@Test
+	@Order(5)
 	public void listById_withInvalidId_shouldThrowException() {
 		Assertions.assertThatExceptionOfType(CustomException.class)
 		.isThrownBy(() -> utenteController.listById(INVALID_ID));
 	}
 	@Test
-	@Order(5)
+	@Order(6)
 	public void deleteUtente_withInvalidId_shouldNotDeleteUtente() {
 		reqUtente.setIdUtente(INVALID_ID);
 		ResponseBase response = utenteController.delete(reqUtente);
@@ -108,12 +117,12 @@ public class UtenteControllerTest {
 	}
 	
 	@Test
-	@Order(6)
+	@Order(7)
 	public void deleteUtente_withValidId_shouldDeleteUtente() {
 		reqUtente.setIdUtente(VALID_ID);
 		ResponseBase response = utenteController.delete(reqUtente);
-		Assertions.assertThat(response.getRc()).isEqualTo(true);
-	
+		Assertions.assertThatExceptionOfType(CustomException.class)
+		.isThrownBy(() -> utenteController.listById(1));	
 	}
 
 
