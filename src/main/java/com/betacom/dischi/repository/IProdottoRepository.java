@@ -18,6 +18,6 @@ public interface IProdottoRepository extends JpaRepository<Prodotto, Integer>{
 			@Param("artista")String artista,
 			@Param("genere")String genere,
 			@Param("annoPubblicazione")Integer annoPubblicazione,
-			@Param("formato") Formato formato
+			@Param("formato") Formato formatoFormattato
 			);
 }

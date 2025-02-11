@@ -28,9 +28,12 @@ public class Utility {
 			throw new CustomException("Inserisci una quantità disponibile del prodotto");
 	}
 	
-	
-	public static Formato formatoToString(String stringa) {
-		 return Formato.valueOf(stringa.toUpperCase()); 
+	public static Formato formatoToString(String stringaFormato){
+		try {
+			return Formato.valueOf(stringaFormato); 
+		}catch(Exception e) {
+			return null;
+		}
 	}
 	
 }

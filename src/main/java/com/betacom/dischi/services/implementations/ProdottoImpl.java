@@ -97,13 +97,14 @@ public class ProdottoImpl implements ProdottoService{
 	public List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere,
 			Integer annoPubblicazione, String formato) throws Exception {
 		
-	    Formato formatoEnum = formatoToString(formato);
-		List<Prodotto> listaFiltrata = prodottoRepository.prodottiFiltrati(idProdotto,titolo, artista, genere, annoPubblicazione, formatoEnum);
+		Formato formatoFormattato = formatoToString(formato);
+		List<Prodotto> listaFiltrata = prodottoRepository.prodottiFiltrati(idProdotto,titolo, artista, genere, annoPubblicazione, formatoFormattato);
+	
 		
 		return listaFiltrata.stream()
 				.map(p -> new ProdottoDTO.Builder()
 						.idProdotto(p.getIdProdotto())
-						.formato(p.getFormato().toString())
+						.formato(formatoFormattato.toString())
 						.titolo(p.getTitolo())
 						.artista(p.getArtista())
 						.genere(p.getGenere())
