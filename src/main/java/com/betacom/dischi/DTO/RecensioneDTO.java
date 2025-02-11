@@ -1,5 +1,6 @@
 package com.betacom.dischi.DTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -12,6 +13,8 @@ public class RecensioneDTO {
 	
 
 	private Integer stelle;
+	
+	private LocalDate dataCreazione;
 	
 	
 	private ClienteDTO cliente;
@@ -31,14 +34,15 @@ public class RecensioneDTO {
 
     	private Integer stelle;
     	
+    	private LocalDate dataCreazione;
+
+    	
     	
     	private ClienteDTO cliente;
     	
 
     	private List<ProdottoDTO> prodotti;
 
-
-	
 
 		public Builder setIdRecensione(Integer idRecensione) {
 			this.idRecensione = idRecensione;
@@ -70,21 +74,28 @@ public class RecensioneDTO {
 		}
 		
 		
+		
+		
+		public Builder setDataCreazione(LocalDate dataCreazione) {
+			this.dataCreazione = dataCreazione;
+			return this;
+		}
+
+
 		public RecensioneDTO build() {
 			RecensioneDTO recDTO = new RecensioneDTO();
 			recDTO.idRecensione = this.idRecensione;
 			recDTO.descrizione = this.descrizione;
 			recDTO.stelle = this.stelle;
+			recDTO.dataCreazione=this.dataCreazione;
 			recDTO.cliente = this.cliente;
 			recDTO.prodotti= this.prodotti;
+		
 			return recDTO;
 		}
     	
     	
     }
-
-
-
 
 
 	@Override
@@ -99,39 +110,26 @@ public class RecensioneDTO {
 	}
 
 
-
-
-
 	public String getDescrizione() {
 		return descrizione;
 	}
-
-
-
 
 	public Integer getStelle() {
 		return stelle;
 	}
 
-
-	
-
-
 	public ClienteDTO getCliente() {
 		return cliente;
 	}
-
-
-	
-
 
 	public List<ProdottoDTO> getProdotti() {
 		return prodotti;
 	}
 
 
+	public LocalDate getDataCreazione() {
+		return dataCreazione;
+	}
 
-	
-	
 	
 }

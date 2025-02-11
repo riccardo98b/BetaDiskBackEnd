@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.dischi.DTO.ClienteDTO;
-import com.betacom.dischi.DTO.ClienteDTO;
 import com.betacom.dischi.request.ClienteRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;

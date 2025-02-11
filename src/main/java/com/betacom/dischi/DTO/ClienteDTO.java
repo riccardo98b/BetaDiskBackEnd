@@ -1,5 +1,6 @@
 package com.betacom.dischi.DTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -22,6 +23,8 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 	private String provincia;
 	
 	private String comune;
+	
+	private LocalDate dataRegistrazione;
 	
 	private List<OrdineDTO> ordini;
 	
@@ -61,6 +64,8 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
     	
     	private String comune;
     
+    	private LocalDate dataRegistrazione;
+
     	
     	private List<OrdineDTO> ordini;
     	
@@ -148,6 +153,12 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 			this.comune = comune;
 			return this;
 		}
+		
+
+		public Builder setDataRegistrazione(LocalDate dataRegistrazione) {
+			this.dataRegistrazione = dataRegistrazione;
+			return this;
+		}
 
 		//3) ORA FAI UN METODO BUILD PER COSTRUIRE IL DTO E RITORNARLO
 		public ClienteDTO build() {
@@ -166,6 +177,7 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 			clienteDTO.comune= this.comune;
 			clienteDTO.provincia=this.provincia;
 			clienteDTO.via= this.via;
+			clienteDTO.dataRegistrazione= this.dataRegistrazione;
 			return clienteDTO;
 		}
         
@@ -246,6 +258,10 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 
 	public List<RecensioneDTO> getRecensioni() {
 		return recensioni;
+	}
+
+	public LocalDate getDataRegistrazione() {
+		return dataRegistrazione;
 	}
     
     

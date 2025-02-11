@@ -160,7 +160,6 @@ public class Cliente {
 	
   
 
-
 	public String getVia() {
 		return via;
 	}
@@ -193,6 +192,8 @@ public class Cliente {
 	public void setComune(String comune) {
 		this.comune = comune;
 	}
+	
+	
 
 	@Override
 	public String toString() {

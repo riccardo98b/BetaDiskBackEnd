@@ -30,7 +30,7 @@ public class RecensioneController {
 	
 	
 	@CrossOrigin(origins = "http://localhost:4200")
-	@GetMapping("/listAll")
+	@GetMapping("/list")
 	public ResponseList<RecensioneDTO>list(Integer idRecensione,Integer stelle) {
 		log.debug("Lista di tutti i clienti: ");
 		ResponseList<RecensioneDTO> response = new ResponseList<RecensioneDTO>();

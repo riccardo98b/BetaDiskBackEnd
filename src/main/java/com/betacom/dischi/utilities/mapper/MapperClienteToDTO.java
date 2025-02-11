@@ -30,7 +30,9 @@ public class MapperClienteToDTO {
 				.setCognome(cliente.getCognome()).setTelefono(cliente.getTelefono())
 				.setImmagineCliente(cliente.getImmagineCliente()).setCarrello(mapCarrello(cliente))
 				.setOrdini(mapOrdini(cliente)).setRecensioni(mapRecensioni(cliente)).setUtente(mapUtente(cliente))
-				.setWishlist(mapWishlist(cliente)).build();
+				.setWishlist(mapWishlist(cliente))
+				.setDataRegistrazione(cliente.getDataRegistrazione())
+				.build();
 	}
 	public static ClienteDTO mapClienteEssential(Cliente cliente) {
 	
@@ -38,6 +40,7 @@ public class MapperClienteToDTO {
 				.setIdCliente(cliente.getIdCliente()).setNome(cliente.getNome())
 				.setCognome(cliente.getCognome()).setTelefono(cliente.getTelefono())
 				.setImmagineCliente(cliente.getImmagineCliente())
+				.setDataRegistrazione(cliente.getDataRegistrazione())
 				.build();
 	}
 	// TODO: serve builder
@@ -98,6 +101,8 @@ public class MapperClienteToDTO {
 		return cliente.getRecensioni().stream()
 				.map(feed -> new RecensioneDTO.Builder().setIdRecensione(feed.getIdRecensione())
 						.setDescrizione(feed.getDescrizione()).setStelle(feed.getStelle())
+						.setDataCreazione(feed.getDataCreazione())
+
 						 .setCliente(mapClienteEssential(cliente)) 
 						.setProdotti(null) // da aggiungere,serve Builder
 						.build())
