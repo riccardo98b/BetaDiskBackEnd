@@ -1,0 +1,142 @@
+package com.betacom.dischi.services.implementations;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.betacom.dischi.DTO.SignInDTO;
+import com.betacom.dischi.DTO.UtenteDTO;
+import com.betacom.dischi.exception.CustomException;
+import com.betacom.dischi.models.Cliente;
+import com.betacom.dischi.models.Utente;
+import com.betacom.dischi.repository.IClienteRepository;
+import com.betacom.dischi.repository.IUtenteRepository;
+import com.betacom.dischi.request.SignInRequest;
+import com.betacom.dischi.request.UtenteRequest;
+import com.betacom.dischi.services.interfaces.UtenteService;
+import com.betacom.dischi.utilities.enums.Roles;
+import com.betacom.dischi.utilities.mapper.MapperClienteToDTO;
+
+import jakarta.transaction.Transactional;
+
+@Service
+public class UtenteImpl implements UtenteService{
+
+	@Autowired
+	private  IUtenteRepository utenteRepo;
+	
+	@Autowired
+	private  IClienteRepository clienteRepo;
+	
+	@Autowired
+	private Logger log;
+	
+    @Autowired
+    PasswordEncoder passwordEncoder;
+	
+	public UtenteImpl() {}
+
+	@Override
+	public SignInDTO signIn(SignInRequest req) {
+	    log.debug("Signin utente: " + req.getUsername());
+	    SignInDTO resp = new SignInDTO();
+	    
+	    Optional<Utente> utente = utenteRepo.findByUsername(req.getUsername());
+	    
+	    if (utente.isEmpty()) {
+	        resp.setLogged(false); 
+	    } else {
+	        if (passwordEncoder.matches(req.getPassword(), utente.get().getPassword())) {
+	            resp.setLogged(true); 
+	            resp.setRole(utente.get().getRoles().toString());
+	        } else {
+	            resp.setLogged(false); 
+	        }
+	    }
+	    
+	    return resp;
+	}
+
+
+	@Transactional
+	@Override
+	public void createUser(UtenteRequest req) throws CustomException {
+	 log.debug("Crea utente: "+req);
+     Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());	
+     if(optUtente.isPresent()) {
+    	 throw new CustomException("Utente con questo username già esistente");
+    	 
+     }
+     if(req.getRoles() == null) {
+    	 req.setRoles("UTENTE");
+     }
+     Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
+     if(optCliente.isEmpty()) {
+         log.debug("Cliente con ID: "+req.getIdCliente()+ "non trovato");
+    	 throw new CustomException("Cliente non trovato");
+     }
+     Cliente cliente = optCliente.get();
+     if(cliente.getUtente() != null) {
+    	 throw new CustomException("Cliente già associato a un altro utente");
+     }
+     Utente utente = new Utente();
+
+     utente.setPassword(passwordEncoder.encode(req.getPassword()));
+
+     utente.setRoles(Roles.valueOf(req.getRoles()));
+     utente.setEmail(req.getEmail());
+     utente.setUsername(req.getUsername());
+     utente.setCliente(cliente);
+     //se cliente e gia legato a dati di un altro utente allora lancio
+     // eccezione
+     utenteRepo.save(utente);
+
+     cliente.setUtente(utente);
+     clienteRepo.save(cliente);
+	}
+
+	@Override
+	public List<UtenteDTO> listAll(Integer idUtente,String username,String email) {
+	    List<Utente> listaUtenti = utenteRepo.filteredUsers(idUtente, username, email);
+	    return listaUtenti.stream()
+	            .map(u -> new UtenteDTO.Builder()
+	                    .setIdUtente(u.getIdUtente())
+	                    .setUsername(u.getUsername())
+	                    .setRoles(u.getRoles().toString()) 
+	                    .setEmail(u.getEmail())
+	                    .setCliente(null)  // 
+	                    .build())
+	            .collect(Collectors.toList());
+	}
+	
+	@Transactional
+	@Override
+	public void deleteUtente(Integer id) throws CustomException{
+		log.debug("Cancellazione utente con ID: "+id);
+		Utente utente = utenteRepo.findById(id)
+				.orElseThrow(() -> new CustomException("Utente non trovato"));
+		Cliente cliente = utente.getCliente();
+		if(cliente != null) {
+			cliente.setUtente(null);
+			clienteRepo.save(cliente);
+		}
+		utenteRepo.delete(utente);
+		
+	}
+	
+	@Override
+	public UtenteDTO listById(Integer id) throws CustomException {
+		log.debug("Visualizzazione dati utente con ID: " + id);
+	    Utente utente = utenteRepo.findById(id)
+	    		.orElseThrow(() -> new CustomException("Utente non trovato"));
+		return MapperClienteToDTO.mapUtente(utente.getCliente());
+}
+	
+	
+	
+}

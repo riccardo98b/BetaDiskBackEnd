@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ProdottoDTO {
 
+
 	private Integer idProdotto; 
 	
 	private String formato;
@@ -135,4 +136,52 @@ public class ProdottoDTO {
 	}
 
 
+
+	public Integer getIdProdotto() {
+		return idProdotto;
+	}
+
+	public String getFormato() {
+		return formato;
+	}
+
+	public String getTitolo() {
+		return titolo;
+	}
+
+	public String getArtista() {
+		return artista;
+	}
+
+	public String getGenere() {
+		return genere;
+	}
+
+	public String getDescrizione() {
+		return descrizione;
+	}
+
+	public Integer getAnnoPubblicazione() {
+		return annoPubblicazione;
+	}
+
+	public Double getPrezzo() {
+		return prezzo;
+	}
+
+	public Integer getQuantita() {
+		return quantita;
+	}
+
+	public String getImmagineProdotto() {
+		return immagineProdotto;
+	}
+
+	public List<OrdineDTO> getOrdini() {
+		return ordini;
+	}
+
+	public List<RecensioneDTO> getRecensioni() {
+		return recensioni;
+	}
 }

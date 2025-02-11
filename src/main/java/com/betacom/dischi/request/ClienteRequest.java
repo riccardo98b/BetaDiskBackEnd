@@ -1,14 +1,5 @@
 package com.betacom.dischi.request;
 
-import java.util.List;
-
-import com.betacom.dischi.models.Carrello;
-import com.betacom.dischi.models.Ordine;
-import com.betacom.dischi.models.Recensione;
-import com.betacom.dischi.models.Utente;
-import com.betacom.dischi.models.Wishlist;
-
-
 
 public class ClienteRequest {
 	
@@ -23,6 +14,13 @@ public class ClienteRequest {
 	
 	private String immagineCliente;
 	
+    private String via;
+	
+	private String cap;
+	
+	private String provincia;
+	
+	private String comune;
 
 
 	public Integer getIdCliente() {
@@ -63,6 +61,40 @@ public class ClienteRequest {
 
 	public void setImmagineCliente(String immagineCliente) {
 		this.immagineCliente = immagineCliente;
+	}
+	
+	
+
+	public String getVia() {
+		return via;
+	}
+
+	public String getCap() {
+		return cap;
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public String getComune() {
+		return comune;
+	}
+
+	public void setVia(String via) {
+		this.via = via;
+	}
+
+	public void setCap(String cap) {
+		this.cap = cap;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+
+	public void setComune(String comune) {
+		this.comune = comune;
 	}
 
 	@Override

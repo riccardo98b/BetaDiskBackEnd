@@ -38,6 +38,23 @@ public class Cliente {
 	@Column(nullable=false)
     private LocalDate dataRegistrazione;	
 	
+	@Column
+	private String via;
+	
+	@Column(length=5)
+	private String cap;
+	
+	@Column(length=2)
+	private String provincia;
+	
+	@Column
+	private String comune;
+	
+	// campo indirizzo aggiunto, importante che un cliente abbia un indirizzo
+//	@Column(nullable=false)
+//	private String indirizzo;
+	
+	
 	@OneToMany(mappedBy="cliente", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)
 	private List<Ordine> ordini;
 	
@@ -141,5 +158,50 @@ public class Cliente {
 		this.dataRegistrazione = dataRegistrazione;
 	}
 	
+  
+
+
+	public String getVia() {
+		return via;
+	}
+
+	public String getCap() {
+		return cap;
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setVia(String via) {
+		this.via = via;
+	}
+
+	public void setCap(String cap) {
+		this.cap = cap;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
+	}
+	
+
+	public String getComune() {
+		return comune;
+	}
+
+	public void setComune(String comune) {
+		this.comune = comune;
+	}
+
+	@Override
+	public String toString() {
+		return "Cliente [idCliente=" + idCliente + ", nome=" + nome + ", cognome=" + cognome + ", telefono=" + telefono
+				+ ", immagineCliente=" + immagineCliente + ", dataRegistrazione=" + dataRegistrazione + ", indirizzo="
+				 + ", ordini=" + ordini + ", carrello=" + carrello + ", utente=" + utente + ", wishlist="
+				+ wishlist + ", recensioni=" + recensioni + "]";
+	}
+
+
 	
 }

@@ -31,7 +31,7 @@ public class ProdottoController {
 		log.debug("Create prodotto: " + req);
 		ResponseBase response = new ResponseBase();
 		response.setRc(true);
-		response.setMsg("Prdotto creato con successo!");
+		response.setMsg("Prodotto creato con successo!");
 		try {
 			prodottoService.create(req);
 		}catch(Exception e) {
@@ -41,13 +41,44 @@ public class ProdottoController {
 		return response;
 		
 	}
-
+	
+	@PostMapping("/update")
+	public ResponseBase update(@RequestBody(required = true) ProdottoRequest req) {
+		ResponseBase response = new ResponseBase();
+		response.setRc(true);
+		response.setMsg("Prodotto aggiornato con successo!");
+		try {
+			prodottoService.update(req);
+		}catch(Exception e) {
+			response.setMsg(e.getMessage());
+			response.setRc(false);
+		}
+		return response;
+	}
+	
+	
+	@PostMapping("/delete")
+	public ResponseBase delete(@RequestBody(required = true) ProdottoRequest req) {
+		ResponseBase response = new ResponseBase();
+		response.setRc(true);
+		response.setMsg("Prodotto eliminato con successo!");
+		try {
+			prodottoService.delete(req);
+		}catch(Exception e) {
+			response.setMsg(e.getMessage());
+			response.setRc(false);
+		}
+		return response;
+	}
+	
+	
 	@GetMapping("/list")
-	public ResponseList<ProdottoDTO> list() {
+	public ResponseList<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere, 
+			Integer annoPubblicazione, String formato){
 		ResponseList<ProdottoDTO> response = new ResponseList<ProdottoDTO>();
 		response.setRc(true);
 		try {
-			response.setDati(prodottoService.listAll());
+			response.setDati(prodottoService.listAll(idProdotto, titolo, artista, genere, annoPubblicazione, formato));
 	
 		}catch(Exception e) {
 			response.setRc(false);
@@ -55,8 +86,8 @@ public class ProdottoController {
 		}
 		return response;
 	}
-
-	}
+	
+}
 	
 	
 
