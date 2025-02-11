@@ -14,41 +14,36 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.betacom.dischi.models.Utente;
 import com.betacom.dischi.repository.IUtenteRepository;
 
-public class DatabaseUserDetailsService implements UserDetailsService{
-	
-    // Inietta il repository per accedere ai dati degli utenti dal database
+public class DatabaseUserDetailsService implements UserDetailsService {
+
+    // Inietta il repository per accedere ai dati degli utenti nel database
     private @Autowired IUtenteRepository utenteRepository;
 
-	@Override
-	// Questo metodo viene chiamato da Spring Security per caricare 
-	//i dettagli dell'utente tramite username
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Cerca l'utente per il suo username nel database
+    @Override
+    // Questo metodo viene chiamato da Spring Security per caricare 
+    // i dettagli dell'utente tramite il suo username
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // Cerca l'utente nel database tramite il suo username
+        Optional<Utente> optionalUtente = utenteRepository.findByUsername(username);
 
-		 Optional<Utente> optionalUtente = utenteRepository.findByUsername(username);
-	        // Se l'utente non viene trovato, lancia un'eccezione
-            if (!optionalUtente.isPresent()) {
-	            throw new UsernameNotFoundException("Utente non trovato.");
-	        }
-            // Se l'utente viene trovato, ottieni i suoi dati
-            Utente utente = optionalUtente.get();
-            
-            // Restituisce un oggetto User di Spring Security con username,
-            //password e autorità (ruoli)
-            
-	        return new org.springframework.security.core.userdetails.User(utente.getUsername(), utente.getPassword(), getAuthorities(utente));
-	    
-	}
-	
-	 /* CONTROLLO SE RUOLO E ADMIN O MENO */
-    /* CONTROLLO SE RUOLO E ADMIN O MENO */
+        // Se l'utente non è trovato, lancia un'eccezione
+        if (!optionalUtente.isPresent()) {
+            throw new UsernameNotFoundException("Utente non trovato.");
+        }
+
+        // Ottieni l'utente dalla risposta del database
+        Utente utente = optionalUtente.get();
+
+        // Restituisce un oggetto User di Spring Security con username, password e autorità (ruoli)
+        return new org.springframework.security.core.userdetails.User(utente.getUsername(), utente.getPassword(), getAuthorities(utente));
+    }
+
+    // Metodo per ottenere le autorità (ruoli) dell'utente
     private Collection<? extends GrantedAuthority> getAuthorities(Utente utente) {
-        // Supponiamo che getRoles() restituisca una stringa (es. "ADMIN", "USER")
+        // Ottieni il ruolo dell'utente come stringa (es. "ADMIN", "USER")
         String ruolo = utente.getRoles().toString(); // Restituisce il ruolo come stringa
+
+        // Crea una lista di ruoli per Spring Security (es. ROLE_ADMIN)
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + ruolo));
     }
-    
-
 }
-	
-
