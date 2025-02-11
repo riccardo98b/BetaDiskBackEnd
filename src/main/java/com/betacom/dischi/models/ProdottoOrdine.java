@@ -25,6 +25,7 @@ public class ProdottoOrdine {
 	private Prodotto prodotto;
 
 	private Integer quantita;
+	private Double prezzoAcquisto;
 
 	public Integer getId() {
 		return id;
@@ -49,6 +50,22 @@ public class ProdottoOrdine {
 	}
 	public void setQuantita(Integer quantita) {
 		this.quantita = quantita;
+	}
+	public Double getPrezzoAcquisto() {
+		return prezzoAcquisto;
+	}
+	public void setPrezzoAcquisto(Double prezzoAcquisto) {
+		this.prezzoAcquisto = prezzoAcquisto;
+	}
+	public ProdottoOrdine() {
+		super();
+	}
+	public ProdottoOrdine(Ordine ordine, Prodotto prodotto, Integer quantita, Double prezzoAcquisto) {
+		super();
+		this.ordine = ordine;
+		this.prodotto = prodotto;
+		this.quantita = quantita;
+		this.prezzoAcquisto = prezzoAcquisto;
 	}
 	
 }

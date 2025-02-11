@@ -64,10 +64,7 @@ public class MapperClienteToDTO {
 		}
 
 		return cliente.getOrdini().stream()
-				.map(ordine -> new OrdineDTO(ordine.getIdOrdine(), ordine.getDataOrdine(),
-						formatDataOrdine(ordine.getDataOrdine()), ordine.getTotaleImporto(), ordine.getSpedito(), null,
-						mapProdotti(ordine)))
-				.collect(Collectors.toList());
+				.map(ordine -> new OrdineDTO.Builder().build()).toList(); // da sistemare
 	}
 
 	public static List<ProdottoDTO> mapProdotti(Ordine ordine) {
@@ -130,7 +127,7 @@ public class MapperClienteToDTO {
 				.idCarrello(carrello.getIdCarrello())
 				.cliente(null)
 				.prodotti(null)
-				.totale(carrello.getTotale())
+				//da aggiungere calcolo totale
 				
 				.build();
 		

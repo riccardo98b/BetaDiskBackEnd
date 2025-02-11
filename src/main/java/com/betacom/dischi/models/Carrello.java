@@ -22,9 +22,6 @@ public class Carrello {
 	@Column
 	private Integer idCarrello;
 	
-	@Column
-	private Double totale;
-	
 	@OneToMany(mappedBy = "carrello", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdottoCarrello> prodotti;
 
@@ -37,12 +34,6 @@ public class Carrello {
 	}
 	public void setIdCarrello(Integer idCarrello) {
 		this.idCarrello = idCarrello;
-	}
-	public Double getTotale() {
-		return totale;
-	}
-	public void setTotale(Double totale) {
-		this.totale = totale;
 	}
 	public List<ProdottoCarrello> getProdotti() {
 		return prodotti;

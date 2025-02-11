@@ -30,8 +30,7 @@ public class CarrelloDTO {
 		private Double totale;
 		private List<ProdottoCarrelloDTO> prodotti;
 		private ClienteDTO cliente;
-		public Builder() {
-		}
+		public Builder() {}
 		public CarrelloDTO build() {
 			CarrelloDTO dto = new CarrelloDTO();
 			dto.idCarrello = this.idCarrello;
