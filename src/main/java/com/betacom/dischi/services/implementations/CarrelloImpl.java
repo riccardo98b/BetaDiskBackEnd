@@ -50,7 +50,6 @@ public class CarrelloImpl implements CarrelloService {
 		}
 		Carrello carrello = new Carrello();
 		carrello.setCliente(cliente.get());
-		carrello.setTotale(0.0);
 		carrello.setIdCarrello(carrelloRepo.save(carrello).getIdCarrello());
 		return carrello;
 	}
@@ -85,8 +84,6 @@ public class CarrelloImpl implements CarrelloService {
 			row.setQuantita(row.getQuantita() + request.getQuantita());
 		}
 		prodotto.setQuantita(prodotto.getQuantita() - request.getQuantita());
-		double prezzo = prodotto.getPrezzo() * request.getQuantita();
-		carrello.setTotale(carrello.getTotale() + prezzo);
 		prodottoRepo.save(prodotto);
 		carrelloRepo.save(carrello);
 	}
@@ -105,8 +102,6 @@ public class CarrelloImpl implements CarrelloService {
 		if (findRecord.isPresent()) {
 			ProdottoCarrello row = findRecord.get();
 			prodotto.setQuantita(prodotto.getQuantita() + request.getQuantita());
-			double prezzo = prodotto.getPrezzo() * request.getQuantita();
-			carrello.setTotale(carrello.getTotale() - prezzo);
 			if (row.getQuantita() > request.getQuantita()) {
 				row.setQuantita(row.getQuantita() - request.getQuantita());
 				joinRepo.save(row);
@@ -150,10 +145,15 @@ public class CarrelloImpl implements CarrelloService {
 		if (cliente.isEmpty()) {
 			throw new CustomException("Cliente inesistente");
 		}
+		double totale = 0.0;
 		Carrello carrello = cliente.get().getCarrello();
 		List<ProdottoCarrello> listaProdotti = carrello.getProdotti();
+		for (ProdottoCarrello prodotto : listaProdotti) {
+			double prezzo = prodotto.getProdotto().getPrezzo() * prodotto.getQuantita();
+			totale += prezzo;
+		}
 		return new CarrelloDTO.Builder()
-				.totale(carrello.getTotale())
+				.totale(totale)
 				.prodotti(listaProdotti.stream()
 							.map(prodotto -> new ProdottoCarrelloDTO.Builder()
 												.quantita(prodotto.getQuantita())
