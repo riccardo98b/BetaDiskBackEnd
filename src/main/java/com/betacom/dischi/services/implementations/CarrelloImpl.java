@@ -140,6 +140,7 @@ public class CarrelloImpl implements CarrelloService {
 	}
 
 	@Override
+	@Transactional
 	public CarrelloDTO listaProdotti(Integer id) throws CustomException {
 		Optional<Cliente> cliente = clienteRepo.findById(id);
 		if (cliente.isEmpty()) {
