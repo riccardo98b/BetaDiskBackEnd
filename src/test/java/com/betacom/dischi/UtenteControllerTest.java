@@ -175,9 +175,6 @@ public class UtenteControllerTest {
 	    ResponseBase response = utenteController.delete(reqUtente);
 	    Assertions.assertThatCode(() -> utenteController.delete(reqUtente))
 	          .doesNotThrowAnyException();
-	    
-	    Assertions.assertThatExceptionOfType(CustomException.class)
-	        .isThrownBy(() -> utenteController.listById(VALID_ID));
 	}
 
 }

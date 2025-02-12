@@ -18,7 +18,7 @@ import com.betacom.dischi.response.ResponseObject;
 import com.betacom.dischi.services.interfaces.ClienteService;
 
 
-	
+    @CrossOrigin(origins="*")
 	@RestController
 	@RequestMapping("/rest/cliente")
 	public class ClienteController {
@@ -28,7 +28,6 @@ import com.betacom.dischi.services.interfaces.ClienteService;
 		ClienteService clienteService;
 		
 		
-		@CrossOrigin(origins = "http://localhost:4200")
 		@GetMapping("/listAll")
 		public ResponseList<ClienteDTO>list(Integer idCliente,String nome,String cognome) {
 			log.debug("Lista di tutti i clienti: ");
@@ -47,7 +46,6 @@ import com.betacom.dischi.services.interfaces.ClienteService;
 			
 		}
 		
-		@CrossOrigin(origins = "http://localhost:4200")
 		@GetMapping("/listById")
 		public ResponseObject<ClienteDTO> listById(@RequestParam Integer id){
 			log.debug("List " + id );
@@ -67,7 +65,6 @@ import com.betacom.dischi.services.interfaces.ClienteService;
 		
 		
 		
-		@CrossOrigin(origins = "http://localhost:4200")
 		@PostMapping("/create")
 		public ResponseBase create(@RequestBody(required = true) ClienteRequest req) {
 			ResponseBase response = new ResponseBase();
@@ -84,7 +81,6 @@ import com.betacom.dischi.services.interfaces.ClienteService;
 			return response;
 		}
 		
-		@CrossOrigin(origins = "http://localhost:4200")
 		@PostMapping("/update")
 		public ResponseBase update(@RequestBody(required = true) ClienteRequest req) {
 			ResponseBase response = new ResponseBase();
@@ -102,7 +98,6 @@ import com.betacom.dischi.services.interfaces.ClienteService;
 			return response;
 		}
 		
-		@CrossOrigin(origins = "http://localhost:4200")
 		@PostMapping("/delete")
 		public ResponseBase delete(@RequestBody(required = true) ClienteRequest req) {
 		    ResponseBase response = new ResponseBase();

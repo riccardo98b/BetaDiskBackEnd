@@ -18,6 +18,7 @@ import com.betacom.dischi.response.ResponseObject;
 import com.betacom.dischi.services.interfaces.ClienteService;
 import com.betacom.dischi.services.interfaces.RecensioneService;
 
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/rest/recensione")
 public class RecensioneController {
@@ -29,10 +30,9 @@ public class RecensioneController {
 	RecensioneService recensioneService;
 	
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/list")
 	public ResponseList<RecensioneDTO>list(Integer idRecensione,Integer stelle) {
-		log.debug("Lista di tutti i clienti: ");
+		log.debug("Lista di tutte le recensioni: ");
 		ResponseList<RecensioneDTO> response = new ResponseList<RecensioneDTO>();
 		response.setRc(true);
 		try {
@@ -48,7 +48,6 @@ public class RecensioneController {
 		
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@GetMapping("/listById")
 	public ResponseObject<RecensioneDTO> listById(@RequestParam Integer id){
 		log.debug("Dati su recensione con id: " + id );
@@ -65,27 +64,8 @@ public class RecensioneController {
 		}
 		return response;
 	}
-	@CrossOrigin(origins = "http://localhost:4200")
-	@GetMapping("/listReviewByProduct")
-	public ResponseList<RecensioneDTO> listReviewByProduct(@RequestParam Integer idProdotto){
-		log.debug("Dati su recensione con id: " + idProdotto );
-		ResponseList<RecensioneDTO> response = new ResponseList<RecensioneDTO>();
-		try {
-			response.setDati(recensioneService.listReviewsByProduct(idProdotto));
-			response.setRc(true);
-	        response.setMsg("Visualizzazione dati recensioni per prodotto id: "+idProdotto);
-
-		}catch(Exception e) {
-			log.error(e.getMessage());
-			response.setMsg(e.getMessage());
-			response.setRc(false);
-		}
-		return response;
-	}
 	
 	
-	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/create")
 	public ResponseBase create(@RequestBody(required = true) RecensioneRequest req) {
 		ResponseBase response = new ResponseBase();
@@ -93,7 +73,7 @@ public class RecensioneController {
 		try {
 			recensioneService.create(req);
 			response.setRc(true);
-	        response.setMsg("Recensione creato con successo!");
+	        response.setMsg("Recensione creata con successo!");
 		}
 		catch(Exception e) {
 			response.setMsg(e.getMessage());
@@ -102,25 +82,8 @@ public class RecensioneController {
 		return response;
 	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
-	@PostMapping("/update")
-	public ResponseBase update(@RequestBody(required = true) RecensioneRequest req) {
-		ResponseBase response = new ResponseBase();
-		log.debug(req.toString());
-		try {
-			recensioneService.update(req);
-			response.setRc(true);
-	        response.setMsg("Recensione aggiornato con successo!");
 
-		}
-		catch(Exception e) {
-			response.setMsg(e.getMessage());
-			response.setRc(false);
-		}		
-		return response;
-	}
 	
-	@CrossOrigin(origins = "http://localhost:4200")
 	@PostMapping("/delete")
 	public ResponseBase delete(@RequestBody(required = true) RecensioneRequest req) {
 	    ResponseBase response = new ResponseBase();

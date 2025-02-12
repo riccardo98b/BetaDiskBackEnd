@@ -109,4 +109,17 @@ public class RecensioneControllerTest {
 	    ResponseBase response = recensioneController.delete(reqRecensione);
 	    Assertions.assertThat(response.getRc()).isEqualTo(false); 
 	}
+	@Test
+	@Order(8)
+	public void createRecensione_withInvalidData_shouldThrowException()  {
+		RecensioneRequest reqInvalid = new RecensioneRequest();
+		reqInvalid.setIdCliente(VALID_ID);
+		reqInvalid.setIdProdotto(INVALID_ID);
+		reqInvalid.setDescrizione("Prodotto di alta qualità,consigliato");
+		reqInvalid.setStelle(0);
+		ResponseBase responseRecensione = recensioneController.create(reqInvalid);
+		Assertions.assertThatExceptionOfType(CustomException.class)
+		.isThrownBy(() -> recensioneController.create(reqInvalid));
+	}
+
 }

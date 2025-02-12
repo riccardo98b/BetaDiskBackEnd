@@ -26,6 +26,7 @@ public class ClienteImpl implements ClienteService {
 	@Autowired
 	IClienteRepository clienteRepo;
 
+	
 	@Override
 	public List<ClienteDTO> listAll(Integer idCliente,String nome,String cognome) {
 		List<Cliente> listaClienti = clienteRepo.filteredClients(idCliente, nome, cognome);
