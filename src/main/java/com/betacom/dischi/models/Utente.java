@@ -1,6 +1,6 @@
 package com.betacom.dischi.models;
 
-import com.betacom.dischi.utilities.Roles;
+import com.betacom.dischi.utilities.enums.Roles;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +25,7 @@ public class Utente {
 	@Column(nullable = false,length = 50)
 	private String email;
 	
-	@Column(nullable = false, length = 20)
+	@Column(nullable = false, length = 512)
 	private String password;
 	
 	@Column(nullable = false)

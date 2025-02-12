@@ -1,8 +1,5 @@
 package com.betacom.dischi.request;
 
-import java.util.List;
-
-
 public class ProdottoRequest {
 	
 	private Integer idProdotto; 

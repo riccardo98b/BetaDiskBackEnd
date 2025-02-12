@@ -2,8 +2,9 @@ package com.betacom.dischi.models;
 
 import java.util.List;
 
-import com.betacom.dischi.utilities.Formato;
+import com.betacom.dischi.utilities.enums.Formato;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -48,25 +50,18 @@ public class Prodotto {
 	@Column(length = 2000)
 	private String immagineProdotto;
 	
-	@ManyToMany(
-			mappedBy = "prodotti",
-			fetch = FetchType.EAGER
-			)
-	private List<Ordine> ordini;
+	@OneToMany(mappedBy = "prodotto",
+			cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProdottoOrdine> prodottiOrdine;
 	
 	@ManyToMany(
 			mappedBy = "prodotti",
 			fetch = FetchType.EAGER)
 	private List<Recensione> recensioni;
-
 	
-	public List<Recensione> getRecensioni() {
-		return recensioni;
-	}
-
-	public void setRecensioni(List<Recensione> recensioni) {
-		this.recensioni = recensioni;
-	}
+	@OneToMany(mappedBy = "prodotto",
+			cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ProdottoCarrello> prodottiCarrello;
 
 	public Integer getIdProdotto() {
 		return idProdotto;
@@ -74,6 +69,14 @@ public class Prodotto {
 
 	public void setIdProdotto(Integer idProdotto) {
 		this.idProdotto = idProdotto;
+	}
+
+	public Formato getFormato() {
+		return formato;
+	}
+
+	public void setFormato(Formato formato) {
+		this.formato = formato;
 	}
 
 	public String getTitolo() {
@@ -140,20 +143,29 @@ public class Prodotto {
 		this.immagineProdotto = immagineProdotto;
 	}
 
-	public List<Ordine> getOrdini() {
-		return ordini;
+	public List<ProdottoOrdine> getProdottiOrdine() {
+		return prodottiOrdine;
 	}
 
-	public void setOrdini(List<Ordine> ordini) {
-		this.ordini = ordini;
+	public void setProdottiOrdine(List<ProdottoOrdine> prodottiOrdine) {
+		this.prodottiOrdine = prodottiOrdine;
 	}
 
-	public Formato getFormato() {
-		return formato;
+	public List<Recensione> getRecensioni() {
+		return recensioni;
 	}
 
-	public void setFormato(Formato formato) {
-		this.formato = formato;
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
 	}
+
+	public List<ProdottoCarrello> getProdottiCarrello() {
+		return prodottiCarrello;
+	}
+
+	public void setProdottiCarrello(List<ProdottoCarrello> prodottiCarrello) {
+		this.prodottiCarrello = prodottiCarrello;
+	}
+
 	
 }
