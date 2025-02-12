@@ -15,6 +15,7 @@ import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
+import com.betacom.dischi.utilities.enums.Formato;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -28,7 +29,7 @@ public class ProdottoControllerTest {
 	
 	
 	
-	public ProdottoRequest createProdottoGeneralRequest() throws CustomException{
+	public ProdottoRequest createProdottoGeneralRequest() {
 		
 		ProdottoRequest req = new ProdottoRequest();
 		
@@ -48,7 +49,7 @@ public class ProdottoControllerTest {
 	
 
 	
-	public ProdottoRequest createProdottoGeneralDTO() throws CustomException{
+	public ProdottoRequest createProdottoGeneralDTO() {
 		
 		ProdottoRequest dto = new ProdottoRequest();
 		
@@ -68,7 +69,7 @@ public class ProdottoControllerTest {
 	
 	@Test
 	@Order(1)
-	public void createProdottoTest()throws Exception {
+	public void createProdottoTest(){
 		ProdottoRequest req = createProdottoGeneralRequest();
 		
 		ResponseBase response = prodottoController.create(req);
@@ -78,16 +79,16 @@ public class ProdottoControllerTest {
 	
 	@Test
 	@Order(2)
-	public void listAllProdotti() throws CustomException{
+	public void listAllProdotti() {
 		
 		Integer idProdotto = 1;
 		String titolo = "Among the Living";
 		String artista = "Anthrax";
 		String genere = "Thrash Metal";
 		Integer annoPubblicazione = 1987;
-		String formato = "VINILE";
+
 		
-		ResponseList<ProdottoDTO> lista = prodottoController.listAll(idProdotto, titolo, artista, genere, annoPubblicazione, formato);
+		ResponseList<ProdottoDTO> lista = prodottoController.listAll(idProdotto, titolo, artista, genere, annoPubblicazione);
 
 		Assertions.assertThat(lista).isNotNull();
 		
@@ -121,17 +122,31 @@ public class ProdottoControllerTest {
 				.anyMatch(t -> t.getAnnoPubblicazione()
 						.equals(annoPubblicazione))).isTrue();
 		
+	
+	}
+	
+	@Test
+	@Order(3)
+	public void listaFiltrataFormato() {
+		Formato formato = Formato.VINILE;
+		
+		ResponseList<ProdottoDTO> lista = prodottoController.listFormato(formato);
+
+		Assertions.assertThat(lista).isNotNull();
+		
 		Assertions.assertThat(lista
 				.getDati()
 				.stream()
 				.anyMatch(t -> t.getFormato()
-						.equals(formato))).isTrue();
-	} 
+						.equals(formato.toString()))).isTrue();	
+		
+	}
+	
 	
 	
 	@Test
-	@Order(3)
-	public void updateProdotto() throws CustomException {
+	@Order(4)
+	public void updateProdotto() {
 		
 		ProdottoRequest req = createProdottoGeneralRequest();
 		
@@ -147,14 +162,23 @@ public class ProdottoControllerTest {
 	
 	
 	@Test
-	@Order(4)
-	public void deleteProdotto() throws CustomException{
+	@Order(5)
+	public void deleteProdotto() {
 	
 		ProdottoRequest req = createProdottoGeneralRequest();
 		ResponseBase response = prodottoController.delete(req);
 		
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 		
+	}
+	
+	@Test
+	@Order(6)
+	public void createProdottoTestPerSuccessivo(){
+		ProdottoRequest req = createProdottoGeneralRequest();
+		
+		ResponseBase response = prodottoController.create(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);	
 	}
 	
 }

@@ -80,8 +80,8 @@ public class OrdineController {
 	}
 	
 	@GetMapping("/lista")
-	public ResponseList<OrdineDTO> listaProdotti(@RequestParam Integer id) {
-		log.debug("Lista carrello: " + id);
+	public ResponseList<OrdineDTO> listaOrdini(@RequestParam Integer id) {
+		log.debug("Lista ordini: " + id);
 		ResponseList<OrdineDTO> response = new ResponseList<OrdineDTO>();
 		response.setRc(true);
 		try {	

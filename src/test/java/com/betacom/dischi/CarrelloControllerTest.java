@@ -10,11 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.betacom.dischi.DTO.CarrelloDTO;
 import com.betacom.dischi.controller.CarrelloController;
-import com.betacom.dischi.controller.ClienteController;
-import com.betacom.dischi.controller.ProdottoController;
 import com.betacom.dischi.request.CarrelloRequest;
-import com.betacom.dischi.request.ClienteRequest;
-import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseObject;
 
@@ -29,8 +25,8 @@ public class CarrelloControllerTest {
 	@Order(1)
 	public void addProdotto(){
 		CarrelloRequest request = new CarrelloRequest();
-		request.setIdCliente(1);
-		request.setIdProdotto(1);
+		request.setIdCliente(2);
+		request.setIdProdotto(2);
 		request.setQuantita(1);
 		ResponseBase response = controller.addProdotto(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
@@ -40,7 +36,7 @@ public class CarrelloControllerTest {
 	@Order(2)
 	public void addProdottoErrore(){
 		CarrelloRequest request = new CarrelloRequest();
-		request.setIdCliente(2);
+		request.setIdCliente(1);
 		request.setIdProdotto(1);
 		request.setQuantita(1);
 		ResponseBase response = controller.addProdotto(request);
@@ -51,12 +47,9 @@ public class CarrelloControllerTest {
 	@Test
 	@Order(3)
 	public void listaProdotto() {
-		System.out.println("inizio");
-		addProdotto();
-		ResponseObject<CarrelloDTO> response = controller.listaProdotti(1);
-		System.out.println(response.getMsg()+ "!!");
+		ResponseObject<CarrelloDTO> response = controller.listaProdotti(2);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
-		response = controller.listaProdotti(2);
+		response = controller.listaProdotti(1);
 		Assertions.assertThat(response.getRc()).isEqualTo(false);
 	}
 	
@@ -64,7 +57,7 @@ public class CarrelloControllerTest {
 	@Order(4)
 	public void removeProdotto(){
 		CarrelloRequest request = new CarrelloRequest();
-		request.setIdCliente(1);
+		request.setIdCliente(2);
 		request.setIdProdotto(1);
 		request.setQuantita(1);
 		ResponseBase response = controller.removeProdotto(request);
@@ -75,7 +68,7 @@ public class CarrelloControllerTest {
 	@Order(5)
 	public void svuotaCarrello(){
 		CarrelloRequest request = new CarrelloRequest();
-		request.setIdCliente(1);
+		request.setIdCliente(2);
 		ResponseBase response = controller.deleteCarrello(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
@@ -83,8 +76,8 @@ public class CarrelloControllerTest {
 	@Order(6)
 	public void addProdottoPerSuccessivo(){
 		CarrelloRequest request = new CarrelloRequest();
-		request.setIdCliente(1);
-		request.setIdProdotto(1);
+		request.setIdCliente(2);
+		request.setIdProdotto(2);
 		request.setQuantita(1);
 		ResponseBase response = controller.addProdotto(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
