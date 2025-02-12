@@ -16,7 +16,7 @@ import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.repository.IWishlistRepository;
 import com.betacom.dischi.request.WishlistRequest;
 import com.betacom.dischi.services.interfaces.WishlistService;
-import com.betacom.dischi.utilities.enums.Formato;
+import com.betacom.dischi.utilities.Formato;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
