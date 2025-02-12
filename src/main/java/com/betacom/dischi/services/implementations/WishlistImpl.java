@@ -18,6 +18,8 @@ import com.betacom.dischi.repository.IWishlistRepository;
 import com.betacom.dischi.request.WishlistRequest;
 import com.betacom.dischi.services.interfaces.WishlistService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class WishlistImpl implements WishlistService {
 
@@ -50,6 +52,7 @@ public class WishlistImpl implements WishlistService {
     }
 
     @Override
+    @Transactional
     public void addProductToWishlist(Integer idCliente, Integer idProdotto) throws CustomException {
         log.debug("Aggiunta del prodotto ID " + idProdotto + " alla Wishlist del cliente ID " + idCliente);
         
@@ -127,8 +130,14 @@ public class WishlistImpl implements WishlistService {
     }
 
     @Override
-    public Optional<Wishlist> searchWishlistById(Integer idWishlist) throws CustomException {
-        log.debug("Ricerca della Wishlist con ID: " + idWishlist);
-        return wishlistRepository.findById(idWishlist);
+    public Optional<Wishlist> searchWishlistById(Integer idCliente) throws CustomException {
+        log.debug("Ricerca della Wishlist per il cliente con ID: " + idCliente);
+        // Ricerca della wishlist per il cliente
+        Cliente cliente = clienteRepository.findById(idCliente)
+                .orElseThrow(() -> new CustomException("Cliente con ID: " + idCliente + " non trovato."));
+        
+        // Restituisce la wishlist associata al cliente
+        return wishlistRepository.findByCliente(cliente);
     }
+
 }
