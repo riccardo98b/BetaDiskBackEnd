@@ -17,7 +17,12 @@ public interface IProdottoRepository extends JpaRepository<Prodotto, Integer>{
 			@Param("titolo")String titolo,
 			@Param("artista")String artista,
 			@Param("genere")String genere,
-			@Param("annoPubblicazione")Integer annoPubblicazione,
-			@Param("formato") Formato formatoFormattato
+			@Param("annoPubblicazione")Integer annoPubblicazione
+			);
+	
+	
+	@Query(name="prodotti.listaPerFormato")
+	List<Prodotto> prodottiPerFormato(
+			@Param("formato") Formato formato
 			);
 }
