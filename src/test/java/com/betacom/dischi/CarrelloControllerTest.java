@@ -58,7 +58,7 @@ public class CarrelloControllerTest {
 	public void removeProdotto(){
 		CarrelloRequest request = new CarrelloRequest();
 		request.setIdCliente(2);
-		request.setIdProdotto(1);
+		request.setIdProdotto(2);
 		request.setQuantita(1);
 		ResponseBase response = controller.removeProdotto(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);

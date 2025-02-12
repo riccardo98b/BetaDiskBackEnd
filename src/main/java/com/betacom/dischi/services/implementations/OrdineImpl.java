@@ -91,6 +91,7 @@ public class OrdineImpl implements OrdineService{
 	}
 
 	@Override
+	@Transactional
 	public void delete(OrdineRequest request) throws CustomException {
 		Optional<Ordine> ordine = ordineRepo.findById(request.getIdOrdine());
 		if (ordine.isEmpty()) {
@@ -109,6 +110,7 @@ public class OrdineImpl implements OrdineService{
 	}
 
 	@Override
+	@Transactional
 	public void update(OrdineRequest request) throws CustomException {
 		Optional<Ordine> ordine = ordineRepo.findById(request.getIdOrdine());
 		if (ordine.isEmpty()) {
@@ -126,6 +128,7 @@ public class OrdineImpl implements OrdineService{
 	}
 
 	@Override
+	@Transactional
 	public List<OrdineDTO> listaByCliente(Integer id) throws CustomException {
 		Optional<Cliente> cliente = clienteRepo.findById(id);
 		if (cliente.isEmpty()) {
