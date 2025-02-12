@@ -172,6 +172,13 @@ public class ProdottoControllerTest {
 		
 	}
 	
-	
+	@Test
+	@Order(6)
+	public void createProdottoTestPerSuccessivo(){
+		ProdottoRequest req = createProdottoGeneralRequest();
+		
+		ResponseBase response = prodottoController.create(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);	
+	}
 	
 }
