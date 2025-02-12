@@ -43,7 +43,7 @@ public class UtenteImpl implements UtenteService{
 
 
 	@Override
-	public SignInDTO signIn(SignInRequest req) {
+	public SignInDTO signIn(SignInRequest req)  {
 	    log.debug("Signin utente: " + req.getUsername());
 	    SignInDTO resp = new SignInDTO();
 	    

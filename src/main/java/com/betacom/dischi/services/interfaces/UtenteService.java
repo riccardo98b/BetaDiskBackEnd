@@ -10,7 +10,7 @@ import com.betacom.dischi.request.UtenteRequest;
 
 public interface UtenteService {
 	
-	SignInDTO signIn(SignInRequest req);
+	SignInDTO signIn(SignInRequest req) ;
 	
 	void createUser(UtenteRequest req) throws CustomException;
 	

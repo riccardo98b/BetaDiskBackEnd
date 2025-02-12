@@ -75,7 +75,7 @@ public class UtenteController {
 	}
 	
 	@GetMapping("/listById")
-	public ResponseObject<UtenteDTO> listById(@RequestParam Integer id){
+	public ResponseObject<UtenteDTO> listById(@RequestParam Integer id) {
 		log.debug("List " + id );
 		ResponseObject<UtenteDTO> response = new ResponseObject<UtenteDTO>();
 		try {
