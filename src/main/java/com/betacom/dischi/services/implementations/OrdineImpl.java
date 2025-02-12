@@ -117,7 +117,7 @@ public class OrdineImpl implements OrdineService{
 			throw new CustomException("L'ordine non esiste");
 		}
 		if (ordine.get().getSpedito()) {
-			throw new CustomException("L'ordine è già stato spedito, non si può eliminare");
+			throw new CustomException("L'ordine è già stato spedito, non si può aggiornare");
 		}
 		if (request.getSpedito() == null) {
 			ordine.get().setSpedito(false);
