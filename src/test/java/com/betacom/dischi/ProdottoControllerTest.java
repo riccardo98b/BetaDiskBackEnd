@@ -157,4 +157,12 @@ public class ProdottoControllerTest {
 		
 	}
 	
+	@Test
+	@Order(5)
+	public void createProdottoPerSuccessivo()throws Exception {
+		ProdottoRequest req = createProdottoGeneralRequest();
+		
+		ResponseBase response = prodottoController.create(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);	
+	}
 }
