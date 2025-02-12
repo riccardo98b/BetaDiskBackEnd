@@ -34,7 +34,7 @@ public class OrdineControllerTest {
 	@Order(2)
 	public void updateOrdine(){
 		OrdineRequest request = new OrdineRequest();
-		request.setIdOrdine(2);
+		request.setIdOrdine(1);
 		request.setSpedito(true);
 		ResponseBase response = controller.update(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
@@ -52,6 +52,16 @@ public class OrdineControllerTest {
 	
 	@Test
 	@Order(5)
+	public void updateOrdinePost(){
+		OrdineRequest request = new OrdineRequest();
+		request.setIdOrdine(1);
+		request.setSpedito(false);
+		ResponseBase response = controller.update(request);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);
+	}
+	
+	@Test
+	@Order(6)
 	public void deleteOrdine(){
 		OrdineRequest request = new OrdineRequest();
 		request.setIdOrdine(1);
