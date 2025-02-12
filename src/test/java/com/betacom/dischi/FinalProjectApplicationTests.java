@@ -12,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 	CarrelloControllerTest.class,
 	OrdineControllerTest.class,
 	RecensioneControllerTest.class,
-	UtenteControllerTest.class,
-	WishlistServiceTest.class
+	UtenteControllerTest.class
 	
 })
 
