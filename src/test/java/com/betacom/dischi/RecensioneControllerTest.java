@@ -1,21 +1,22 @@
 package com.betacom.dischi;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.junit.jupiter.api.BeforeEach;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.betacom.dischi.DTO.RecensioneDTO;
 import com.betacom.dischi.controller.ClienteController;
 import com.betacom.dischi.controller.ProdottoController;
+import com.betacom.dischi.controller.RecensioneController;
 import com.betacom.dischi.controller.UtenteController;
-import com.betacom.dischi.request.ClienteRequest;
-import com.betacom.dischi.request.ProdottoRequest;
-import com.betacom.dischi.request.UtenteRequest;
+import com.betacom.dischi.exception.CustomException;
+import com.betacom.dischi.request.RecensioneRequest;
 import com.betacom.dischi.response.ResponseBase;
+import com.betacom.dischi.response.ResponseList;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -27,51 +28,85 @@ public class RecensioneControllerTest {
 	ClienteController clienteController;
 	@Autowired
 	UtenteController utenteController;
-	private ClienteRequest reqCliente;
-	private UtenteRequest reqUtente;
-	private ProdottoRequest reqProdotto;
-	final Integer VALID_ID = 1;
+	@Autowired
+	RecensioneController recensioneController;
+	
+	private RecensioneRequest reqRecensione;
+	final Integer VALID_ID = 2;
 	final Integer INVALID_ID = -2;
+	
 	
 	//TODO: SERVE ORDINE PER COMPLETARE I TEST
 	// cliente
-	@BeforeEach
-    public void setup() {
-        // Inizializzazione prodotto
-        reqProdotto = new ProdottoRequest();
-        reqProdotto.setFormato("Vinile");
-        reqProdotto.setTitolo("Among the Living");
-        reqProdotto.setArtista("Anthrax");
-        reqProdotto.setGenere("Thrash Metal");
-        reqProdotto.setDescrizione("Album iconico del thrash metal, pubblicato nel 1987.");
-        reqProdotto.setAnnoPubblicazione(1987);
-        reqProdotto.setPrezzo(24.99);
-        reqProdotto.setQuantita(8);
-        reqProdotto.setImmagineProdotto("https://example.com/among-the-living.jpg");
+	@Test
+	@Order(1)
+	public void createRecensione_withInvalidValidData_shouldNotCreateRecensione()  {
+		reqRecensione = new RecensioneRequest();
+		reqRecensione.setIdCliente(INVALID_ID);
+		reqRecensione.setIdProdotto(VALID_ID);
+		reqRecensione.setDescrizione("");
+		reqRecensione.setStelle(0);
+		ResponseBase responseRecensione = recensioneController.create(reqRecensione);
+		Assertions.assertThatExceptionOfType(CustomException.class)
+        .isThrownBy(() -> recensioneController.create(reqRecensione));
+	}
+	
+	@Test
+	@Order(2)
+	public void createRecensione_withValidData_shouldCreateRecensione()  {
+		reqRecensione = new RecensioneRequest();
+		reqRecensione.setIdCliente(VALID_ID);
+		reqRecensione.setIdProdotto(VALID_ID);
+		reqRecensione.setDescrizione("Prodotto di alta qualità");
+		reqRecensione.setStelle(5);
+		ResponseBase responseRecensione = recensioneController.create(reqRecensione);
+		  Assertions.assertThatCode(() -> recensioneController.create(reqRecensione))
+          .doesNotThrowAnyException();	
+	}
 
-        ResponseBase responseProdotto = prodottoController.create(reqProdotto);
-        assertNotNull(responseProdotto);
-        assertEquals(201, responseProdotto.getRc()); // Controllo stato risposta
+	@Test
+	@Order(3)
+	public void listAllRecensione_shouldReturnListOfRecensione() {
+		ResponseList<RecensioneDTO> responseList = recensioneController.list(null, null);
+	    Assertions.assertThat(responseList).isNotNull();
+	}
+	
+	
+	@Test
+	@Order(4)
+	public void listById_withValidId_shouldReturnRecensione()  {
+		ResponseBase response = recensioneController.listById(1);
+		  Assertions.assertThatCode(() -> recensioneController.listById(1))
+          .doesNotThrowAnyException();
+		  }
+	
 
-        reqCliente = new ClienteRequest();
-        reqCliente.setNome("Matteo");
-        reqCliente.setCognome("Bianchi");
-        reqCliente.setImmagineCliente("https://randomuser.me/api/portraits/men/9.jpg");
-        reqCliente.setTelefono("3456401123");
+	@Test
+	@Order(5)
+	public void listById_withInvalidId_shouldNotReturnRecensione()  {
+		ResponseBase response = recensioneController.listById(INVALID_ID);
+		Assertions.assertThatExceptionOfType(CustomException.class)
+        .isThrownBy(() -> recensioneController.listById(INVALID_ID));
+		  }
+	
+	
+	@Test
+	@Order(6)
+	public void deleteRecensione_withValidId_shouldDeleteRecensione() {
+	    reqRecensione = new RecensioneRequest();
+	    reqRecensione.setIdRecensione(1);     
+	    ResponseBase response = recensioneController.delete(reqRecensione);
+	    Assertions.assertThat(response).isNotNull();
+		Assertions.assertThatExceptionOfType(CustomException.class)
+		.isThrownBy(() -> recensioneController.listById(1));
+	}
 
-        ResponseBase responseCliente = clienteController.create(reqCliente);
-        assertNotNull(responseCliente);
-        assertEquals(201, responseCliente.getRc());
-
-        reqUtente = new UtenteRequest();
-        reqUtente.setEmail("matteob@gmail.com");
-        reqUtente.setIdCliente(1);
-        reqUtente.setPassword("password");
-        reqUtente.setRoles("UTENTE");
-        reqUtente.setUsername("matteob");
-
-        ResponseBase responseUtente = utenteController.create(reqUtente);
-        assertNotNull(responseUtente);
-        assertEquals(201, responseUtente.getRc()); 
-    }
+	@Test
+	@Order(7)
+	public void deleteRecensione_withInvalidId_shouldNotDeleteRecensione() {
+	    reqRecensione = new RecensioneRequest();
+	    reqRecensione.setIdRecensione(INVALID_ID); 
+	    ResponseBase response = recensioneController.delete(reqRecensione);
+	    Assertions.assertThat(response.getRc()).isEqualTo(false); 
+	}
 }

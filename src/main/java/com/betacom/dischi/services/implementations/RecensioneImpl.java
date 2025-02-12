@@ -54,26 +54,7 @@ public class RecensioneImpl implements RecensioneService {
 	            .collect(Collectors.toList());
 	}
 	
-	@Override
-	public List<RecensioneDTO> listReviewsByProduct(Integer idProdotto) throws CustomException{
-//		Prodotto prodotto = prodottoRepo.findById(idProdotto)
-//				.orElseThrow(() -> new ProdottoNotFoundException());
-//		List<Recensione> recensioniProdotto = recensioneRepo.findByProdotti(prodotto);
-//		if (recensioniProdotto.isEmpty()) {
-//	        return new ArrayList<>();
-//	    }
-//	    return recensioniProdotto.stream()
-//	            .map(rece -> new RecensioneDTO.Builder()
-//	                    .setIdRecensione(rece.getIdRecensione())
-//	                    .setDescrizione(rece.getDescrizione())
-//	                    .setStelle(rece.getStelle())
-//	                    .setCliente(MapperClienteToDTO.mapClienteToDTO(rece.getCliente()))  
-//	                    // MANCA LA DATA RECENSIONE
-//	                    .setProdotti(null) 
-//	                    .build())  
-//	            .collect(Collectors.toList());
-		return null;
-	    }
+	
 	
 	@Override
 	public void create(RecensioneRequest req) throws CustomException {
@@ -84,10 +65,7 @@ public class RecensioneImpl implements RecensioneService {
 		log.debug("Recensione creata con ID: "+recensione.getIdRecensione() + " e dettagli: " + recensione);
 	}
 
-	@Override
-	public void update(RecensioneRequest req) throws CustomException {
-		
-	}
+
 
 	@Override
 	public void delete(RecensioneRequest req) throws CustomException {

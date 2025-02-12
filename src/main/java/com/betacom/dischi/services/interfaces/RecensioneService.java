@@ -12,12 +12,9 @@ public interface RecensioneService {
 
 	void create(RecensioneRequest req) throws CustomException;
 
-	void update(RecensioneRequest req) throws CustomException;
-
 	void delete(RecensioneRequest req) throws CustomException;
 
 	RecensioneDTO listById(Integer id) throws CustomException;
 
-	List<RecensioneDTO> listReviewsByProduct(Integer idProdotto) throws CustomException;
 
 }

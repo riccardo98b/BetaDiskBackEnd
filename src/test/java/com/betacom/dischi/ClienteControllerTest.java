@@ -86,7 +86,7 @@ public class ClienteControllerTest {
 		Assertions.assertThatExceptionOfType(CustomException.class)
         .isThrownBy(() -> clienteController.create(req));
 	}
-	
+
 	@Test
 	@Order(5)
 	public void updateCliente_withValidData_shouldUpdateCliente() throws CustomException {
@@ -124,13 +124,26 @@ public class ClienteControllerTest {
 		    .isThrownBy(() -> clienteController.update(req));
 	}
 
-	@Test
-	@Order(7)
-	public void listAllClientes_shouldReturnListOfCliente(Integer idCliente,String nome,String cognome) throws CustomException {
-	    ResponseList<ClienteDTO> responseList = clienteController.list(null,null,null);
-	    Assertions.assertThat(responseList).isNotNull();
-	    Assertions.assertThat(responseList.getDati()).isNotEmpty();
-	}
+	
+	   @Test
+	    @Order(7)
+	    public void listAllClientes_shouldReturnListOfCliente() throws CustomException {
+	        ClienteRequest req = new ClienteRequest();
+	        req.setNome("Matteo");
+	        req.setCognome("Bianchi");
+	        req.setTelefono("3456401123");
+	        req.setCap("35028");
+	        req.setComune("Polverara");
+	        req.setProvincia("PD");
+	        req.setVia("via Roma,10");
+	        
+		    ResponseBase response = clienteController.create(req);
+
+	        // Now call the listAll method and assert
+	        ResponseList<ClienteDTO> responseList = clienteController.list(null, null, null);
+	        Assertions.assertThat(responseList).isNotNull();
+	        Assertions.assertThat(responseList.getDati()).isNotEmpty();
+	    }
 	
 	@Test
 	@Order(8)
