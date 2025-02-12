@@ -1,5 +1,8 @@
 package com.betacom.dischi.services.implementations;
 
+import static com.betacom.dischi.utilities.Utility.validazioneValoriProdotto;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,17 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.ProdottoDTO;
+import com.betacom.dischi.DTO.RecensioneDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Prodotto;
+import com.betacom.dischi.models.Recensione;
 import com.betacom.dischi.repository.IProdottoRepository;
+import com.betacom.dischi.repository.IRecensioneRepository;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.services.interfaces.ProdottoService;
 import com.betacom.dischi.utilities.enums.Formato;
 
 import jakarta.transaction.Transactional;
-
-import static com.betacom.dischi.utilities.Utility.validazioneValoriProdotto;
-import static com.betacom.dischi.utilities.Utility.formatoToString;
 
 @Service
 public class ProdottoImpl implements ProdottoService{
@@ -30,6 +33,8 @@ public class ProdottoImpl implements ProdottoService{
 	@Autowired
 	IProdottoRepository prodottoRepository;
 	
+	@Autowired
+	IRecensioneRepository recensioneRepository;
 	
 
 	@Override
@@ -95,12 +100,11 @@ public class ProdottoImpl implements ProdottoService{
 
 	@Override
 	public List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere,
-			Integer annoPubblicazione, String formato) throws Exception {
+		Integer annoPubblicazione) throws Exception {
 		
-	    Formato formatoEnum = formatoToString(formato);
-		List<Prodotto> listaFiltrata = prodottoRepository.prodottiFiltrati(idProdotto,titolo, artista, genere, annoPubblicazione, formatoEnum);
-		
-		return listaFiltrata.stream()
+		List<Prodotto> listaFiltrata = prodottoRepository.prodottiFiltrati(idProdotto,titolo, artista, genere, annoPubblicazione);
+	
+		List<ProdottoDTO> risultato = listaFiltrata.stream()
 				.map(p -> new ProdottoDTO.Builder()
 						.idProdotto(p.getIdProdotto())
 						.formato(p.getFormato().toString())
@@ -111,11 +115,50 @@ public class ProdottoImpl implements ProdottoService{
 						.annoPubblicazione(p.getAnnoPubblicazione())
 						.prezzo(p.getPrezzo())
 						.immagineProdotto(p.getImmagineProdotto())
-						.quantita(p.getQuantita()) 
-						.build())
-				.collect(Collectors.toList());
-		
-		
+						.quantita(p.getQuantita())
+						.recensioni(p.getRecensioni().stream()
+								.map(r -> new RecensioneDTO.Builder()
+										.setDescrizione(r.getDescrizione())
+										.setStelle(r.getStelle())
+										.build()).toList())
+	                    .build()) 
+	            .collect(Collectors.toList());  
+	    
+	    return risultato;
 	}
+
+
+
+	@Override
+	public List<ProdottoDTO> listPerFormato(Formato formato) throws Exception {
+		
+		List<Prodotto> listaFiltrata = prodottoRepository.prodottiPerFormato(formato);
+		
+		
+		List<ProdottoDTO> risultato = listaFiltrata.stream()
+				.map(p -> new ProdottoDTO.Builder()
+						.idProdotto(p.getIdProdotto())
+						.formato(p.getFormato().toString())
+						.titolo(p.getTitolo())
+						.artista(p.getArtista())
+						.genere(p.getGenere())
+						.descrizione(p.getDescrizione())
+						.annoPubblicazione(p.getAnnoPubblicazione())
+						.prezzo(p.getPrezzo())
+						.immagineProdotto(p.getImmagineProdotto())
+						.quantita(p.getQuantita())
+						.recensioni(p.getRecensioni().stream()
+								.map(r -> new RecensioneDTO.Builder()
+										.setDescrizione(r.getDescrizione())
+										.setStelle(r.getStelle())
+										.build()).toList())
+	                    .build()) 
+	            .collect(Collectors.toList());  
+	    
+	    return risultato;
+	}
+	
+	
+	
 }
 	

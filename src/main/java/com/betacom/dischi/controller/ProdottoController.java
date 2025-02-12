@@ -13,6 +13,7 @@ import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.services.interfaces.ProdottoService;
+import com.betacom.dischi.utilities.enums.Formato;
 
 
 @RestController
@@ -74,11 +75,11 @@ public class ProdottoController {
 	
 	@GetMapping("/list")
 	public ResponseList<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere, 
-			Integer annoPubblicazione, String formato){
+			Integer annoPubblicazione){
 		ResponseList<ProdottoDTO> response = new ResponseList<ProdottoDTO>();
 		response.setRc(true);
 		try {
-			response.setDati(prodottoService.listAll(idProdotto, titolo, artista, genere, annoPubblicazione, formato));
+			response.setDati(prodottoService.listAll(idProdotto, titolo, artista, genere, annoPubblicazione));
 	
 		}catch(Exception e) {
 			response.setRc(false);
@@ -86,6 +87,21 @@ public class ProdottoController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/listFormato")
+	public ResponseList<ProdottoDTO> listFormato(Formato formato){
+		ResponseList<ProdottoDTO> response = new ResponseList<ProdottoDTO>();
+		response.setRc(true);
+		try {
+			response.setDati(prodottoService.listPerFormato(formato));
+	
+		}catch(Exception e) {
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
+	
 	
 }
 	

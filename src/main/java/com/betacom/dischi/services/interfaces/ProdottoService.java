@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.request.ProdottoRequest;
+import com.betacom.dischi.utilities.enums.Formato;
+
 
 public interface ProdottoService {
 
@@ -13,5 +15,8 @@ public interface ProdottoService {
 	
 	void delete(ProdottoRequest req)throws Exception;
 	
-	List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere, Integer annoPubblicazione, String formato) throws Exception;
+	List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere,
+			Integer annoPubblicazione) throws Exception;
+	
+	List<ProdottoDTO> listPerFormato(Formato formato) throws Exception;
 }
