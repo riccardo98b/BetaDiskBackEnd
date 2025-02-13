@@ -146,6 +146,9 @@ public class CarrelloImpl implements CarrelloService {
 		if (cliente.isEmpty()) {
 			throw new CustomException("Cliente inesistente");
 		}
+		if (cliente.get().getCarrello() == null) {
+			throw new CustomException("Il carrello è vuoto");
+		}
 		double totale = 0.0;
 		Carrello carrello = cliente.get().getCarrello();
 		List<ProdottoCarrello> listaProdotti = carrello.getProdotti();
