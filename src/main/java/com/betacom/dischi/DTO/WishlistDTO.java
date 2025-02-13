@@ -14,7 +14,6 @@ public class WishlistDTO {
         this.cliente = cliente;
     }
     
-    // Getters and Setters
     public Integer getIdWishlist() {
         return idWishlist;
     }

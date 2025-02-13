@@ -28,14 +28,14 @@ public class WishlistController {
     @PostMapping("/create")
     public ResponseBase create(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setrC(true);  
+        response.setRc(true);  
         try {
             wishlistService.create(req); 
         } catch (CustomException e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Wishlist create con successo: " + e.getMessage());
         } catch (Exception e) {  
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Errore interno nel server: " + e.getMessage());
         }
         return response;
@@ -44,12 +44,12 @@ public class WishlistController {
     @PostMapping("/addProduct")
     public ResponseBase addProduct(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setrC(true);
+        response.setRc(true);
         try {
             wishlistService.addProductToWishlist(req.getIdCliente(), req.getIdProdotti().get(0)); // Assuming 1 product per request
             response.setMsg("Prodotto aggiunto alla wishlist con successo.");
         } catch (CustomException e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg(e.getMessage());
         }
         return response;
@@ -58,15 +58,15 @@ public class WishlistController {
     @PostMapping("/removeProduct")
     public ResponseBase removeProduct(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setrC(true);
+        response.setRc(true);
         try {
             wishlistService.removeProductFromWishlist(req.getIdCliente(), req.getIdProdotti().get(0)); // Assuming 1 product per request
             response.setMsg("Prodotto rimosso dalla wishlist con successo.");
         } catch (CustomException e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Errore durante la rimozione del prodotto: " + e.getMessage());
         } catch (Exception e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Errore interno nel server: " + e.getMessage());
         }
         return response;
@@ -75,15 +75,15 @@ public class WishlistController {
     @PostMapping("/clearWishlist")
     public ResponseBase clearWishlist(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setrC(true);
+        response.setRc(true);
         try {
             wishlistService.clearWishlist(req.getIdCliente());
             response.setMsg("Tutti i prodotti sono stati rimossi dalla wishlist.");
         } catch (CustomException e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Errore durante lo svuotamento della wishlist: " + e.getMessage());
         } catch (Exception e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Errore interno nel server: " + e.getMessage());
         }
         return response;
@@ -93,16 +93,16 @@ public class WishlistController {
     @GetMapping("/getAllProducts")
     public ResponseObject<List<Prodotto>> getAllProducts(@RequestParam Integer idCliente) {
         ResponseObject<List<Prodotto>> response = new ResponseObject<>();
-        response.setrC(true);
+        response.setRc(true);
         try {
             List<Prodotto> prodotti = wishlistService.getWishlistProducts(idCliente);
             response.setMsg("Prodotti della wishlist recuperati con successo.");
             response.setDati(prodotti); 
         } catch (CustomException e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Errore durante il recupero dei prodotti dalla wishlist: " + e.getMessage());
         } catch (Exception e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg("Errore interno nel server: " + e.getMessage());
         }
         return response;
@@ -111,18 +111,18 @@ public class WishlistController {
     @GetMapping("/searchById")
     public ResponseObject<Wishlist> searchWishlistById(@RequestParam Integer idWishlist) {
         ResponseObject<Wishlist> response = new ResponseObject<>();
-        response.setrC(true);
+        response.setRc(true);
         try {
             Optional<Wishlist> wishlist = wishlistService.searchWishlistById(idWishlist);
             if (wishlist.isPresent()) {
                 response.setDati(wishlist.get());
                 response.setMsg("Wishlist trovata con successo.");
             } else {
-                response.setrC(false);
+                response.setRc(false);
                 response.setMsg("Wishlist non trovata.");
             }
         } catch (CustomException e) {
-            response.setrC(false);
+            response.setRc(false);
             response.setMsg(e.getMessage());
         }
         return response;
