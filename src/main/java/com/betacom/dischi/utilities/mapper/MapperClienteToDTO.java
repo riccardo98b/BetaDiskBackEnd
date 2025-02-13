@@ -26,10 +26,20 @@ public class MapperClienteToDTO {
 
 	// Metodo privato per la mappatura di Cliente a ClienteDTO
 	public static ClienteDTO mapClienteToDTO(Cliente cliente) {
-		return new ClienteDTO.Builder().setIdCliente(cliente.getIdCliente()).setNome(cliente.getNome())
-				.setCognome(cliente.getCognome()).setTelefono(cliente.getTelefono())
-				.setImmagineCliente(cliente.getImmagineCliente()).setCarrello(mapCarrello(cliente))
-				.setOrdini(mapOrdini(cliente)).setRecensioni(mapRecensioni(cliente)).setUtente(mapUtente(cliente))
+		return new ClienteDTO.Builder()
+				.setIdCliente(cliente.getIdCliente())
+				.setNome(cliente.getNome())
+				.setCognome(cliente.getCognome())
+				.setTelefono(cliente.getTelefono())
+				.setImmagineCliente(cliente.getImmagineCliente())
+				.setCap(cliente.getCap())
+				.setVia(cliente.getVia())
+				.setProvincia(cliente.getProvincia())
+				.setComune(cliente.getComune())
+				.setCarrello(mapCarrello(cliente))
+				//.setOrdini(mapOrdini(cliente))
+				.setRecensioni(mapRecensioni(cliente))
+				.setUtente(mapUtente(cliente))
 				.setWishlist(mapWishlist(cliente))
 				.setDataRegistrazione(cliente.getDataRegistrazione())
 				.build();
