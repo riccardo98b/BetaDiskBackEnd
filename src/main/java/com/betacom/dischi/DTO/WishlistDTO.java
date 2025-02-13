@@ -8,34 +8,52 @@ public class WishlistDTO {
     private List<ProdottoDTO> prodotti;
     private ClienteDTO cliente;
     
-    public WishlistDTO(Integer idWishlist, List<ProdottoDTO> prodotti, ClienteDTO cliente) {
-        this.idWishlist = idWishlist;
-        this.prodotti = prodotti;
-        this.cliente = cliente;
-    }
-    
-    public Integer getIdWishlist() {
-        return idWishlist;
+    private WishlistDTO() {
+        super();
     }
 
-    public void setIdWishlist(Integer idWishlist) {
-        this.idWishlist = idWishlist;
+    public static class Builder {
+        private Integer idWishlist;
+        private List<ProdottoDTO> prodotti;
+        private ClienteDTO cliente;
+   
+        public Builder() {
+        }
+
+        public WishlistDTO build() {
+            WishlistDTO wishlist = new WishlistDTO();
+            wishlist.idWishlist = this.idWishlist;
+            wishlist.prodotti = this.prodotti;
+            wishlist.cliente = this.cliente;
+            return wishlist;
+        }
+
+        public Builder idWishlist(Integer idWishlist) {
+            this.idWishlist = idWishlist;
+            return this;
+        }
+
+        public Builder prodotti(List<ProdottoDTO> prodotti) {
+            this.prodotti = prodotti;
+            return this;
+        }
+
+        public Builder cliente(ClienteDTO cliente) {
+            this.cliente = cliente;
+            return this;
+        }
+    }
+
+    public Integer getIdWishlist() {
+        return idWishlist;
     }
 
     public List<ProdottoDTO> getProdotti() {
         return prodotti;
     }
 
-    public void setProdotti(List<ProdottoDTO> prodotti) {
-        this.prodotti = prodotti;
-    }
-
     public ClienteDTO getCliente() {
         return cliente;
-    }
-
-    public void setCliente(ClienteDTO cliente) {
-        this.cliente = cliente;
     }
 
     @Override

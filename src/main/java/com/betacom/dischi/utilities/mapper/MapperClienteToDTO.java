@@ -26,20 +26,10 @@ public class MapperClienteToDTO {
 
 	// Metodo privato per la mappatura di Cliente a ClienteDTO
 	public static ClienteDTO mapClienteToDTO(Cliente cliente) {
-		return new ClienteDTO.Builder()
-				.setIdCliente(cliente.getIdCliente())
-				.setNome(cliente.getNome())
-				.setCognome(cliente.getCognome())
-				.setTelefono(cliente.getTelefono())
-				.setImmagineCliente(cliente.getImmagineCliente())
-				.setCap(cliente.getCap())
-				.setVia(cliente.getVia())
-				.setProvincia(cliente.getProvincia())
-				.setComune(cliente.getComune())
-				.setCarrello(mapCarrello(cliente))
-				//.setOrdini(mapOrdini(cliente))
-				.setRecensioni(mapRecensioni(cliente))
-				.setUtente(mapUtente(cliente))
+		return new ClienteDTO.Builder().setIdCliente(cliente.getIdCliente()).setNome(cliente.getNome())
+				.setCognome(cliente.getCognome()).setTelefono(cliente.getTelefono())
+				.setImmagineCliente(cliente.getImmagineCliente()).setCarrello(mapCarrello(cliente))
+				.setOrdini(mapOrdini(cliente)).setRecensioni(mapRecensioni(cliente)).setUtente(mapUtente(cliente))
 				.setWishlist(mapWishlist(cliente))
 				.setDataRegistrazione(cliente.getDataRegistrazione())
 				.build();
@@ -126,13 +116,38 @@ public class MapperClienteToDTO {
 
 	// TODO: Serve builder
 	public static WishlistDTO mapWishlist(Cliente cliente) {
-		if (cliente.getWishlist() == null) {
-			return null;
-		}
-		Wishlist wishlist = cliente.getWishlist();
+	    if (cliente.getWishlist() == null) {
+	        return null;
+	    }
+	    Wishlist wishlist = cliente.getWishlist();
 
-		return new WishlistDTO(wishlist.getIdWishlist(), getProdottiIds(wishlist), cliente.getIdCliente());
+	    return new WishlistDTO.Builder()
+	            .idWishlist(wishlist.getIdWishlist())  // Imposta l'id della wishlist
+	            .prodotti(mapProdottiWishlist(wishlist))  // Mappa i prodotti associati alla wishlist
+	            .cliente(mapClienteEssential(cliente))  // Mappa il cliente essenziale
+	            .build();  // Costruisci il WishlistDTO
 	}
+	private static List<ProdottoDTO> mapProdottiWishlist(Wishlist wishlist) {
+	    if (wishlist.getProdotti() == null) {
+	        return Collections.emptyList();
+	    }
+
+	    return wishlist.getProdotti().stream()
+	            .map(prodotto -> new ProdottoDTO.Builder()
+	                    .idProdotto(prodotto.getIdProdotto())
+	                    .formato(prodotto.getFormato().toString())  // Forma del prodotto
+	                    .titolo(prodotto.getTitolo())  // Titolo del prodotto
+	                    .artista(prodotto.getArtista())  // Artista del prodotto
+	                    .genere(prodotto.getGenere())  // Genere del prodotto
+	                    .prezzo(prodotto.getPrezzo())  // Prezzo del prodotto
+	                    .quantita(prodotto.getQuantita())  // Quantità del prodotto
+	                    .descrizione(prodotto.getDescrizione())  // Descrizione del prodotto
+	                    .annoPubblicazione(prodotto.getAnnoPubblicazione())  // Anno di pubblicazione
+	                    .immagineProdotto(prodotto.getImmagineProdotto())  // Immagine del prodotto
+	                    .build())
+	            .collect(Collectors.toList());
+	}
+
 
 	// TODO: Serve builder
 	public static CarrelloDTO mapCarrello(Cliente cliente) {
