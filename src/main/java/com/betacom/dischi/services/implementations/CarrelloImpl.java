@@ -166,6 +166,8 @@ public class CarrelloImpl implements CarrelloService {
 														.titolo(prodotto.getProdotto().getTitolo())
 														.artista(prodotto.getProdotto().getArtista())
 														.prezzo(prodotto.getProdotto().getPrezzo())
+														.formato(prodotto.getProdotto().getFormato().toString())
+														.genere(prodotto.getProdotto().getGenere())
 														.immagineProdotto(prodotto.getProdotto().getImmagineProdotto())
 												.build())
 								.build()
