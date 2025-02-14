@@ -100,10 +100,9 @@ public class UtenteImpl implements UtenteService{
 	public List<UtenteDTO> listAll(Integer idUtente,String username,String email) {
 	    List<Utente> listaUtenti = utenteRepo.filteredUsers(idUtente, username, email);
 	    return listaUtenti.stream()
-	            .map(u -> buildUtenteDTO(u.getCliente())) 
+	            .map(u -> buildUtenteDTO(u)) 
 	            .toList();
 	}
-
 	
 	@Transactional
 	@Override
@@ -150,11 +149,7 @@ public class UtenteImpl implements UtenteService{
 		log.debug("Visualizzazione dati utente con ID: " + id);
 	    Utente utente = utenteRepo.findById(id)
 	    		.orElseThrow(() -> new CustomException("Utente non trovato"));
-		return buildUtenteDTO(utente.getCliente());
-}
-	
-	
-	
-	
-	
+		return buildUtenteDTO(utente);
+	}
+
 }
