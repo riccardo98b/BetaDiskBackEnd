@@ -21,13 +21,14 @@ import com.betacom.dischi.utilities.enums.Formato;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
 @Transactional
-public class WishlistServiceTest {
+public class WishlistControllerTest {
 
 	@Autowired
 	private EntityManager entityManager;
@@ -47,16 +48,18 @@ public class WishlistServiceTest {
     private Cliente testCliente;
     private Prodotto testProdotto;
 
+
     @BeforeEach
     public void setUp() {
-       //crea cliente per test
+        
         testCliente = new Cliente();
         testCliente.setNome("Mario");
         testCliente.setCognome("Rossi");
         testCliente.setTelefono("123456789");
+        testCliente.setDataRegistrazione(LocalDate.now()); 
         clienteRepository.save(testCliente);
 
-        //crea prodotto per test
+        // Crea un prodotto di test
         testProdotto = new Prodotto();
         testProdotto.setTitolo("Album Test");
         testProdotto.setArtista("Artista Test");
@@ -64,9 +67,9 @@ public class WishlistServiceTest {
         testProdotto.setDescrizione("Descrizione di test.");
         testProdotto.setAnnoPubblicazione(2025);
         testProdotto.setPrezzo(29.99);
-        testProdotto.setFormato(Formato.CD); 
-        
-        prodottoRepository.save(testProdotto);
+        testProdotto.setFormato(Formato.CD);
+
+        prodottoRepository.save(testProdotto); 
     }
 
     @Test
@@ -197,7 +200,7 @@ public class WishlistServiceTest {
         if (!existingWishlist.isPresent()) {
             System.out.println("Wishlist non trovata, la sto creando per il cliente con ID: " + testCliente.getIdCliente());
             wishlistService.create(req);  
-            entityManager.flush();  // Forza la persistenza dei cambiamenti nel DB
+            entityManager.flush();  
         } else {
             System.out.println("Wishlist già esistente per il cliente con ID: " + testCliente.getIdCliente());
         }
@@ -221,7 +224,7 @@ public class WishlistServiceTest {
         WishlistRequest req = new WishlistRequest();
         req.setIdCliente(99999);  // ID cliente inesistente
 
-        // Verifica che venga lanciata un'eccezione quando si cerca di creare una wishlist per un cliente non esistente
+        
         Assertions.assertThatThrownBy(() -> wishlistService.create(req))
                 .isInstanceOf(CustomException.class)
                 .hasMessageContaining("Cliente con ID: 99999 non trovato.");
@@ -245,7 +248,7 @@ public class WishlistServiceTest {
 
         // Rimuoviamo un prodotto che non è nella wishlist
         Prodotto prodottoNonPresente = new Prodotto();
-        prodottoNonPresente.setIdProdotto(99999);  // Prodotto che non esiste
+        prodottoNonPresente.setIdProdotto(99999);  
         Assertions.assertThatThrownBy(() -> wishlistService.removeProductFromWishlist(testCliente.getIdCliente(), prodottoNonPresente.getIdProdotto()))
         .isInstanceOf(CustomException.class)
         .hasMessageContaining("Prodotto con ID: 99999 non trovato.");
@@ -255,15 +258,14 @@ public class WishlistServiceTest {
     @Test
     @Order(9)
     public void testSearchNonExistentWishlist() throws Exception {
-        // Prova a cercare una wishlist per un cliente che non ha una wishlist
+       
         Optional<Wishlist> wishlist = wishlistService.searchWishlistById(testCliente.getIdCliente());
-        Assertions.assertThat(wishlist).isEmpty();  // La wishlist non dovrebbe esistere
+        Assertions.assertThat(wishlist).isEmpty();  
     }
 
     @Test
     @Order(10)
     public void testAddAndRemoveMultipleProducts() throws Exception {
-        // Aggiungi più prodotti alla wishlist
         Prodotto prodotto2 = new Prodotto();
         prodotto2.setTitolo("Album Test 2");
         prodotto2.setArtista("Artista Test 2");
@@ -282,18 +284,17 @@ public class WishlistServiceTest {
             wishlistService.create(req);
         }
 
-        // Aggiungi prodotti alla wishlist
+        
         wishlistService.addProductToWishlist(testCliente.getIdCliente(), testProdotto.getIdProdotto());
         wishlistService.addProductToWishlist(testCliente.getIdCliente(), prodotto2.getIdProdotto());
 
-        // Verifica che entrambi i prodotti siano nella wishlist
         List<Prodotto> prodotti = wishlistService.getWishlistProducts(testCliente.getIdCliente());
         Assertions.assertThat(prodotti).contains(testProdotto, prodotto2);
 
-        // Rimuovi un prodotto
+      
         wishlistService.removeProductFromWishlist(testCliente.getIdCliente(), prodotto2.getIdProdotto());
 
-        // Verifica che il prodotto rimosso non sia più presente
+    
         List<Prodotto> updatedProdotti = wishlistService.getWishlistProducts(testCliente.getIdCliente());
         Assertions.assertThat(updatedProdotti).doesNotContain(prodotto2);
     }
