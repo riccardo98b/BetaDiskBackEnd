@@ -145,11 +145,15 @@ public class UtenteImpl implements UtenteService{
 		if(req.getPassword() != null && !req.getPassword().isEmpty()) {
 			utente.setPassword(passwordEncoder.encode(req.getPassword()));
 		}
+		// se utente ha ruolo admin allora puoi cambiare il ruolo e non viceversa
+		if(req.getIsAdmin()){//valueof
+			utente.setRoles(Roles.valueOf(req.getRoles()));
+		}
 		// TODO: EMAIL
 		utenteRepo.save(utente);
 		
 	}
-	
+	  
 	@Override
 	public UtenteDTO listById(Integer id) throws CustomException {
 		log.debug("Visualizzazione dati utente con ID: " + id);

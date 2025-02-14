@@ -18,7 +18,6 @@ public interface UtenteService {
 
 	UtenteDTO listById(Integer id) throws CustomException;
 
-
 	void deleteUtente(Integer id) throws CustomException;
 	
 	void updateUtente(UtenteRequest req) throws CustomException;
