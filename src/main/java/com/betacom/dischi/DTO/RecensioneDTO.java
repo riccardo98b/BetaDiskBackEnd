@@ -41,7 +41,7 @@ public class RecensioneDTO {
 			return this;
 		}
 
-		public Builder prodotti(ProdottoDTO prodotto) {
+		public Builder prodotto(ProdottoDTO prodotto) {
 			this.prodotto = prodotto;
 			return this;
 		}

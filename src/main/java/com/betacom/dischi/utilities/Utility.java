@@ -54,10 +54,10 @@ public class Utility {
 				.prezzo(prodotto.getPrezzo())
 				.quantita(prodotto.getQuantita())
 				.immagineProdotto(prodotto.getImmagineProdotto())
-				.recensioni(prodotto.getRecensioni().stream().map(r -> buildRecensioneDTO(r)).toList())
+				.recensioni(prodotto.getRecensioni().stream().map(r -> buildRecensioneDTOnoProdotto(r)).toList())
 				.build();
 	}
-	 public static RecensioneDTO buildRecensioneDTO(Recensione recensione) {
+	 public static RecensioneDTO buildRecensioneDTOnoProdotto(Recensione recensione) {
 		 return new RecensioneDTO.Builder()
 				 .idRecensione(recensione.getIdRecensione())
 				 .descrizione(recensione.getDescrizione())
@@ -66,6 +66,30 @@ public class Utility {
 				 .cliente(buildClienteDTOnoRecensione(recensione.getCliente()))
 				 .build();
 	 }
+	 public static RecensioneDTO buildRecensioneDTO(Recensione recensione) {
+		 return new RecensioneDTO.Builder()
+				 .idRecensione(recensione.getIdRecensione())
+				 .descrizione(recensione.getDescrizione())
+				 .stelle(recensione.getStelle())
+				 .dataCreazione(recensione.getDataCreazione())
+				 .prodotto(buildProdottoDTOnoRecensione(recensione.getProdotto()))
+				 .cliente(buildClienteDTOnoRecensione(recensione.getCliente()))
+				 .build();
+	 }
+		public static ProdottoDTO buildProdottoDTOnoRecensione(Prodotto prodotto) {
+			return new ProdottoDTO.Builder()
+					.idProdotto(prodotto.getIdProdotto())
+					.formato(prodotto.getFormato().toString())
+					.titolo(prodotto.getTitolo())
+					.artista(prodotto.getArtista())
+					.genere(prodotto.getGenere())
+					.descrizione(prodotto.getDescrizione())
+					.annoPubblicazione(prodotto.getAnnoPubblicazione())
+					.prezzo(prodotto.getPrezzo())
+					.quantita(prodotto.getQuantita())
+					.immagineProdotto(prodotto.getImmagineProdotto())
+					.build();
+		}
 	 public static ClienteDTO buildClienteDTOnoRecensione(Cliente cliente) {
 		 return new ClienteDTO.Builder()
 				 .idCliente(cliente.getIdCliente())
@@ -80,7 +104,7 @@ public class Utility {
 				 .dataRegistrazione(cliente.getDataRegistrazione())
 				 .ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
 				 .carrello(buildCarrelloDTO(cliente.getCarrello())) 
-				 .utente(null) //DA FARE
+				 .utente(buildUtenteDTOnoCliente(cliente.getUtente()))
 				 .wishlist(buildWishlistDTO(cliente.getWishlist()))
 				 .build();
 	 }
