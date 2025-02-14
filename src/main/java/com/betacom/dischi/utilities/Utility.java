@@ -99,7 +99,7 @@ public class Utility {
 				 .dataRegistrazione(cliente.getDataRegistrazione())
 				 .ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
 				 .carrello(buildCarrelloDTO(cliente.getCarrello())) 
-				 .utente(buildUtenteDTO(cliente)) //DA FARE
+				 .utente(null) //DA FARE
 			     .wishlist(buildWishlistDTO(cliente.getWishlist()))
 				 .recensioni(cliente.getRecensioni().stream().map(r -> buildRecensioneDTO(r)).toList())
 				 .build();
