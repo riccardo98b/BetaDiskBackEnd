@@ -7,6 +7,7 @@ import com.betacom.dischi.DTO.ProdottoCarrelloDTO;
 import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.DTO.ProdottoOrdineDTO;
 import com.betacom.dischi.DTO.RecensioneDTO;
+import com.betacom.dischi.DTO.WishlistDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Carrello;
 import com.betacom.dischi.models.Cliente;
@@ -15,6 +16,7 @@ import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.ProdottoCarrello;
 import com.betacom.dischi.models.ProdottoOrdine;
 import com.betacom.dischi.models.Recensione;
+import com.betacom.dischi.models.Wishlist;
 import com.betacom.dischi.request.ProdottoRequest;
 
 public class Utility {
@@ -77,7 +79,7 @@ public class Utility {
 				 .ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
 				 .carrello(buildCarrelloDTO(cliente.getCarrello())) 
 				 .utente(null) //DA FARE
-				 .wishlist(null) //DA FARE
+				 .wishlist(buildWishlistDTO(cliente.getWishlist()))
 				 .build();
 	 }
 	 
@@ -96,7 +98,7 @@ public class Utility {
 				 .ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
 				 .carrello(buildCarrelloDTO(cliente.getCarrello())) 
 				 .utente(null) //DA FARE
-				 .wishlist(null) //DA FARE
+				 .wishlist(buildWishlistDTO(cliente.getWishlist()))
 				 .recensioni(cliente.getRecensioni().stream().map(r -> buildRecensioneDTO(r)).toList())
 				 .build();
 	 }
@@ -130,6 +132,13 @@ public class Utility {
 				 .id(pc.getId())
 				 .quantita(pc.getQuantita())
 				 .prodotto(buildProdottoDTO(pc.getProdotto()))				 
+				 .build();
+	 }
+	 
+	 public static WishlistDTO buildWishlistDTO(Wishlist wishlist) {
+		 return new WishlistDTO.Builder()
+				 .idWishlist(wishlist.getIdWishlist())
+				 .prodotti(wishlist.getProdotti().stream().map(p -> buildProdottoDTO(p)).toList())
 				 .build();
 	 }
 }
