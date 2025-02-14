@@ -54,9 +54,9 @@ public class Prodotto {
 			cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdottoOrdine> prodottiOrdine;
 	
-	@ManyToMany(
-			mappedBy = "prodotti",
-			fetch = FetchType.EAGER)
+	@OneToMany(
+			mappedBy = "prodotto",
+			cascade = CascadeType.REMOVE)
 	private List<Recensione> recensioni;
 	
 	@OneToMany(mappedBy = "prodotto",

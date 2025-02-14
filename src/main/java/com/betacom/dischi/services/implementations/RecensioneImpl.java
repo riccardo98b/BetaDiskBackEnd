@@ -23,7 +23,6 @@ import static com.betacom.dischi.utilities.Utility.buildRecensioneDTO;
 @Service
 public class RecensioneImpl implements RecensioneService {
 	
-
 	private Logger log;
 	private IRecensioneRepository recensioneRepo;
 	private IClienteRepository clienteRepo;
@@ -80,13 +79,13 @@ public class RecensioneImpl implements RecensioneService {
 		recensione.setStelle(req.getStelle());
 		recensione.setDescrizione(req.getDescrizione());
 		recensione.setCliente(cliente);
-	    recensione.setProdotti(List.of(prodotto));  // unico prodotto 
+	    recensione.setProdotto(prodotto);  
 		recensione.setDataCreazione(LocalDate.now());
 
 		return recensione;
 	}
 	private void checkIfRecensioneAlreadyExists(Cliente cliente, Prodotto prodotto) throws CustomException {
-		Boolean recensioneEsistente = recensioneRepo.existsByClienteAndProdotti(cliente, prodotto);
+		Boolean recensioneEsistente = recensioneRepo.existsByClienteAndProdotto(cliente, prodotto);
 		if(recensioneEsistente) 
 			throw new CustomException();
 	}
