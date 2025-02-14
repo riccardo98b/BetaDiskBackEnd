@@ -26,6 +26,7 @@ import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.request.OrdineRequest;
 import com.betacom.dischi.services.interfaces.OrdineService;
 import com.betacom.dischi.services.interfaces.SystemMsgServices;
+import static com.betacom.dischi.utilities.Utility.*;
 
 import jakarta.transaction.Transactional;
 
@@ -139,24 +140,7 @@ public class OrdineImpl implements OrdineService{
 		}
 		List<Ordine> ordini = cliente.get().getOrdini();
 		return ordini.stream()
-				.map(ordine -> new OrdineDTO.Builder()
-						.idOrdine(ordine.getIdOrdine())
-						.dataOrdine(ordine.getDataOrdine())
-						.spedito(ordine.getSpedito())
-						.totaleImporto(ordine.getTotaleImporto())
-						.prodotti(ordine.getProdotti().stream()
-								.map(prodotto -> new ProdottoOrdineDTO.Builder()
-										.prezzoAcquisto(prodotto.getPrezzoAcquisto())
-										.quantita(prodotto.getQuantita())
-										.prodotto(new ProdottoDTO.Builder()
-														.idProdotto(prodotto.getProdotto().getIdProdotto())
-														.titolo(prodotto.getProdotto().getTitolo())
-														.artista(prodotto.getProdotto().getArtista())
-														.immagineProdotto(prodotto.getProdotto().getImmagineProdotto())
-												.build())
-										.build())
-								.toList())
-						.build())
+				.map(ordine -> buildOrdineDTO(ordine))
 				.toList();
 	}
 

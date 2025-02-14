@@ -21,6 +21,7 @@ import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.request.CarrelloRequest;
 import com.betacom.dischi.services.interfaces.CarrelloService;
 import com.betacom.dischi.services.interfaces.SystemMsgServices;
+import static com.betacom.dischi.utilities.Utility.*;
 
 import jakarta.transaction.Transactional;
 
@@ -165,19 +166,8 @@ public class CarrelloImpl implements CarrelloService {
 		return new CarrelloDTO.Builder()
 				.totale(totale)
 				.prodotti(listaProdotti.stream()
-							.map(prodotto -> new ProdottoCarrelloDTO.Builder()
-												.quantita(prodotto.getQuantita())
-												.prodotto(new ProdottoDTO.Builder()
-														.idProdotto(prodotto.getProdotto().getIdProdotto())
-														.titolo(prodotto.getProdotto().getTitolo())
-														.artista(prodotto.getProdotto().getArtista())
-														.prezzo(prodotto.getProdotto().getPrezzo())
-														.formato(prodotto.getProdotto().getFormato().toString())
-														.genere(prodotto.getProdotto().getGenere())
-														.immagineProdotto(prodotto.getProdotto().getImmagineProdotto())
-												.build())
-								.build()
-						).toList())
+							.map(prodotto -> buildProdottoCarrelloDTO(prodotto))
+						.toList())
 				.build();
 	}
 
