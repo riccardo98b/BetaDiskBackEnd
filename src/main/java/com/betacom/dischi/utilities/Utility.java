@@ -7,6 +7,7 @@ import com.betacom.dischi.DTO.ProdottoCarrelloDTO;
 import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.DTO.ProdottoOrdineDTO;
 import com.betacom.dischi.DTO.RecensioneDTO;
+import com.betacom.dischi.DTO.UtenteDTO;
 import com.betacom.dischi.DTO.WishlistDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Carrello;
@@ -16,6 +17,7 @@ import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.ProdottoCarrello;
 import com.betacom.dischi.models.ProdottoOrdine;
 import com.betacom.dischi.models.Recensione;
+import com.betacom.dischi.models.Utente;
 import com.betacom.dischi.models.Wishlist;
 import com.betacom.dischi.request.ProdottoRequest;
 
@@ -98,10 +100,23 @@ public class Utility {
 				 .ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
 				 .carrello(buildCarrelloDTO(cliente.getCarrello())) 
 				 .utente(null) //DA FARE
-				 .wishlist(buildWishlistDTO(cliente.getWishlist()))
+			     .wishlist(buildWishlistDTO(cliente.getWishlist()))
 				 .recensioni(cliente.getRecensioni().stream().map(r -> buildRecensioneDTO(r)).toList())
 				 .build();
 	 }
+	 
+		public static UtenteDTO buildUtenteDTO(Cliente cliente) {
+			if (cliente.getUtente() == null) {
+				return null;
+			}
+			Utente utente = cliente.getUtente();
+			return new UtenteDTO.Builder()
+					.idUtente(utente.getIdUtente())
+					.username(utente.getUsername())
+					.email(utente.getEmail())
+					.roles(utente.getRoles().toString())
+					.build();
+		}
 
 	 public static OrdineDTO buildOrdineDTO(Ordine ordine) {
 		 return new OrdineDTO.Builder()
@@ -122,6 +137,9 @@ public class Utility {
 	 }
 	 
 	 public static CarrelloDTO buildCarrelloDTO(Carrello carrello) {
+		 if(carrello == null) {
+			 return null;
+		 }
 		 return new CarrelloDTO.Builder()
 				 .idCarrello(carrello.getIdCarrello())
 				 .prodotti(carrello.getProdotti().stream().map(p -> buildProdottoCarrelloDTO(p)).toList())
@@ -136,6 +154,9 @@ public class Utility {
 	 }
 	 
 	 public static WishlistDTO buildWishlistDTO(Wishlist wishlist) {
+		 if(wishlist == null) {
+			 return null;
+		 }
 		 return new WishlistDTO.Builder()
 				 .idWishlist(wishlist.getIdWishlist())
 				 .prodotti(wishlist.getProdotti().stream().map(p -> buildProdottoDTO(p)).toList())
