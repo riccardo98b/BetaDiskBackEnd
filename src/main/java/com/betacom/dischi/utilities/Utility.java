@@ -63,7 +63,7 @@ public class Utility {
 				 .descrizione(recensione.getDescrizione())
 				 .stelle(recensione.getStelle())
 				 .dataCreazione(recensione.getDataCreazione())
-				 .cliente(buildClienteDTO(recensione.getCliente()))
+				 .cliente(buildClienteDTOnoRecensione(recensione.getCliente()))
 				 .build();
 	 }
 	 public static ClienteDTO buildClienteDTOnoRecensione(Cliente cliente) {
@@ -99,26 +99,55 @@ public class Utility {
 				 .dataRegistrazione(cliente.getDataRegistrazione())
 				 .ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
 				 .carrello(buildCarrelloDTO(cliente.getCarrello())) 
-				 .utente(null) //DA FARE
+				 .utente(buildUtenteDTOnoCliente(cliente.getUtente())) //DA FARE
 			     .wishlist(buildWishlistDTO(cliente.getWishlist()))
 				 .recensioni(cliente.getRecensioni().stream().map(r -> buildRecensioneDTO(r)).toList())
 				 .build();
-	 }
-	 
-		public static UtenteDTO buildUtenteDTO(Cliente cliente) {
-			if (cliente.getUtente() == null) {
-				return null;
-			}
-			Utente utente = cliente.getUtente();
-			return new UtenteDTO.Builder()
-					.idUtente(utente.getIdUtente())
-					.username(utente.getUsername())
-					.email(utente.getEmail())
-					.roles(utente.getRoles().toString())
-					.build();
+	} 
+	public static UtenteDTO buildUtenteDTOnoCliente(Utente utente) {
+		if (utente == null) {
+			return null;
 		}
+		return new UtenteDTO.Builder()
+				.idUtente(utente.getIdUtente())
+				.username(utente.getUsername())
+				.email(utente.getEmail())
+				.roles(utente.getRoles().toString())
+				.build();
+	}
+	
+	public static UtenteDTO buildUtenteDTO(Utente utente) {
+		return new UtenteDTO.Builder()
+				.idUtente(utente.getIdUtente())
+				.username(utente.getUsername())
+				.email(utente.getEmail())
+				.roles(utente.getRoles().toString())
+				.cliente(buildClienteDTOnoUtente(utente.getCliente()))
+				.build();
+	}
+	 public static ClienteDTO buildClienteDTOnoUtente(Cliente cliente) {
+		 if (cliente == null) {
+			 return null;
+		 }
+		 return new ClienteDTO.Builder()
+				 .idCliente(cliente.getIdCliente())
+				 .nome(cliente.getNome())
+				 .cognome(cliente.getCognome())
+				 .telefono(cliente.getTelefono())
+				 .immagineCliente(cliente.getImmagineCliente())
+				 .via(cliente.getVia())
+				 .cap(cliente.getCap())
+				 .provincia(cliente.getProvincia())
+				 .comune(cliente.getComune())
+				 .dataRegistrazione(cliente.getDataRegistrazione())
+				 .ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
+				 .carrello(buildCarrelloDTO(cliente.getCarrello())) 
+			     .wishlist(buildWishlistDTO(cliente.getWishlist()))
+				 .recensioni(cliente.getRecensioni().stream().map(r -> buildRecensioneDTO(r)).toList())
+				 .build();
+	} 
 
-	 public static OrdineDTO buildOrdineDTO(Ordine ordine) {
+	public static OrdineDTO buildOrdineDTO(Ordine ordine) {
 		 return new OrdineDTO.Builder()
 				 .idOrdine(ordine.getIdOrdine())
 				 .dataOrdine(ordine.getDataOrdine())
