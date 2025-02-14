@@ -1,5 +1,7 @@
 package com.betacom.dischi.services.implementations;
 
+import static com.betacom.dischi.utilities.Utility.buildProdottoCarrelloDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -7,8 +9,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.CarrelloDTO;
-import com.betacom.dischi.DTO.ProdottoCarrelloDTO;
-import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Carrello;
 import com.betacom.dischi.models.Cliente;
@@ -21,7 +21,6 @@ import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.request.CarrelloRequest;
 import com.betacom.dischi.services.interfaces.CarrelloService;
 import com.betacom.dischi.services.interfaces.SystemMsgServices;
-import static com.betacom.dischi.utilities.Utility.*;
 
 import jakarta.transaction.Transactional;
 
