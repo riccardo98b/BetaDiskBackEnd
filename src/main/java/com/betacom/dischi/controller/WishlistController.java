@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Wishlist;
@@ -14,7 +15,7 @@ import com.betacom.dischi.request.WishlistRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseObject;
 import com.betacom.dischi.services.interfaces.WishlistService;
-
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("/rest/wishlist")
 public class WishlistController {
@@ -91,11 +92,11 @@ public class WishlistController {
 
     
     @GetMapping("/getAllProducts")
-    public ResponseObject<List<Prodotto>> getAllProducts(@RequestParam Integer idCliente) {
-        ResponseObject<List<Prodotto>> response = new ResponseObject<>();
+    public ResponseObject<List<ProdottoDTO>> getAllProducts(@RequestParam Integer idCliente) {
+        ResponseObject<List<ProdottoDTO>> response = new ResponseObject<>();
         response.setRc(true);
         try {
-            List<Prodotto> prodotti = wishlistService.getWishlistProducts(idCliente);
+            List<ProdottoDTO> prodotti = wishlistService.getWishlistProducts(idCliente);
             response.setMsg("Prodotti della wishlist recuperati con successo.");
             response.setDati(prodotti); 
         } catch (CustomException e) {
@@ -107,6 +108,8 @@ public class WishlistController {
         }
         return response;
     }
+
+
 
     @GetMapping("/searchById")
     public ResponseObject<Wishlist> searchWishlistById(@RequestParam Integer idWishlist) {
