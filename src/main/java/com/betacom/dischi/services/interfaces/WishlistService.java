@@ -4,6 +4,7 @@ package com.betacom.dischi.services.interfaces;
 import java.util.List;
 import java.util.Optional;
 
+import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Wishlist;
@@ -20,7 +21,7 @@ public interface WishlistService {
 
     void clearWishlist(Integer idCliente) throws CustomException;
     
-    List<Prodotto> getWishlistProducts(Integer idCliente) throws CustomException;
+    List<ProdottoDTO> getWishlistProducts(Integer idCliente) throws CustomException;
     
     Optional<Wishlist> searchWishlistById(Integer idWishlist) throws CustomException;
 

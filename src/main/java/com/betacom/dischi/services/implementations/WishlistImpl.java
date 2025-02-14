@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Cliente;
 import com.betacom.dischi.models.Prodotto;
@@ -116,7 +117,7 @@ public class WishlistImpl implements WishlistService {
     }
 
     @Override
-    public List<Prodotto> getWishlistProducts(Integer idCliente) throws CustomException {
+    public List<ProdottoDTO> getWishlistProducts(Integer idCliente) throws CustomException {
         log.debug("Recupero dei prodotti dalla Wishlist per il cliente con ID: " + idCliente);
         
         Cliente cliente = clienteRepository.findById(idCliente)
@@ -125,8 +126,17 @@ public class WishlistImpl implements WishlistService {
         Wishlist wishlist = wishlistRepository.findByCliente(cliente)
                 .orElseThrow(() -> new CustomException("Wishlist non trovata per il cliente ID: " + idCliente));
         
-       
-        return wishlist.getProdotti();
+        return wishlist.getProdotti().stream()
+                .map(prodotto -> new ProdottoDTO.Builder()
+                        .idProdotto(prodotto.getIdProdotto())
+                        .titolo(prodotto.getTitolo())
+                        .artista(prodotto.getArtista())
+                        .prezzo(prodotto.getPrezzo())
+                        .formato(prodotto.getFormato().toString())
+                        .genere(prodotto.getGenere())
+                        .immagineProdotto(prodotto.getImmagineProdotto())
+                        .build())
+                .toList();
     }
 
     @Override

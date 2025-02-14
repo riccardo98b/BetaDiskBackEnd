@@ -19,6 +19,7 @@ import com.betacom.dischi.repository.IRecensioneRepository;
 import com.betacom.dischi.request.RecensioneRequest;
 import com.betacom.dischi.services.interfaces.RecensioneService;
 import com.betacom.dischi.utilities.mapper.MapperClienteToDTO;
+import static com.betacom.dischi.utilities.Utility.buildRecensioneDTO;
 
 @Service
 public class RecensioneImpl implements RecensioneService {
@@ -43,14 +44,7 @@ public class RecensioneImpl implements RecensioneService {
 	public List<RecensioneDTO> listAll(Integer idRecensione,Integer stelle) {
 	    List<Recensione> listaRecensioni = recensioneRepo.filteredReviews(idRecensione, stelle); 
 	    return listaRecensioni.stream()
-	            .map(rece -> new RecensioneDTO.Builder()
-	                    .setIdRecensione(rece.getIdRecensione())
-	                    .setDescrizione(rece.getDescrizione())
-	                    .setStelle(rece.getStelle())
-	                    .setCliente(MapperClienteToDTO.mapClienteToDTO(rece.getCliente()))  
-	                    // MANCA LA DATA RECENSIONE
-	                    .setProdotti(null) 
-	                    .build())  
+	            .map(rece -> buildRecensioneDTO(rece))
 	            .collect(Collectors.toList());
 	}
 	
