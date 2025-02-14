@@ -106,7 +106,7 @@ public class RecensioneImpl implements RecensioneService {
 	        if (clienteIdOrdine.equals(cliente.getIdCliente()) && prodottoId.equals(prodottoOrdine.getProdotto().getIdProdotto())) {
 	                haAcquistato = true;
 	                break;  
-	        }
+	        } 
 	    }
 	    if (!haAcquistato) 
 	        throw new CustomException("Non è possibile recensire un prodotto non acquistato");

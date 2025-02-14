@@ -7,12 +7,20 @@ public class UtenteRequest {
 	private String email;
 	private String password;
 	private String roles;
-	private Integer idCliente;
+	private Integer idCliente; 
+	private Boolean isAdmin;
 	public Integer getIdUtente() {
 		return idUtente;
 	}
 	public void setIdUtente(Integer idUtente) {
 		this.idUtente = idUtente;
+	}
+	
+	public Boolean getIsAdmin() {
+		return isAdmin;
+	}
+	public void setIsAdmin(Boolean isAdmin) {
+		this.isAdmin = isAdmin;
 	}
 	public String getUsername() {
 		return username;
