@@ -44,7 +44,7 @@ public class Utility {
 	
 	public static ProdottoDTO buildProdottoDTO(Prodotto prodotto) {
 		return new ProdottoDTO.Builder()
-				//.idProdotto(prodotto.getIdProdotto())
+				.idProdotto(prodotto.getIdProdotto())
 				.formato(prodotto.getFormato().toString())
 				.titolo(prodotto.getTitolo())
 				.artista(prodotto.getArtista())
