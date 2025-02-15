@@ -54,6 +54,8 @@ public class Utility {
 				.prezzo(prodotto.getPrezzo())
 				.quantita(prodotto.getQuantita())
 				.immagineProdotto(prodotto.getImmagineProdotto())
+				.prodottiCarrello(prodotto.getProdottiCarrello().stream().map(p -> buildProdottoCarrelloNoProdottoDTO(p)).toList())
+				.prodottiWishlist(prodotto.getProdottiWishlist().stream().map(p -> buildWishlistDTOnoProdotto(p)).toList())
 				.recensioni(prodotto.getRecensioni().stream().map(r -> buildRecensioneDTOnoProdotto(r)).toList())
 				.build();
 	}
@@ -180,39 +182,53 @@ public class Utility {
 				 .prodotti(ordine.getProdotti().stream().map(p -> buildProdottoOrdineDTO(p)).toList())
 				 .build();
 	 }
-	 public static ProdottoOrdineDTO buildProdottoOrdineDTO(ProdottoOrdine po) {
-		 return new ProdottoOrdineDTO.Builder()
-				 .id(po.getId())
-				 .prodotto(buildProdottoDTO(po.getProdotto()))
-				 .quantita(po.getQuantita())
-				 .prezzoAcquisto(po.getPrezzoAcquisto())
-				 .build();
-	 }
+	public static ProdottoOrdineDTO buildProdottoOrdineDTO(ProdottoOrdine po) {
+		return new ProdottoOrdineDTO.Builder()
+				.id(po.getId())
+				.prodotto(buildProdottoDTO(po.getProdotto()))
+				.quantita(po.getQuantita())
+				.prezzoAcquisto(po.getPrezzoAcquisto())
+				.build();
+	}
 	 
-	 public static CarrelloDTO buildCarrelloDTO(Carrello carrello) {
-		 if(carrello == null) {
-			 return null;
-		 }
-		 return new CarrelloDTO.Builder()
-				 .idCarrello(carrello.getIdCarrello())
-				 .prodotti(carrello.getProdotti().stream().map(p -> buildProdottoCarrelloDTO(p)).toList())
-				 .build();
-	 }
-	 public static ProdottoCarrelloDTO buildProdottoCarrelloDTO(ProdottoCarrello pc) {
-		 return new ProdottoCarrelloDTO.Builder()
-				 .id(pc.getId())
-				 .quantita(pc.getQuantita())
-				 .prodotto(buildProdottoDTO(pc.getProdotto()))				 
-				 .build();
-	 }
+	public static CarrelloDTO buildCarrelloDTO(Carrello carrello) {
+		if(carrello == null) {
+			return null;
+		}
+		return new CarrelloDTO.Builder()
+				.idCarrello(carrello.getIdCarrello())
+				.prodotti(carrello.getProdotti().stream().map(p -> buildProdottoCarrelloDTO(p)).toList())
+				.build();
+	}
+	public static ProdottoCarrelloDTO buildProdottoCarrelloDTO(ProdottoCarrello pc) {
+		return new ProdottoCarrelloDTO.Builder()
+				.id(pc.getId())
+				.quantita(pc.getQuantita())
+				.prodotto(buildProdottoDTO(pc.getProdotto()))				 
+				.build();
+	}
 	 
-	 public static WishlistDTO buildWishlistDTO(Wishlist wishlist) {
-		 if(wishlist == null) {
-			 return null;
-		 }
-		 return new WishlistDTO.Builder()
-				 .idWishlist(wishlist.getIdWishlist())
-				 .prodotti(wishlist.getProdotti().stream().map(p -> buildProdottoDTO(p)).toList())
-				 .build();
-	 }
+	public static WishlistDTO buildWishlistDTO(Wishlist wishlist) {
+		if(wishlist == null) {
+			return null;
+		}
+		return new WishlistDTO.Builder()
+				.idWishlist(wishlist.getIdWishlist())
+				.prodotti(wishlist.getProdotti().stream().map(p -> buildProdottoDTO(p)).toList())
+				.build();
+	}
+	private static WishlistDTO buildWishlistDTOnoProdotto(Wishlist wishlist) {
+		if(wishlist == null) {
+			return null;
+		}
+		return new WishlistDTO.Builder()
+				.idWishlist(wishlist.getIdWishlist())
+				.build();
+	}
+	private static ProdottoCarrelloDTO buildProdottoCarrelloNoProdottoDTO(ProdottoCarrello pc) {
+		return new ProdottoCarrelloDTO.Builder()
+				.id(pc.getId())
+				.quantita(pc.getQuantita())		 
+				.build();
+	}
 }

@@ -62,6 +62,10 @@ public class Prodotto {
 	@OneToMany(mappedBy = "prodotto",
 			cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProdottoCarrello> prodottiCarrello;
+	
+	@ManyToMany(mappedBy = "prodotti")
+	private List<Wishlist> prodottiWishlist;
+	
 
 	public Integer getIdProdotto() {
 		return idProdotto;
@@ -165,6 +169,14 @@ public class Prodotto {
 
 	public void setProdottiCarrello(List<ProdottoCarrello> prodottiCarrello) {
 		this.prodottiCarrello = prodottiCarrello;
+	}
+
+	public List<Wishlist> getProdottiWishlist() {
+		return prodottiWishlist;
+	}
+
+	public void setProdottiWishlist(List<Wishlist> prodottiWishlist) {
+		this.prodottiWishlist = prodottiWishlist;
 	}
 
 	
