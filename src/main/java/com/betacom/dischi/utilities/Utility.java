@@ -65,7 +65,33 @@ public class Utility {
 				.descrizione(recensione.getDescrizione())
 				.stelle(recensione.getStelle())
 				.dataCreazione(recensione.getDataCreazione())
-				.cliente(buildClienteDTOnoRecensione(recensione.getCliente()))
+				.cliente(buildClienteDTOperRecensioneNoPodotto(recensione.getCliente()))
+				.build();
+	}
+	private static ClienteDTO buildClienteDTOperRecensioneNoPodotto(Cliente cliente) {
+		return new ClienteDTO.Builder()
+				.idCliente(cliente.getIdCliente())
+				.nome(cliente.getNome())
+				.cognome(cliente.getCognome())
+				.immagineCliente(cliente.getImmagineCliente())
+				.build();
+	}
+	private static ClienteDTO buildClienteDTOnoRecensione(Cliente cliente) {
+		return new ClienteDTO.Builder()
+				.idCliente(cliente.getIdCliente())
+				.nome(cliente.getNome())
+				.cognome(cliente.getCognome())
+				.telefono(cliente.getTelefono())
+				.immagineCliente(cliente.getImmagineCliente())
+				.via(cliente.getVia())
+				.cap(cliente.getCap())
+				.provincia(cliente.getProvincia())
+				.comune(cliente.getComune())
+				.dataRegistrazione(cliente.getDataRegistrazione())
+				.ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
+				.carrello(buildCarrelloDTO(cliente.getCarrello())) 
+				.utente(buildUtenteDTOnoCliente(cliente.getUtente()))
+				.wishlist(buildWishlistDTO(cliente.getWishlist()))
 				.build();
 	}
 	public static RecensioneDTO buildRecensioneDTO(Recensione recensione) {
@@ -92,24 +118,7 @@ public class Utility {
 					.immagineProdotto(prodotto.getImmagineProdotto())
 					.build();
 		}
-	private static ClienteDTO buildClienteDTOnoRecensione(Cliente cliente) {
-		return new ClienteDTO.Builder()
-				.idCliente(cliente.getIdCliente())
-				.nome(cliente.getNome())
-				.cognome(cliente.getCognome())
-				.telefono(cliente.getTelefono())
-				.immagineCliente(cliente.getImmagineCliente())
-				.via(cliente.getVia())
-				.cap(cliente.getCap())
-				.provincia(cliente.getProvincia())
-				.comune(cliente.getComune())
-				.dataRegistrazione(cliente.getDataRegistrazione())
-				.ordini(cliente.getOrdini().stream().map(o -> buildOrdineDTO(o)).toList())
-				.carrello(buildCarrelloDTO(cliente.getCarrello())) 
-				.utente(buildUtenteDTOnoCliente(cliente.getUtente()))
-				.wishlist(buildWishlistDTO(cliente.getWishlist()))
-				.build();
-	}
+
 	 
 	public static ClienteDTO buildClienteDTO(Cliente cliente) {
 		return new ClienteDTO.Builder()
