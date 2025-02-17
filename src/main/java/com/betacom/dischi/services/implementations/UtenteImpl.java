@@ -141,7 +141,7 @@ public class UtenteImpl implements UtenteService{
 			utente.setRoles(Roles.valueOf(req.getRoles()));
 		}
 		// TODO: EMAIL
-		req.setEmail(req.getEmail());
+		utente.setEmail(req.getEmail());
 		utenteRepo.save(utente);
 		
 	}
