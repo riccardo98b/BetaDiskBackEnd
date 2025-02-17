@@ -50,6 +50,8 @@ public class UtenteImpl implements UtenteService{
 	        if (passwordEncoder.matches(req.getPassword(), utente.get().getPassword())) {
 	            resp.setLogged(true); 
 	            resp.setRole(utente.get().getRoles().toString());
+	            resp.setIdUtente(utente.get().getIdUtente());
+                resp.setIdCliente(utente.get().getCliente().getIdCliente());
 	        } else {
 	            resp.setLogged(false); 
 	        }
