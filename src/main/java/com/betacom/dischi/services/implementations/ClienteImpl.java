@@ -38,6 +38,7 @@ public class ClienteImpl implements ClienteService {
 		log.debug("Create Cliente: " + req);
 		Cliente cliente = new Cliente();
 		checkAndSetFields(req, cliente);
+		cliente.setDataRegistrazione(LocalDate.now());
 		log.debug("Cliente creato con ID: " + cliente.getIdCliente() + " e dettagli: " + cliente);
 		clienteRepo.save(cliente);
 	}
@@ -108,7 +109,6 @@ public class ClienteImpl implements ClienteService {
 		cliente.setNome(req.getNome());
 		cliente.setCognome(req.getCognome());
 		cliente.setTelefono(req.getTelefono());
-		cliente.setDataRegistrazione(LocalDate.now());
 		cliente.setCap(req.getCap());
 		cliente.setProvincia(req.getProvincia());
 		cliente.setVia(req.getVia());
