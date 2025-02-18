@@ -23,7 +23,7 @@ public class MailConfig {
 	    mailSender.setPort(587);
 
 	    mailSender.setUsername(username);
-	    mailSender.setPassword(googlePass.trim());
+	    mailSender.setPassword(googlePass);
 
 	    Properties props = mailSender.getJavaMailProperties();
 	    props.put("mail.transport.protocol", "smtp");
