@@ -19,19 +19,17 @@ public class MailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
-        message.setFrom("michel.zanona@gmail.com"); // lo stesso indirizzo email usato per la configurazione
-
         mailSender.send(message);
     }
     
      public void mailConfermaOrdine(MailRequest request) throws CustomException {
+    	 String text = "Il tuo ordine presso BetaDisk è stato confermato";
+    	 
     	 SimpleMailMessage message = new SimpleMailMessage();
          message.setTo(request.getTo());
          message.setSubject("Ordine BetaDisk confermato");
-         String text = "Il tuo ordine presso BetaDisk è stato confermato";
          message.setText(text);
-         message.setFrom("betadisk@betacom.com"); // lo stesso indirizzo email usato per la configurazione
-
+         //message.setFrom("betadisk@betacom.com");
          mailSender.send(message);
      }
 }
