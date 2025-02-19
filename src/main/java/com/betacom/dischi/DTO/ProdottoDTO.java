@@ -1,6 +1,7 @@
 package com.betacom.dischi.DTO;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.betacom.dischi.models.ProdottoCarrello;
 import com.betacom.dischi.models.Wishlist;

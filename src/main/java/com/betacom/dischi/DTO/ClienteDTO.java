@@ -196,24 +196,6 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 		return Objects.hash(cap, carrello, cognome, comune, dataRegistrazione, idCliente, immagineCliente, nome, ordini,
 				provincia, recensioni, telefono, utente, via, wishlist);
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ClienteDTO other = (ClienteDTO) obj;
-		return Objects.equals(cap, other.cap) && Objects.equals(carrello, other.carrello)
-				&& Objects.equals(cognome, other.cognome) && Objects.equals(comune, other.comune)
-				&& Objects.equals(dataRegistrazione, other.dataRegistrazione)
-				&& Objects.equals(idCliente, other.idCliente) && Objects.equals(immagineCliente, other.immagineCliente)
-				&& Objects.equals(nome, other.nome) && Objects.equals(ordini, other.ordini)
-				&& Objects.equals(provincia, other.provincia) && Objects.equals(recensioni, other.recensioni)
-				&& Objects.equals(telefono, other.telefono) && Objects.equals(utente, other.utente)
-				&& Objects.equals(via, other.via) && Objects.equals(wishlist, other.wishlist);
-	}
-	
+
 	
 }
