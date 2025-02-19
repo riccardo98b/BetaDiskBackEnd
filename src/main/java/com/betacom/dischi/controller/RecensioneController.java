@@ -98,22 +98,6 @@ public class RecensioneController {
 	    return response;
 	}
 	
-	@GetMapping("/lista-recensioni")
-	public ResponseList<RecensioneDTO>listaRecensioni(Integer id) {
-		log.debug("Lista di tutte le recensioni: " + id);
-		ResponseList<RecensioneDTO> response = new ResponseList<RecensioneDTO>();
-		response.setRc(true);
-		try {
-			response.setDati(recensioneService.listaProdottiDaRecensire(id)); 
-			response.setRc(true);
-	        response.setMsg("Visualizzazione lista recensioni");
-		}catch(Exception e) {
-			log.error(e.getMessage());
-			response.setMsg(e.getMessage());
-			response.setRc(false);
-		}
-		return response;
-		
-	}
+
 
 }

@@ -1,7 +1,6 @@
 package com.betacom.dischi.DTO;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class RecensioneDTO {
 
@@ -89,24 +88,5 @@ public class RecensioneDTO {
 	public LocalDate getDataCreazione() {
 		return dataCreazione;
 	}
-	@Override
-	public int hashCode() {
-		return Objects.hash(cliente, dataCreazione, descrizione, idRecensione, prodotto, stelle);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		RecensioneDTO other = (RecensioneDTO) obj;
-		return Objects.equals(cliente, other.cliente) && Objects.equals(dataCreazione, other.dataCreazione)
-				&& Objects.equals(descrizione, other.descrizione) && Objects.equals(idRecensione, other.idRecensione)
-				&& Objects.equals(prodotto, other.prodotto) && Objects.equals(stelle, other.stelle);
-	}
 
-	
-	
 }
