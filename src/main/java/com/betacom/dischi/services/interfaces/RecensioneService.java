@@ -16,5 +16,5 @@ public interface RecensioneService {
 
 	RecensioneDTO listById(Integer id) throws CustomException;
 
-
+	List<RecensioneDTO> listaProdottiDaRecensire(Integer idCliente) throws CustomException;
 }
