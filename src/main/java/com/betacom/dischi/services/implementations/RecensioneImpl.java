@@ -1,11 +1,15 @@
 package com.betacom.dischi.services.implementations;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.betacom.dischi.DTO.OrdineDTO;
 import com.betacom.dischi.DTO.RecensioneDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Cliente;
@@ -16,6 +20,7 @@ import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.repository.IRecensioneRepository;
 import com.betacom.dischi.request.RecensioneRequest;
+import com.betacom.dischi.services.interfaces.OrdineService;
 import com.betacom.dischi.services.interfaces.RecensioneService;
 import com.betacom.dischi.utilities.Utility;
 import static com.betacom.dischi.utilities.Utility.buildRecensioneDTO;
@@ -27,14 +32,16 @@ public class RecensioneImpl implements RecensioneService {
 	private IRecensioneRepository recensioneRepo;
 	private IClienteRepository clienteRepo;
 	private IProdottoRepository prodottoRepo;
+	private OrdineService ordineServ;
 
 	
 	public RecensioneImpl(Logger log, IRecensioneRepository recensioneRepo, IClienteRepository clienteRepo,
-			IProdottoRepository prodottoRepo) {
+			IProdottoRepository prodottoRepo, OrdineService ordineServ) {
 		this.log = log;
 		this.recensioneRepo = recensioneRepo;
 		this.clienteRepo = clienteRepo;
 		this.prodottoRepo = prodottoRepo;
+		this.ordineServ = ordineServ;
 	}
 
 
@@ -123,5 +130,38 @@ public class RecensioneImpl implements RecensioneService {
 	    RecensioneDTO recensioneDTO = Utility.buildRecensioneDTO(recensione);  
 	    return recensioneDTO;
 	}
+
+
+	@Override
+	public List<RecensioneDTO> listaProdottiDaRecensire(Integer idCliente) throws CustomException {
+		List<OrdineDTO> listaOrdini = ordineServ.listaByCliente(idCliente);
+		Set<RecensioneDTO> set = new LinkedHashSet<RecensioneDTO>();
+		
+		for (OrdineDTO ordine : listaOrdini) {
+			ordine.getProdotti().forEach(p -> {
+				if (p.getProdotto().getRecensioni().isEmpty()) {
+					RecensioneDTO r = new RecensioneDTO.Builder()
+							.cliente(ordine.getCliente())
+							.prodotto(p.getProdotto())
+							.build();
+					set.add(r);
+				} else {
+					p.getProdotto().getRecensioni().forEach(r -> {
+						if (r.getCliente().getIdCliente()== idCliente) {
+							set.add(r);
+						} else {
+							r = new RecensioneDTO.Builder()
+									.cliente(ordine.getCliente())
+									.prodotto(p.getProdotto())
+									.build();
+							set.add(r);
+						}
+					});
+				}
+			});
+		}
+		return new ArrayList<RecensioneDTO>(set);
+	}
+	
 
 }
