@@ -21,6 +21,8 @@ import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.repository.IRecensioneRepository;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.services.interfaces.ProdottoService;
+import com.betacom.dischi.services.interfaces.SystemMsgServices;
+import com.betacom.dischi.utilities.Utility;
 import com.betacom.dischi.utilities.enums.Formato;
 
 import jakarta.transaction.Transactional;
@@ -37,15 +39,18 @@ public class ProdottoImpl implements ProdottoService{
 	@Autowired
 	IRecensioneRepository recensioneRepository;
 	
+	@Autowired
+	SystemMsgServices msgServ;
 
+	@Transactional(rollbackOn = CustomException.class)
 	@Override
-	public void create(ProdottoRequest req) throws Exception {
+	public void create(ProdottoRequest req) throws CustomException {
 	
 		Prodotto prodotto = new Prodotto();
 	
 		Optional<Prodotto> prodottoCercato = prodottoRepository.findByTitoloAndArtista(req.getTitolo(), req.getArtista());
 		if(prodottoCercato.isPresent()) {
-			throw new Exception("Prodotto già esistente");
+			throw new CustomException(msgServ.getSysMsg("product_already_exist"));
 		}
 		
 		validazioneValoriProdotto(req);
@@ -64,13 +69,13 @@ public class ProdottoImpl implements ProdottoService{
 	}
 	
 
-
+	@Transactional(rollbackOn = CustomException.class)
 	@Override
 	public void update(ProdottoRequest req) throws CustomException {
 		
 		Optional<Prodotto> prodotto = prodottoRepository.findById(req.getIdProdotto());
 		if(prodotto.isEmpty())
-			throw new CustomException("Prodotto non trovato");
+			throw new CustomException(msgServ.getSysMsg("product_not_found"));
 		
 		Prodotto p = prodotto.get();
 		
@@ -96,34 +101,38 @@ public class ProdottoImpl implements ProdottoService{
 	public void delete(ProdottoRequest req) throws CustomException {
 		Optional<Prodotto> prodotto = prodottoRepository.findById(req.getIdProdotto());
 		if(prodotto.isEmpty())
-			throw new CustomException("Prodotto non trovato");
+			throw new CustomException(msgServ.getSysMsg("product_not_found"));
 		
 		Prodotto p = prodotto.get();
 		prodottoRepository.delete(p);
 		
 	}
 
-
+	@Transactional(rollbackOn = CustomException.class)
 	@Override
 	public List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere,
-		Integer annoPubblicazione) throws Exception {
+		Integer annoPubblicazione) throws CustomException {
 		
 		List<Prodotto> listaFiltrata = prodottoRepository.prodottiFiltrati(idProdotto,titolo, artista, genere, annoPubblicazione);
+		if(listaFiltrata.isEmpty() || listaFiltrata == null)
+			throw new CustomException(msgServ.getSysMsg("product_not_found"));
 	
+		
 		List<ProdottoDTO> risultato = listaFiltrata.stream()
 				.map(p -> buildProdottoDTO(p))
 	            .collect(Collectors.toList());  
-	    
-	    return risultato;
+	
+		 return risultato;
 	}
 
 
-
+	@Transactional(rollbackOn = CustomException.class)
 	@Override
-	public List<ProdottoDTO> listPerFormato(Formato formato) throws Exception {
+	public List<ProdottoDTO> listPerFormato(Formato formato) throws CustomException {
 		
 		List<Prodotto> listaFiltrata = prodottoRepository.prodottiPerFormato(formato);
-		
+		if(listaFiltrata.isEmpty() || listaFiltrata == null)
+			throw new CustomException(msgServ.getSysMsg("product_not_found"));
 		
 		List<ProdottoDTO> risultato = listaFiltrata.stream()
 				.map(p -> buildProdottoDTO(p)) 
@@ -133,10 +142,12 @@ public class ProdottoImpl implements ProdottoService{
 	}
 
 
-
+	@Transactional(rollbackOn = CustomException.class)
 	@Override
-	public List<ProdottoDTO> topTenProdotti() throws Exception {
+	public List<ProdottoDTO> topTenProdotti() throws CustomException {
 	    List<Prodotto> listaProdotti = prodottoRepository.findAll();
+	    if(listaProdotti.isEmpty()|| listaProdotti == null)
+			throw new CustomException(msgServ.getSysMsg("product_not_found"));
 	    
 	    List<Prodotto> risultato = listaProdotti.stream()
 	            .filter(prodotto -> prodotto.getRecensioni().size() != 0).collect(Collectors.toList());

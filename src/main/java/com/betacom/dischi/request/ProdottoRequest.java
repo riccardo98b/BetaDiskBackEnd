@@ -103,6 +103,6 @@ public class ProdottoRequest {
 	public void setImmagineProdotto(String immagineProdotto) {
 		this.immagineProdotto = immagineProdotto;
 	}
-	
-	
+
+
 }
