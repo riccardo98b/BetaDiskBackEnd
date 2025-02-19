@@ -2,6 +2,7 @@ package com.betacom.dischi.DTO;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 	// 1) ATTRIBUTI DTO
@@ -190,4 +191,11 @@ public class ClienteDTO { // APPLICO IL PATTERN BUILDER
 	public LocalDate getDataRegistrazione() {
 		return dataRegistrazione;
 	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(cap, carrello, cognome, comune, dataRegistrazione, idCliente, immagineCliente, nome, ordini,
+				provincia, recensioni, telefono, utente, via, wishlist);
+	}
+
+	
 }
