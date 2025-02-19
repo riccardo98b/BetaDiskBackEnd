@@ -23,13 +23,27 @@ public class MailService {
     }
     
      public void mailConfermaOrdine(MailRequest request) throws CustomException {
-    	 String text = "Il tuo ordine presso BetaDisk è stato confermato";
+    	StringBuilder text = new StringBuilder();
+    	text.append("Ciao ")
+    		.append(request.getNome()).append(" ")
+    		.append(request.getCognome()).append(",\n")
+    		.append("Il tuo ordine presso BetaDisk è stato confermato! \n Ecco il riepilogo del tuo ordine: \n");
+    	request.getProdotti().forEach(prodotto -> 
+    	   text.append("- ").append(prodotto.getProdotto().getTitolo()).append(": € ")
+    	            .append(prodotto.getProdotto().getPrezzo()).append(" x ")
+    	            .append(prodotto.getQuantita()).append("\n")
+    	);
+    	text.append("Il totale del tuo ordine è: ")
+    		.append(request.getTotale().toString())
+    		.append("\n");
+    	text.append("Il tuo ordine sarà spedito a breve. \n");
+    	text.append("Grazie dal team BetaDisk!");
     	 
-    	 SimpleMailMessage message = new SimpleMailMessage();
-         message.setTo(request.getTo());
-         message.setSubject("Ordine BetaDisk confermato");
-         message.setText(text);
-         //message.setFrom("betadisk@betacom.com");
-         mailSender.send(message);
+    	SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(request.getToEmail());
+        message.setSubject("Ordine BetaDisk confermato");
+        message.setText(text.toString());
+        //message.setFrom("betadisk@betacom.com");
+        mailSender.send(message);
      }
 }
