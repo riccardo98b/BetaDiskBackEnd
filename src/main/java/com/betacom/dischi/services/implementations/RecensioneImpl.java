@@ -1,10 +1,10 @@
 package com.betacom.dischi.services.implementations;
 
+import static com.betacom.dischi.utilities.Utility.buildRecensioneDTO;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,6 @@ import com.betacom.dischi.request.RecensioneRequest;
 import com.betacom.dischi.services.interfaces.OrdineService;
 import com.betacom.dischi.services.interfaces.RecensioneService;
 import com.betacom.dischi.utilities.Utility;
-import static com.betacom.dischi.utilities.Utility.buildRecensioneDTO;
 
 @Service
 public class RecensioneImpl implements RecensioneService {
@@ -135,32 +134,50 @@ public class RecensioneImpl implements RecensioneService {
 	@Override
 	public List<RecensioneDTO> listaProdottiDaRecensire(Integer idCliente) throws CustomException {
 		List<OrdineDTO> listaOrdini = ordineServ.listaByCliente(idCliente);
-		Set<RecensioneDTO> set = new LinkedHashSet<RecensioneDTO>();
+		List<RecensioneDTO> listaRecensioni = new ArrayList<RecensioneDTO>();
 		
 		for (OrdineDTO ordine : listaOrdini) {
 			ordine.getProdotti().forEach(p -> {
 				if (p.getProdotto().getRecensioni().isEmpty()) {
-					RecensioneDTO r = new RecensioneDTO.Builder()
+					RecensioneDTO rec = new RecensioneDTO.Builder()
 							.cliente(ordine.getCliente())
 							.prodotto(p.getProdotto())
 							.build();
-					set.add(r);
+					listaRecensioni.add(rec);
 				} else {
 					p.getProdotto().getRecensioni().forEach(r -> {
-						if (r.getCliente().getIdCliente()== idCliente) {
-							set.add(r);
+						if (r.getCliente().getIdCliente() == idCliente) {
+							boolean trovato = false;
+							if (listaRecensioni.size() != 0 ) {
+								for (RecensioneDTO item : listaRecensioni) {
+									if (item.getProdotto().getTitolo().equalsIgnoreCase(p.getProdotto().getTitolo()) && item.getProdotto().getArtista().equalsIgnoreCase(p.getProdotto().getArtista())) {
+										trovato = true;
+										break;
+									}
+								};
+							}
+							if (!trovato) {
+								listaRecensioni.add(new RecensioneDTO.Builder()
+										.cliente(r.getCliente())
+										.prodotto(p.getProdotto())
+										.idRecensione(r.getIdRecensione())
+										.dataCreazione(r.getDataCreazione())
+										.stelle(r.getStelle())
+										.descrizione(r.getDescrizione())
+										.build());
+							}
 						} else {
-							r = new RecensioneDTO.Builder()
+							RecensioneDTO rec = new RecensioneDTO.Builder()
 									.cliente(ordine.getCliente())
 									.prodotto(p.getProdotto())
 									.build();
-							set.add(r);
+							listaRecensioni.add(rec);
 						}
 					});
 				}
 			});
 		}
-		return new ArrayList<RecensioneDTO>(set);
+		return listaRecensioni;
 	}
 	
 
