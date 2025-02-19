@@ -13,6 +13,11 @@ public class ResponseList<T> extends ResponseBase {
 	public void setDati(List<T> dati) {
 		this.dati = dati;
 	}
+
+	@Override
+	public String toString() {
+		return "ResponseList [dati=" + dati + "]";
+	}
 	
 		
 }

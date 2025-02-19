@@ -1,5 +1,7 @@
 package com.betacom.dischi.utilities;
 
+import java.util.ArrayList;
+
 import com.betacom.dischi.DTO.CarrelloDTO;
 import com.betacom.dischi.DTO.ClienteDTO;
 import com.betacom.dischi.DTO.OrdineDTO;
@@ -22,17 +24,18 @@ import com.betacom.dischi.models.Wishlist;
 import com.betacom.dischi.request.ProdottoRequest;
 
 public class Utility {
+	
 
 	public static void validazioneValoriProdotto(ProdottoRequest req) throws CustomException{
-		if(req.getFormato() == null)
+		if(req.getFormato().isBlank() || req.getFormato() == null)
 			throw new CustomException("Inserisci il formato del prodotto");
-		if(req.getTitolo() == null)
+		if(req.getTitolo().isBlank() || req.getTitolo() == null)
 			throw new CustomException("Inserisci il titolo del prodotto");
-		if(req.getArtista() == null)
+		if(req.getArtista().isBlank() || req.getArtista() == null)
 			throw new CustomException("Inserisci l'artista del prodotto");
-		if(req.getGenere() == null)
+		if(req.getGenere().isBlank() || req.getGenere() == null)
 			throw new CustomException("Inserisci il genere del prodotto");	
-		if(req.getDescrizione() == null)
+		if(req.getDescrizione().isBlank() || req.getDescrizione() == null)
 			throw new CustomException("Inserisci una descrizione del prodotto");
 		if(req.getAnnoPubblicazione() == null)
 			throw new CustomException("Inserisci l'anno di pubblicazione del prodotto");
@@ -42,23 +45,34 @@ public class Utility {
 			throw new CustomException("Inserisci una quantità disponibile del prodotto");
 	}
 	
+	
 	public static ProdottoDTO buildProdottoDTO(Prodotto prodotto) {
-		return new ProdottoDTO.Builder()
-				.idProdotto(prodotto.getIdProdotto())
-				.formato(prodotto.getFormato().toString())
-				.titolo(prodotto.getTitolo())
-				.artista(prodotto.getArtista())
-				.genere(prodotto.getGenere())
-				.descrizione(prodotto.getDescrizione())
-				.annoPubblicazione(prodotto.getAnnoPubblicazione())
-				.prezzo(prodotto.getPrezzo())
-				.quantita(prodotto.getQuantita())
-				.immagineProdotto(prodotto.getImmagineProdotto())
-				.prodottiCarrello(prodotto.getProdottiCarrello().stream().map(p -> buildProdottoCarrelloNoProdottoDTO(p)).toList())
-				.prodottiWishlist(prodotto.getProdottiWishlist().stream().map(p -> buildWishlistDTOnoProdotto(p)).toList())
-				.recensioni(prodotto.getRecensioni().stream().map(r -> buildRecensioneDTOnoProdotto(r)).toList())
-				.build();
-	}
+	    
+	        return new ProdottoDTO.Builder()
+	                .idProdotto(prodotto.getIdProdotto())
+	                .formato(prodotto.getFormato().toString())
+	                .titolo(prodotto.getTitolo())
+	                .artista(prodotto.getArtista())
+	                .genere(prodotto.getGenere())
+	                .descrizione(prodotto.getDescrizione())
+	                .annoPubblicazione(prodotto.getAnnoPubblicazione())
+	                .prezzo(prodotto.getPrezzo())
+	                .quantita(prodotto.getQuantita())
+	                .immagineProdotto(prodotto.getImmagineProdotto())
+	                .prodottiCarrello(prodotto.getProdottiCarrello() != null ? 
+	                        prodotto.getProdottiCarrello().stream().map(p -> buildProdottoCarrelloNoProdottoDTO(p)).toList() : 
+	                        new ArrayList<>())
+	                .prodottiWishlist(prodotto.getProdottiWishlist() != null ? 
+	                        prodotto.getProdottiWishlist().stream().map(p -> buildWishlistDTOnoProdotto(p)).toList() : 
+	                        new ArrayList<>())
+	                .recensioni(prodotto.getRecensioni() != null ? 
+	                        prodotto.getRecensioni().stream().map(r -> buildRecensioneDTOnoProdotto(r)).toList() : 
+	                        new ArrayList<>())
+	                .build();
+	    }
+	
+	
+
 	private static RecensioneDTO buildRecensioneDTOnoProdotto(Recensione recensione) {
 		return new RecensioneDTO.Builder()
 				.idRecensione(recensione.getIdRecensione())

@@ -30,7 +30,7 @@ public class ProdottoDTO {
 	
 	private String immagineProdotto;
 	
-	private List<OrdineDTO> ordini;
+	private List<ProdottoOrdineDTO> ordine;
 	
 	private List<RecensioneDTO> recensioni;
 	
@@ -55,7 +55,7 @@ public class ProdottoDTO {
 		private Double prezzo;		
 		private Integer quantita;		
 		private String immagineProdotto;		
-		private List<OrdineDTO> ordini;		
+		private List<ProdottoOrdineDTO> ordine;		
 		private List<RecensioneDTO> recensioni;
 		private List<ProdottoCarrelloDTO> prodottiCarrello;
 		private List<WishlistDTO> prodottiWishlist;
@@ -75,7 +75,7 @@ public class ProdottoDTO {
 			 prodotto.prezzo = this.prezzo;
 			 prodotto.immagineProdotto = this.immagineProdotto;
 			 prodotto.quantita = this.quantita;
-			 prodotto.ordini = this.ordini;
+			 prodotto.ordine = this.ordine;
 			 prodotto.recensioni = this.recensioni;
 			 prodotto.prodottiCarrello=this.prodottiCarrello;
 			 prodotto.prodottiWishlist=this.prodottiWishlist;
@@ -134,8 +134,8 @@ public class ProdottoDTO {
 			return this;
 		}
 
-		public Builder ordini(List<OrdineDTO> ordini) {
-			this.ordini = ordini;
+		public Builder ordine(List<ProdottoOrdineDTO> ordine) {
+			this.ordine = ordine;
 			return this;
 		}
 
@@ -199,8 +199,8 @@ public class ProdottoDTO {
 		return immagineProdotto;
 	}
 
-	public List<OrdineDTO> getOrdini() {
-		return ordini;
+	public List<ProdottoOrdineDTO> getordine() {
+		return ordine;
 	}
 
 	public List<RecensioneDTO> getRecensioni() {
@@ -214,5 +214,7 @@ public class ProdottoDTO {
 	public List<WishlistDTO> getProdottiWishlist() {
 		return prodottiWishlist;
 	}
+
+
 	
 }
