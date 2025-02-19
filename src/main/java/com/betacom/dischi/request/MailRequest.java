@@ -1,15 +1,46 @@
 package com.betacom.dischi.request;
 
+import java.util.List;
+
+import com.betacom.dischi.DTO.ProdottoCarrelloDTO;
+
 public class MailRequest {
 
-	String to;
-
-	public String getTo() {
-		return to;
+	private String toEmail;
+	private String nome;
+	private String cognome;
+	private Double totale;
+	private List<ProdottoCarrelloDTO> prodotti;
+	public String getToEmail() {
+		return toEmail;
+	}
+	public void setToEmail(String toEmail) {
+		this.toEmail = toEmail;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public String getCognome() {
+		return cognome;
+	}
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+	public List<ProdottoCarrelloDTO> getProdotti() {
+		return prodotti;
+	}
+	public void setProdotti(List<ProdottoCarrelloDTO> prodotti) {
+		this.prodotti = prodotti;
+	}
+	public Double getTotale() {
+		return totale;
+	}
+	public void setTotale(Double totale) {
+		this.totale = totale;
 	}
 
-	public void setTo(String to) {
-		this.to = to;
-	}
 	
 }
