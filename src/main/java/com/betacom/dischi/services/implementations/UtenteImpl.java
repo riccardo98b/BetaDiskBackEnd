@@ -52,6 +52,7 @@ public class UtenteImpl implements UtenteService{
 	            resp.setRole(utente.get().getRoles().toString());
 	            resp.setIdUtente(utente.get().getIdUtente());
                 resp.setIdCliente(utente.get().getCliente().getIdCliente());
+                resp.setDataRegistrazione(utente.get().getCliente().getDataRegistrazione());
 	        } else {
 	            resp.setLogged(false); 
 	        }

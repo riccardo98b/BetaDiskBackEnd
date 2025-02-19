@@ -11,7 +11,7 @@ public interface ClienteService {
 	
 	ClienteDTO listById(Integer id) throws CustomException;
 
-	void create(ClienteRequest req) throws CustomException;
+	ClienteDTO create(ClienteRequest req) throws CustomException;
 
 	void update(ClienteRequest req) throws CustomException;
 
