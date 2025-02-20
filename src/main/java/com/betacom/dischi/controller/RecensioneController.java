@@ -82,7 +82,21 @@ public class RecensioneController {
 		return response;
 	}
 	
-
+	@PostMapping("/update")
+	public ResponseBase update(@RequestBody(required = true) RecensioneRequest req) {
+		ResponseBase response = new ResponseBase();
+		log.debug(req.toString());
+		try {
+			recensioneService.update(req);
+			response.setRc(true);
+	        response.setMsg("Recensione aggiornata con successo!");
+		}
+		catch(Exception e) {
+			response.setMsg(e.getMessage());
+			response.setRc(false);
+		}
+		return response;
+	}
 	
 	@PostMapping("/delete")
 	public ResponseBase delete(@RequestBody(required = true) RecensioneRequest req) {

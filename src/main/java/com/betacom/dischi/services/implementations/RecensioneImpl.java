@@ -63,7 +63,24 @@ public class RecensioneImpl implements RecensioneService {
 		log.debug("Recensione creata con ID: "+recensione.getIdRecensione() + " e dettagli: " + recensione);
 	}
 
-
+	@Override
+	public void update(RecensioneRequest req) throws CustomException {
+		Recensione recensione = recensioneRepo.findById(req.getIdRecensione())
+				.orElseThrow(() -> new CustomException("Recensione non trovata"));
+		boolean modifica = false;
+		if (req.getDescrizione() != null) {
+			recensione.setDescrizione(req.getDescrizione());
+			modifica = true;
+		}
+		if (req.getStelle() != null) {
+			recensione.setStelle(req.getStelle());
+			modifica = true;
+		}
+		if (modifica) {
+			recensione.setDataCreazione(LocalDate.now());
+		}
+		recensioneRepo.save(recensione);
+	}
 
 	@Override
 	public void delete(RecensioneRequest req) throws CustomException {
@@ -179,6 +196,5 @@ public class RecensioneImpl implements RecensioneService {
 		});
 		return listaRecensioni;
 	}
-	
 
 }

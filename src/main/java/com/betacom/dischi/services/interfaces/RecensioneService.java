@@ -11,6 +11,7 @@ public interface RecensioneService {
 	List<RecensioneDTO> listAll(Integer idRecensione,Integer stelle);
 
 	void create(RecensioneRequest req) throws CustomException;
+	void update(RecensioneRequest req) throws CustomException;
 
 	void delete(RecensioneRequest req) throws CustomException;
 
