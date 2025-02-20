@@ -196,6 +196,16 @@ public class Utility {
 				.build();
 	}
 
+	public static OrdineDTO buildOrdineDTOAdmin(Ordine ordine) {
+		 return new OrdineDTO.Builder()
+				 .idOrdine(ordine.getIdOrdine())
+				 .dataOrdine(ordine.getDataOrdine())
+				 .totaleImporto(ordine.getTotaleImporto())
+				 .spedito(ordine.getSpedito())
+				 .cliente(buildClienteDTOnoRecensione(ordine.getCliente()))
+				 .prodotti(ordine.getProdotti().stream().map(p -> buildProdottoOrdineDTO(p)).toList())
+				 .build();
+	 }
 	public static OrdineDTO buildOrdineDTO(Ordine ordine) {
 		 return new OrdineDTO.Builder()
 				 .idOrdine(ordine.getIdOrdine())

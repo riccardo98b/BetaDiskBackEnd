@@ -1,6 +1,6 @@
 package com.betacom.dischi.services.implementations;
 
-import static com.betacom.dischi.utilities.Utility.buildOrdineDTO;
+import static com.betacom.dischi.utilities.Utility.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -155,7 +155,7 @@ public class OrdineImpl implements OrdineService{
 			throw new CustomException(msgServ.getSysMsg("no_orders"));
 		}
 		return lista.stream()
-				.map(ordine -> buildOrdineDTO(ordine))
+				.map(ordine -> buildOrdineDTOAdmin(ordine))
 				.toList();
 	}
 
