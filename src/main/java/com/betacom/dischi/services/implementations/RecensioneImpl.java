@@ -136,7 +136,7 @@ public class RecensioneImpl implements RecensioneService {
 		List<OrdineDTO> listaOrdini = ordineServ.listaByCliente(idCliente);
 		List<RecensioneDTO> listaRecensioni = new ArrayList<RecensioneDTO>();
 		
-		for (OrdineDTO ordine : listaOrdini) {
+		listaOrdini.forEach(ordine -> {
 			ordine.getProdotti().forEach(p -> {
 				if (p.getProdotto().getRecensioni().isEmpty()) {
 					RecensioneDTO rec = new RecensioneDTO.Builder()
@@ -176,7 +176,7 @@ public class RecensioneImpl implements RecensioneService {
 					});
 				}
 			});
-		}
+		});
 		return listaRecensioni;
 	}
 	
