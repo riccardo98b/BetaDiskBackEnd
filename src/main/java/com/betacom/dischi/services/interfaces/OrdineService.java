@@ -12,5 +12,6 @@ public interface OrdineService {
 	void delete(OrdineRequest request) throws CustomException;
 	void update(OrdineRequest request) throws CustomException;
 	List<OrdineDTO> listaByCliente(Integer id) throws CustomException;
+	List<OrdineDTO> listAll(String request) throws CustomException;
 	
 }
