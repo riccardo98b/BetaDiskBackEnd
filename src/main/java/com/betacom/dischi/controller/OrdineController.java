@@ -98,4 +98,20 @@ public class OrdineController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/lista-admin")
+	public ResponseList<OrdineDTO> listAll(@RequestParam String data) {
+		log.debug("Lista ordini: ");
+		ResponseList<OrdineDTO> response = new ResponseList<OrdineDTO>();
+		response.setRc(true);
+		try {	
+			response.setMsg(msgServ.getSysMsg("order_list"));
+			response.setDati(ordineServ.listAll(data));
+		} catch (CustomException e) {
+			log.error(e.getMessage());
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
 }

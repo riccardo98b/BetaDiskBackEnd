@@ -143,4 +143,20 @@ public class OrdineImpl implements OrdineService{
 				.toList();
 	}
 
+	@Override
+	public List<OrdineDTO> listAll(String request) throws CustomException {
+		List<Ordine> lista = new ArrayList<Ordine>();
+		if (request == null || request == "") {
+			lista = ordineRepo.findAll();
+		} else {
+			lista = ordineRepo.findByDataOrdineAfter(LocalDate.parse(request).minusDays(1));
+		}
+		if (lista.isEmpty()) {
+			throw new CustomException(msgServ.getSysMsg("no_orders"));
+		}
+		return lista.stream()
+				.map(ordine -> buildOrdineDTO(ordine))
+				.toList();
+	}
+
 }

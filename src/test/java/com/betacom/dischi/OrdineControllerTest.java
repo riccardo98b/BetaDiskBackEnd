@@ -1,5 +1,7 @@
 package com.betacom.dischi;
 
+import java.time.LocalDate;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -49,7 +51,6 @@ public class OrdineControllerTest {
 	@Order(4)
 	public void listaOrdini() {
 		ResponseList<OrdineDTO> response = controller.listaOrdini(2);
-		System.out.println(response.getMsg()+ "!!");
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 		response = controller.listaOrdini(1);
 		Assertions.assertThat(response.getRc()).isEqualTo(false);
@@ -93,4 +94,11 @@ public class OrdineControllerTest {
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
 	
+	@Test
+	@Order(9)
+	public void listaOrdiniAdmin() {
+		ResponseList<OrdineDTO> response = controller.listAll(LocalDate.now().toString());
+		Assertions.assertThat(response.getRc()).isEqualTo(true);
+		Assertions.assertThat(response.getDati().size()).isGreaterThan(0);
+	}
 }
