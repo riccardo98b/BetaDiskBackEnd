@@ -1,5 +1,7 @@
 package com.betacom.dischi.utilities.mail;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -63,4 +65,22 @@ public class MailService {
             message.setText(testo.toString());
     	    mailSender.send(message);
      }
+     
+     public void mailSpedizioneOrdine(MailRequest request) throws CustomException {
+     	StringBuilder text = new StringBuilder();
+     	text.append("Ciao ")
+     		.append(request.getNome()).append(" ")
+     		.append(request.getCognome()).append(",\n")
+     		.append("Il tuo ordine del ")
+     		.append(request.getDataOrdine()).append("\n")
+     		.append("presso BetaDisk è stato spedito!")
+     		.append("\n")
+     		.append("Grazie dal team BetaDisk!");
+     	 
+     	SimpleMailMessage message = new SimpleMailMessage();
+         message.setTo(request.getToEmail());
+         message.setSubject("Ordine BetaDisk spedito");
+         message.setText(text.toString());
+         mailSender.send(message);
+      }
 }

@@ -47,4 +47,19 @@ public class MailController {
 		}
 		return response;
 	}
+	
+
+	@PostMapping("/ordine-spedito")
+	public ResponseBase ordineSpedito(@RequestBody(required = true) MailRequest request){
+		ResponseBase response = new ResponseBase();
+		response.setRc(true);
+		try {
+			mailServ.mailSpedizioneOrdine(request);
+			response.setMsg("Mail inviata correttamente");
+		} catch (CustomException e) {
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
 }
