@@ -10,6 +10,7 @@ public class MailRequest {
 	private String nome;
 	private String cognome;
 	private Double totale;
+	private String dataOrdine;
 	private List<ProdottoCarrelloDTO> prodotti;
 	public String getToEmail() {
 		return toEmail;
@@ -40,6 +41,12 @@ public class MailRequest {
 	}
 	public void setTotale(Double totale) {
 		this.totale = totale;
+	}
+	public String getDataOrdine() {
+		return dataOrdine;
+	}
+	public void setDataOrdine(String dataOrdine) {
+		this.dataOrdine = dataOrdine;
 	}
 
 	
