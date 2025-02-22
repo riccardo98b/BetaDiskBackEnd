@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.OrdineDTO;
+import com.betacom.dischi.DTO.ProdottoOrdineDTO;
 import com.betacom.dischi.DTO.RecensioneDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Cliente;
@@ -160,7 +161,7 @@ public class RecensioneImpl implements RecensioneService {
 							.cliente(ordine.getCliente())
 							.prodotto(p.getProdotto())
 							.build();
-					listaRecensioni.add(rec);
+					listaRecensioni.add(recensioneDaScrivere(ordine, p));
 				} else {
 					p.getProdotto().getRecensioni().forEach(r -> {
 						if (r.getCliente().getIdCliente() == idCliente) {
@@ -174,21 +175,10 @@ public class RecensioneImpl implements RecensioneService {
 								};
 							}
 							if (!trovato) {
-								listaRecensioni.add(new RecensioneDTO.Builder()
-										.cliente(r.getCliente())
-										.prodotto(p.getProdotto())
-										.idRecensione(r.getIdRecensione())
-										.dataCreazione(r.getDataCreazione())
-										.stelle(r.getStelle())
-										.descrizione(r.getDescrizione())
-										.build());
+								listaRecensioni.add(recensioneScritta(r, p));
 							}
 						} else {
-							RecensioneDTO rec = new RecensioneDTO.Builder()
-									.cliente(ordine.getCliente())
-									.prodotto(p.getProdotto())
-									.build();
-							listaRecensioni.add(rec);
+							listaRecensioni.add(recensioneDaScrivere(ordine, p));
 						}
 					});
 				}
@@ -197,4 +187,21 @@ public class RecensioneImpl implements RecensioneService {
 		return listaRecensioni;
 	}
 
+	private RecensioneDTO recensioneDaScrivere(OrdineDTO ordine, ProdottoOrdineDTO p) {
+		 return new RecensioneDTO.Builder()
+		.cliente(ordine.getCliente())
+		.prodotto(p.getProdotto())
+		.build();
+	}
+	private RecensioneDTO recensioneScritta(RecensioneDTO r,  ProdottoOrdineDTO p) {
+		return new RecensioneDTO.Builder()
+		.cliente(r.getCliente())
+		.prodotto(p.getProdotto())
+		.idRecensione(r.getIdRecensione())
+		.dataCreazione(r.getDataCreazione())
+		.stelle(r.getStelle())
+		.descrizione(r.getDescrizione())
+		.build();
+	}
+	
 }
