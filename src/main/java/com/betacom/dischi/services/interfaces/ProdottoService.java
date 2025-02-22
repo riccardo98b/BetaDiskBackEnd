@@ -22,4 +22,6 @@ public interface ProdottoService {
 	List<ProdottoDTO> listPerFormato(Formato formato) throws CustomException;
 	
 	List<ProdottoDTO> topTenProdotti() throws CustomException;
+	
+	List<Formato> listaDeiFormati() throws CustomException;
 }
