@@ -3,6 +3,8 @@ package com.betacom.dischi.services.implementations;
 import static com.betacom.dischi.utilities.Utility.buildProdottoDTO;
 import static com.betacom.dischi.utilities.Utility.validazioneValoriProdotto;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -169,6 +171,15 @@ public class ProdottoImpl implements ProdottoService{
 
 
 	    return risultato.stream().map(r-> buildProdottoDTO(r)).limit(10).toList();
+	}
+
+
+	@Override
+	public List<Formato> listaDeiFormati() throws CustomException {
+		
+		List<Formato> listaFormati = Arrays.asList(Formato.values());
+		return listaFormati;
+		
 	}
 
 	
