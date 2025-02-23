@@ -2,19 +2,26 @@ package com.betacom.dischi.services.implementations;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.DTO.SignInDTO;
 import com.betacom.dischi.DTO.UtenteDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Cliente;
+import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Utente;
 import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.repository.IUtenteRepository;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
+import com.betacom.dischi.services.interfaces.SystemMsgServices;
 import com.betacom.dischi.services.interfaces.UtenteService;
+import com.betacom.dischi.utilities.enums.Formato;
 import com.betacom.dischi.utilities.enums.Roles;
 import jakarta.transaction.Transactional;
 import static com.betacom.dischi.utilities.Utility.*;
@@ -25,15 +32,18 @@ public class UtenteImpl implements UtenteService{
     private  IClienteRepository clienteRepo;
     private  Logger log;
     private  PasswordEncoder passwordEncoder;
+    private SystemMsgServices msgServ;
 
     public UtenteImpl(IUtenteRepository utenteRepo, 
                        IClienteRepository clienteRepo, 
                        Logger log, 
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       SystemMsgServices msgServ) {
         this.utenteRepo = utenteRepo;
         this.clienteRepo = clienteRepo;
         this.log = log;
         this.passwordEncoder = passwordEncoder;
+        this.msgServ = msgServ;
     }
 
 
@@ -140,7 +150,6 @@ public class UtenteImpl implements UtenteService{
 		if(req.getIsAdmin()){//valueof
 			utente.setRoles(Roles.valueOf(req.getRoles()));
 		}
-		// TODO: EMAIL
 		utente.setEmail(req.getEmail());
 		utenteRepo.save(utente);
 		
@@ -152,6 +161,21 @@ public class UtenteImpl implements UtenteService{
 	    Utente utente = utenteRepo.findById(id)
 	    		.orElseThrow(() -> new CustomException("Utente non trovato"));
 		return buildUtenteDTO(utente);
+	}
+	
+	@Transactional(rollbackOn = CustomException.class)
+	@Override
+	public List<UtenteDTO> listPerRoles(Roles roles) throws CustomException {
+		
+		List<Utente> listaFiltrata = utenteRepo.utentiPerRoles(roles);
+		if(listaFiltrata.isEmpty() || listaFiltrata == null)
+			throw new CustomException(msgServ.getSysMsg(""));
+		
+		List<UtenteDTO> risultato = listaFiltrata.stream()
+				.map(p -> buildUtenteDTO(p)) 
+	            .collect(Collectors.toList());  
+	    
+	    return risultato;
 	}
 
 }
