@@ -7,6 +7,7 @@ import com.betacom.dischi.DTO.UtenteDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
+import com.betacom.dischi.utilities.enums.Roles;
 
 public interface UtenteService {
 	
@@ -21,6 +22,8 @@ public interface UtenteService {
 	void deleteUtente(Integer id) throws CustomException;
 	
 	void updateUtente(UtenteRequest req) throws CustomException;
+
+	List<UtenteDTO> listPerRoles(Roles roles) throws CustomException;
 	
 	
 }

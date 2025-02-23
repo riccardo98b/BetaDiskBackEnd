@@ -17,6 +17,6 @@ public interface ClienteService {
 
 	void delete(ClienteRequest req) throws CustomException;
 
-	List<ClienteDTO> listAll(Integer idCliente, String nome, String cognome);
+	List<ClienteDTO> listAll(Integer idCliente, String nome, String cognome,String cap,String comune,String provincia);
 
 }
