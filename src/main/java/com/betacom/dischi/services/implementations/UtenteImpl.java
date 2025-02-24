@@ -8,12 +8,10 @@ import org.slf4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.DTO.SignInDTO;
 import com.betacom.dischi.DTO.UtenteDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Cliente;
-import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Utente;
 import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.repository.IUtenteRepository;
@@ -21,7 +19,6 @@ import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
 import com.betacom.dischi.services.interfaces.SystemMsgServices;
 import com.betacom.dischi.services.interfaces.UtenteService;
-import com.betacom.dischi.utilities.enums.Formato;
 import com.betacom.dischi.utilities.enums.Roles;
 import jakarta.transaction.Transactional;
 import static com.betacom.dischi.utilities.Utility.*;
@@ -62,6 +59,7 @@ public class UtenteImpl implements UtenteService{
 	            resp.setRole(utente.get().getRoles().toString());
 	            resp.setIdUtente(utente.get().getIdUtente());
                 resp.setIdCliente(utente.get().getCliente().getIdCliente());
+	            resp.setDataRegistrazione(utente.get().getCliente().getDataRegistrazione());
 	        } else {
 	            resp.setLogged(false); 
 	        }
@@ -109,8 +107,8 @@ public class UtenteImpl implements UtenteService{
 	}
 
 	@Override
-	public List<UtenteDTO> listAll(Integer idUtente,String username,String email) {
-	    List<Utente> listaUtenti = utenteRepo.filteredUsers(idUtente, username, email);
+	public List<UtenteDTO> listAll(String username,String email) {
+	    List<Utente> listaUtenti = utenteRepo.filteredUsers(username, email);
 	    return listaUtenti.stream()
 	            .map(u -> buildUtenteDTO(u)) 
 	            .toList();
@@ -146,10 +144,11 @@ public class UtenteImpl implements UtenteService{
 		if(req.getPassword() != null && !req.getPassword().isEmpty()) {
 			utente.setPassword(passwordEncoder.encode(req.getPassword()));
 		}
+		utente.setRoles(Roles.valueOf(req.getRoles()));
 		// se utente ha ruolo admin allora puoi cambiare il ruolo e non viceversa
-		if(req.getIsAdmin()){//valueof
-			utente.setRoles(Roles.valueOf(req.getRoles()));
-		}
+//		if(req.getIsAdmin()){//valueof
+//			utente.setRoles(Roles.valueOf(req.getRoles()));
+//		}
 		utente.setEmail(req.getEmail());
 		utenteRepo.save(utente);
 		

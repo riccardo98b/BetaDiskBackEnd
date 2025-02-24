@@ -15,7 +15,7 @@ public interface UtenteService {
 	
 	void createUser(UtenteRequest req) throws CustomException;
 	
-	List<UtenteDTO> listAll(Integer idUtente,String username,String email);
+	List<UtenteDTO> listAll(String username,String email);
 
 	UtenteDTO listById(Integer id) throws CustomException;
 

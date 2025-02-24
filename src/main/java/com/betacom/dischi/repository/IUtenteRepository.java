@@ -22,7 +22,6 @@ public interface IUtenteRepository extends JpaRepository<Utente, Integer> {
 
 	@Query(name = "utenti.filteredUsers")
 	List<Utente> filteredUsers(
-			@Param("idUtente") Integer idUtente,
 			@Param("username") String username,
 			@Param("email") String email
 	);
