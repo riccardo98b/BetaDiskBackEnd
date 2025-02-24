@@ -2,9 +2,12 @@ package com.betacom.dischi.services.implementations;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import com.betacom.dischi.DTO.SignInDTO;
 import com.betacom.dischi.DTO.UtenteDTO;
 import com.betacom.dischi.exception.CustomException;
@@ -14,6 +17,7 @@ import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.repository.IUtenteRepository;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
+import com.betacom.dischi.services.interfaces.SystemMsgServices;
 import com.betacom.dischi.services.interfaces.UtenteService;
 import com.betacom.dischi.utilities.enums.Roles;
 import jakarta.transaction.Transactional;
@@ -25,15 +29,18 @@ public class UtenteImpl implements UtenteService{
     private  IClienteRepository clienteRepo;
     private  Logger log;
     private  PasswordEncoder passwordEncoder;
+    private SystemMsgServices msgServ;
 
-    public UtenteImpl(IUtenteRepository utenteRepo, 
-                       IClienteRepository clienteRepo, 
-                       Logger log, 
-                       PasswordEncoder passwordEncoder) {
+    public UtenteImpl(IUtenteRepository utenteRepo,
+                       IClienteRepository clienteRepo,
+                       Logger log,
+                       PasswordEncoder passwordEncoder,
+                       SystemMsgServices msgServ) {
         this.utenteRepo = utenteRepo;
         this.clienteRepo = clienteRepo;
         this.log = log;
         this.passwordEncoder = passwordEncoder;
+        this.msgServ = msgServ;
     }
 
 
@@ -41,23 +48,23 @@ public class UtenteImpl implements UtenteService{
 	public SignInDTO signIn(SignInRequest req)  {
 	    log.debug("Signin utente: " + req.getUsername());
 	    SignInDTO resp = new SignInDTO();
-	    
+
 	    Optional<Utente> utente = utenteRepo.findByUsername(req.getUsername());
-	    
+
 	    if (utente.isEmpty()) {
-	        resp.setLogged(false); 
+	        resp.setLogged(false);
 	    } else {
 	        if (passwordEncoder.matches(req.getPassword(), utente.get().getPassword())) {
-	            resp.setLogged(true); 
+	            resp.setLogged(true);
 	            resp.setRole(utente.get().getRoles().toString());
 	            resp.setIdUtente(utente.get().getIdUtente());
                 resp.setIdCliente(utente.get().getCliente().getIdCliente());
                 resp.setDataRegistrazione(utente.get().getCliente().getDataRegistrazione());
 	        } else {
-	            resp.setLogged(false); 
+	            resp.setLogged(false);
 	        }
 	    }
-	    
+
 	    return resp;
 	}
 
@@ -66,10 +73,10 @@ public class UtenteImpl implements UtenteService{
 	@Override
 	public void createUser(UtenteRequest req) throws CustomException {
 	 log.debug("Crea utente: "+req);
-     Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());	
+     Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
      if(optUtente.isPresent()) {
     	 throw new CustomException("Utente con questo username già esistente");
-    	 
+
      }
      if(req.getRoles() == null) {
     	 req.setRoles("UTENTE");
@@ -100,13 +107,13 @@ public class UtenteImpl implements UtenteService{
 	}
 
 	@Override
-	public List<UtenteDTO> listAll(Integer idUtente,String username,String email) {
-	    List<Utente> listaUtenti = utenteRepo.filteredUsers(idUtente, username, email);
+	public List<UtenteDTO> listAll(String username,String email) {
+	    List<Utente> listaUtenti = utenteRepo.filteredUsers(username, email);
 	    return listaUtenti.stream()
-	            .map(u -> buildUtenteDTO(u)) 
+	            .map(u -> buildUtenteDTO(u))
 	            .toList();
 	}
-	
+
 	@Transactional
 	@Override
 	public void deleteUtente(Integer id) throws CustomException{
@@ -119,9 +126,9 @@ public class UtenteImpl implements UtenteService{
 			clienteRepo.save(cliente);
 		}
 		utenteRepo.delete(utente);
-		
+
 	}
-	
+
 	@Override
 	public void updateUtente(UtenteRequest req) throws CustomException{
 		log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
@@ -137,22 +144,37 @@ public class UtenteImpl implements UtenteService{
 		if(req.getPassword() != null && !req.getPassword().isEmpty()) {
 			utente.setPassword(passwordEncoder.encode(req.getPassword()));
 		}
+		utente.setRoles(Roles.valueOf(req.getRoles()));
 		// se utente ha ruolo admin allora puoi cambiare il ruolo e non viceversa
-		if(req.getIsAdmin()){//valueof
-			utente.setRoles(Roles.valueOf(req.getRoles()));
-		}
-		// TODO: EMAIL
+//		if(req.getIsAdmin()){//valueof
+//			utente.setRoles(Roles.valueOf(req.getRoles()));
+//		}
 		utente.setEmail(req.getEmail());
 		utenteRepo.save(utente);
-		
+
 	}
-	  
+
 	@Override
 	public UtenteDTO listById(Integer id) throws CustomException {
 		log.debug("Visualizzazione dati utente con ID: " + id);
 	    Utente utente = utenteRepo.findById(id)
 	    		.orElseThrow(() -> new CustomException("Utente non trovato"));
 		return buildUtenteDTO(utente);
+	}
+
+	@Transactional(rollbackOn = CustomException.class)
+	@Override
+	public List<UtenteDTO> listPerRoles(Roles roles) throws CustomException {
+
+		List<Utente> listaFiltrata = utenteRepo.utentiPerRoles(roles);
+		if(listaFiltrata.isEmpty() || listaFiltrata == null)
+			throw new CustomException(msgServ.getSysMsg(""));
+
+		List<UtenteDTO> risultato = listaFiltrata.stream()
+				.map(p -> buildUtenteDTO(p))
+	            .collect(Collectors.toList());
+
+	    return risultato;
 	}
 
 }
