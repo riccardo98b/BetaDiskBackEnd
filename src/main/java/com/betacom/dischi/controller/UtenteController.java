@@ -18,6 +18,7 @@ import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.response.ResponseObject;
 import com.betacom.dischi.services.interfaces.UtenteService;
+import com.betacom.dischi.utilities.enums.Roles;
 
 @CrossOrigin(origins="*")
 @RestController
@@ -32,12 +33,12 @@ public class UtenteController {
 	
 	
 	@GetMapping("/listAll")
-	public ResponseList<UtenteDTO>list(Integer idUtente,String username,String email) {
+	public ResponseList<UtenteDTO>list(String username,String email) {
 		log.debug("Lista di tutti gli utenti: ");
 		ResponseList<UtenteDTO> response = new ResponseList<UtenteDTO>();
 		response.setRc(true);
 		try {
-			response.setDati(utenteService.listAll(idUtente,username,email)); 
+			response.setDati(utenteService.listAll(username,email)); 
 			response.setRc(true);
 	        response.setMsg("Visualizzazione lista utenti");
 		}catch(Exception e) {
@@ -46,7 +47,23 @@ public class UtenteController {
 			response.setRc(false);
 		}
 		return response;
-		
+	}
+	
+	@GetMapping("/listAllRoles")
+	public ResponseList<UtenteDTO>listUtentiPerRoles(Roles roles) {
+		log.debug("Lista di tutti gli utenti: ");
+		ResponseList<UtenteDTO> response = new ResponseList<UtenteDTO>();
+		response.setRc(true);
+		try {
+			response.setDati(utenteService.listPerRoles(roles)); 
+			response.setRc(true);
+	        response.setMsg("Visualizzazione lista utenti per ruolo");
+		}catch(Exception e) {
+			log.error(e.getMessage());
+			response.setMsg(e.getMessage());
+			response.setRc(false);
+		}
+		return response;
 	}
 	
 	

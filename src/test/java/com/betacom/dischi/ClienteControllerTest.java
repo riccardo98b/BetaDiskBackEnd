@@ -140,7 +140,7 @@ public class ClienteControllerTest {
 		    ResponseBase response = clienteController.create(req);
 
 	        // Now call the listAll method and assert
-	        ResponseList<ClienteDTO> responseList = clienteController.list(null, null, null);
+	        ResponseList<ClienteDTO> responseList = clienteController.list(null, null, null,null,null,null);
 	        Assertions.assertThat(responseList).isNotNull();
 	        Assertions.assertThat(responseList.getDati()).isNotEmpty();
 	    }
