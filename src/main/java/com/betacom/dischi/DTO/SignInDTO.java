@@ -3,13 +3,13 @@ package com.betacom.dischi.DTO;
 import java.time.LocalDate;
 
 public class SignInDTO {
-	
+
 	private Boolean logged;
 	private String role;
-    private Integer idUtente; 
+    private Integer idUtente;
     private Integer idCliente;
     private LocalDate dataRegistrazione;
-	
+
 	public SignInDTO() {
 		super();
 	}
@@ -52,6 +52,6 @@ public class SignInDTO {
 		this.dataRegistrazione = dataRegistrazione;
 	}
 
-	
+
 
 }

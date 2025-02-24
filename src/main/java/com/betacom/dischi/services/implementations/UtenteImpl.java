@@ -31,9 +31,9 @@ public class UtenteImpl implements UtenteService{
     private  PasswordEncoder passwordEncoder;
     private SystemMsgServices msgServ;
 
-    public UtenteImpl(IUtenteRepository utenteRepo, 
-                       IClienteRepository clienteRepo, 
-                       Logger log, 
+    public UtenteImpl(IUtenteRepository utenteRepo,
+                       IClienteRepository clienteRepo,
+                       Logger log,
                        PasswordEncoder passwordEncoder,
                        SystemMsgServices msgServ) {
         this.utenteRepo = utenteRepo;
@@ -48,23 +48,23 @@ public class UtenteImpl implements UtenteService{
 	public SignInDTO signIn(SignInRequest req)  {
 	    log.debug("Signin utente: " + req.getUsername());
 	    SignInDTO resp = new SignInDTO();
-	    
+
 	    Optional<Utente> utente = utenteRepo.findByUsername(req.getUsername());
-	    
+
 	    if (utente.isEmpty()) {
-	        resp.setLogged(false); 
+	        resp.setLogged(false);
 	    } else {
 	        if (passwordEncoder.matches(req.getPassword(), utente.get().getPassword())) {
-	            resp.setLogged(true); 
+	            resp.setLogged(true);
 	            resp.setRole(utente.get().getRoles().toString());
 	            resp.setIdUtente(utente.get().getIdUtente());
                 resp.setIdCliente(utente.get().getCliente().getIdCliente());
-	            resp.setDataRegistrazione(utente.get().getCliente().getDataRegistrazione());
+                resp.setDataRegistrazione(utente.get().getCliente().getDataRegistrazione());
 	        } else {
-	            resp.setLogged(false); 
+	            resp.setLogged(false);
 	        }
 	    }
-	    
+
 	    return resp;
 	}
 
@@ -73,10 +73,10 @@ public class UtenteImpl implements UtenteService{
 	@Override
 	public void createUser(UtenteRequest req) throws CustomException {
 	 log.debug("Crea utente: "+req);
-     Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());	
+     Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
      if(optUtente.isPresent()) {
     	 throw new CustomException("Utente con questo username già esistente");
-    	 
+
      }
      if(req.getRoles() == null) {
     	 req.setRoles("UTENTE");
@@ -110,10 +110,10 @@ public class UtenteImpl implements UtenteService{
 	public List<UtenteDTO> listAll(String username,String email) {
 	    List<Utente> listaUtenti = utenteRepo.filteredUsers(username, email);
 	    return listaUtenti.stream()
-	            .map(u -> buildUtenteDTO(u)) 
+	            .map(u -> buildUtenteDTO(u))
 	            .toList();
 	}
-	
+
 	@Transactional
 	@Override
 	public void deleteUtente(Integer id) throws CustomException{
@@ -126,9 +126,9 @@ public class UtenteImpl implements UtenteService{
 			clienteRepo.save(cliente);
 		}
 		utenteRepo.delete(utente);
-		
+
 	}
-	
+
 	@Override
 	public void updateUtente(UtenteRequest req) throws CustomException{
 		log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
@@ -151,9 +151,9 @@ public class UtenteImpl implements UtenteService{
 //		}
 		utente.setEmail(req.getEmail());
 		utenteRepo.save(utente);
-		
+
 	}
-	  
+
 	@Override
 	public UtenteDTO listById(Integer id) throws CustomException {
 		log.debug("Visualizzazione dati utente con ID: " + id);
@@ -161,19 +161,19 @@ public class UtenteImpl implements UtenteService{
 	    		.orElseThrow(() -> new CustomException("Utente non trovato"));
 		return buildUtenteDTO(utente);
 	}
-	
+
 	@Transactional(rollbackOn = CustomException.class)
 	@Override
 	public List<UtenteDTO> listPerRoles(Roles roles) throws CustomException {
-		
+
 		List<Utente> listaFiltrata = utenteRepo.utentiPerRoles(roles);
 		if(listaFiltrata.isEmpty() || listaFiltrata == null)
 			throw new CustomException(msgServ.getSysMsg(""));
-		
+
 		List<UtenteDTO> risultato = listaFiltrata.stream()
-				.map(p -> buildUtenteDTO(p)) 
-	            .collect(Collectors.toList());  
-	    
+				.map(p -> buildUtenteDTO(p))
+	            .collect(Collectors.toList());
+
 	    return risultato;
 	}
 

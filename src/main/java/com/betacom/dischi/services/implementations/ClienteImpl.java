@@ -34,13 +34,19 @@ public class ClienteImpl implements ClienteService {
 	}
 
 	@Override
-	public void create(ClienteRequest req) throws CustomException {
+	public ClienteDTO create(ClienteRequest req) throws CustomException {
 		log.debug("Create Cliente: " + req);
 		Cliente cliente = new Cliente();
 		checkAndSetFields(req, cliente);
 		cliente.setDataRegistrazione(LocalDate.now());
 		log.debug("Cliente creato con ID: " + cliente.getIdCliente() + " e dettagli: " + cliente);
-		clienteRepo.save(cliente);
+	    cliente = clienteRepo.save(cliente); 
+	    ClienteDTO clienteDTO = new ClienteDTO.Builder()
+	            .idCliente(cliente.getIdCliente()) 
+	            .dataRegistrazione(cliente.getDataRegistrazione())
+	            .build();  
+	    return clienteDTO;  
+       
 	}
 
 	@Override

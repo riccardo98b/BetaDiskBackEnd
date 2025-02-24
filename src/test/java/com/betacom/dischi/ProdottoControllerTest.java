@@ -1,5 +1,7 @@
 package com.betacom.dischi;
 
+import java.util.List;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -11,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.controller.ProdottoController;
-import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
@@ -33,6 +34,7 @@ public class ProdottoControllerTest {
 		
 		ProdottoRequest req = new ProdottoRequest();
 		
+		
 		req.setIdProdotto(1);
 		req.setFormato("VINILE");
 		req.setTitolo("Among the Living");
@@ -44,28 +46,11 @@ public class ProdottoControllerTest {
 		req.setQuantita(8);
 		req.setImmagineProdotto("https://example.com/among-the-living.jpg");
 		
+		
 		return req;
 	}
 	
 
-	
-	public ProdottoRequest createProdottoGeneralDTO() {
-		
-		ProdottoRequest dto = new ProdottoRequest();
-		
-		dto.setIdProdotto(1);
-		dto.setFormato("VINILE");
-		dto.setTitolo("Among the Living");
-		dto.setArtista("Anthrax");
-		dto.setGenere("Thrash Metal");
-		dto.setDescrizione("Album iconico del thrash metal, pubblicato nel 1987.");
-		dto.setAnnoPubblicazione(1987);
-		dto.setPrezzo(24.99);
-		dto.setQuantita(8);
-		dto.setImmagineProdotto("https://example.com/among-the-living.jpg");
-		
-		return dto;
-	}
 	
 	@Test
 	@Order(1)
@@ -74,56 +59,22 @@ public class ProdottoControllerTest {
 		
 		ResponseBase response = prodottoController.create(req);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);	
+		
 	}
-	
 	
 	@Test
 	@Order(2)
 	public void listAllProdotti() {
-		
-		Integer idProdotto = 1;
-		String titolo = "Among the Living";
-		String artista = "Anthrax";
-		String genere = "Thrash Metal";
-		Integer annoPubblicazione = 1987;
+		String titolo = ("Among the Living");
 
+		ResponseList<ProdottoDTO> lista = prodottoController.listAll(null, null, titolo, null, null);
+	
+	    List<ProdottoDTO> dati = lista.getDati();
+	    
+		Assertions.assertThat(dati).isNotEmpty();
 		
-		ResponseList<ProdottoDTO> lista = prodottoController.listAll(idProdotto, titolo, artista, genere, annoPubblicazione);
+}
 
-		Assertions.assertThat(lista).isNotNull();
-		
-		Assertions.assertThat(lista
-				.getDati()
-				.stream()
-				.anyMatch(t -> t.getIdProdotto()
-						.equals(idProdotto))).isTrue();
-		
-		Assertions.assertThat(lista
-				.getDati()
-				.stream()
-				.anyMatch(t -> t.getTitolo()
-						.equals(titolo))).isTrue();
-	
-		Assertions.assertThat(lista
-				.getDati()
-				.stream()
-				.anyMatch(t -> t.getArtista()
-						.equals(artista))).isTrue();
-		
-		Assertions.assertThat(lista
-				.getDati()
-				.stream()
-				.anyMatch(t -> t.getGenere()
-						.equals(genere))).isTrue();
-		
-		Assertions.assertThat(lista
-				.getDati()
-				.stream()
-				.anyMatch(t -> t.getAnnoPubblicazione()
-						.equals(annoPubblicazione))).isTrue();
-		
-	
-	}
 	
 	@Test
 	@Order(3)

@@ -59,9 +59,10 @@ public class WishlistController {
     @PostMapping("/removeProduct")
     public ResponseBase removeProduct(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setRc(true);
         try {
-            wishlistService.removeProductFromWishlist(req.getIdCliente(), req.getIdProdotti().get(0)); // Assuming 1 product per request
+            // Passiamo idCliente e idProdotti (primo prodotto) al servizio
+            wishlistService.removeProductFromWishlist(req.getIdCliente(), req.getIdProdotti().get(0)); 
+            response.setRc(true);
             response.setMsg("Prodotto rimosso dalla wishlist con successo.");
         } catch (CustomException e) {
             response.setRc(false);
@@ -72,6 +73,7 @@ public class WishlistController {
         }
         return response;
     }
+
     
     @PostMapping("/clearWishlist")
     public ResponseBase clearWishlist(@RequestBody WishlistRequest req) {

@@ -5,6 +5,7 @@ public class OrdineRequest {
 	private Integer idOrdine;
 	private Boolean spedito;
 	private Integer idCliente;
+	private String dataRicerca;
 	public Integer getIdOrdine() {
 		return idOrdine;
 	}
@@ -26,6 +27,12 @@ public class OrdineRequest {
 	@Override
 	public String toString() {
 		return "OrdineRequest [idOrdine=" + idOrdine + ", spedito=" + spedito + ", idCliente=" + idCliente + "]";
+	}
+	public String getDataRicerca() {
+		return dataRicerca;
+	}
+	public void setDataRicerca(String dataRicerca) {
+		this.dataRicerca = dataRicerca;
 	}
 
 	

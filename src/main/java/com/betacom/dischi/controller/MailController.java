@@ -20,12 +20,41 @@ public class MailController {
 	@Autowired
 	MailService mailServ;
 
-	@PostMapping("/conferma")
-	public ResponseBase getConferma(@RequestBody(required = true) MailRequest request){
+	@PostMapping("/conferma-ordine")
+	public ResponseBase getConfermaOrdine(@RequestBody(required = true) MailRequest request){
 		ResponseBase response = new ResponseBase();
 		response.setRc(true);
 		try {
 			mailServ.mailConfermaOrdine(request);
+			response.setMsg("Mail inviata correttamente");
+		} catch (CustomException e) {
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
+	
+	@PostMapping("/conferma-registrazione")
+	public ResponseBase getConfermaRegistrazione(@RequestBody(required = true) MailRequest request){
+		ResponseBase response = new ResponseBase();
+		response.setRc(true);
+		try {
+			mailServ.mailConfermaRegistrazione(request);
+			response.setMsg("Mail inviata correttamente");
+		} catch (CustomException e) {
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
+	
+
+	@PostMapping("/ordine-spedito")
+	public ResponseBase ordineSpedito(@RequestBody(required = true) MailRequest request){
+		ResponseBase response = new ResponseBase();
+		response.setRc(true);
+		try {
+			mailServ.mailSpedizioneOrdine(request);
 			response.setMsg("Mail inviata correttamente");
 		} catch (CustomException e) {
 			response.setRc(false);
