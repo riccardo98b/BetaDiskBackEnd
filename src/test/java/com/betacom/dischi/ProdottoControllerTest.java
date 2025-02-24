@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.betacom.dischi.DTO.ProdottoDTO;
 import com.betacom.dischi.controller.ProdottoController;
+import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
@@ -65,9 +66,11 @@ public class ProdottoControllerTest {
 	@Test
 	@Order(2)
 	public void listAllProdotti() {
-		String titolo = ("Among the Living");
+		
+		String titolo = "Among the Living";
+		
 
-		ResponseList<ProdottoDTO> lista = prodottoController.listAll(null, null, titolo, null, null);
+		ResponseList<ProdottoDTO> lista = prodottoController.listAll(null, titolo, null, null, null);
 	
 	    List<ProdottoDTO> dati = lista.getDati();
 	    
@@ -75,9 +78,18 @@ public class ProdottoControllerTest {
 		
 }
 
-	
 	@Test
 	@Order(3)
+	public void listAllProdottiError() throws CustomException{
+
+		ResponseList<ProdottoDTO> lista = prodottoController.listAll(50, null, null, null, null);
+		
+		Assertions.assertThat(lista.getRc()).isEqualTo(false);
+		
+}
+	
+	@Test
+	@Order(4)
 	public void listaFiltrataFormato() {
 		Formato formato = Formato.VINILE;
 		
@@ -96,7 +108,7 @@ public class ProdottoControllerTest {
 	
 	
 	@Test
-	@Order(4)
+	@Order(5)
 	public void updateProdotto() {
 		
 		ProdottoRequest req = createProdottoGeneralRequest();
@@ -113,7 +125,7 @@ public class ProdottoControllerTest {
 	
 	
 	@Test
-	@Order(5)
+	@Order(6)
 	public void deleteProdotto() {
 	
 		ProdottoRequest req = createProdottoGeneralRequest();
@@ -124,7 +136,7 @@ public class ProdottoControllerTest {
 	}
 	
 	@Test
-	@Order(6)
+	@Order(7)
 	public void createProdottoTestPerSuccessivo(){
 		ProdottoRequest req = createProdottoGeneralRequest();
 		
