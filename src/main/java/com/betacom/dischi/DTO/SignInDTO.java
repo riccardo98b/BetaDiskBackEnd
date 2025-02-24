@@ -1,12 +1,14 @@
 package com.betacom.dischi.DTO;
 
+import java.time.LocalDate;
+
 public class SignInDTO {
 	
 	private Boolean logged;
 	private String role;
     private Integer idUtente; 
     private Integer idCliente;
-
+    private LocalDate dataRegistrazione;
 	
 	public SignInDTO() {
 		super();
@@ -42,6 +44,12 @@ public class SignInDTO {
 	}
 	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
+	}
+	public LocalDate getDataRegistrazione() {
+		return dataRegistrazione;
+	}
+	public void setDataRegistrazione(LocalDate dataRegistrazione) {
+		this.dataRegistrazione = dataRegistrazione;
 	}
 
 	

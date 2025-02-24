@@ -106,7 +106,7 @@ public class UtenteControllerTest {
 	@Test
 	@Order(5)
 	public void listAllUtente_shouldReturnListOfUtente() {
-		ResponseList<UtenteDTO> responseList = utenteController.list(null, null, null);
+		ResponseList<UtenteDTO> responseList = utenteController.list( null, null);
 	    Assertions.assertThat(responseList).isNotNull();
 	}
 	

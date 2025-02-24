@@ -33,12 +33,12 @@ public class UtenteController {
 	
 	
 	@GetMapping("/listAll")
-	public ResponseList<UtenteDTO>list(Integer idUtente,String username,String email) {
+	public ResponseList<UtenteDTO>list(String username,String email) {
 		log.debug("Lista di tutti gli utenti: ");
 		ResponseList<UtenteDTO> response = new ResponseList<UtenteDTO>();
 		response.setRc(true);
 		try {
-			response.setDati(utenteService.listAll(idUtente,username,email)); 
+			response.setDati(utenteService.listAll(username,email)); 
 			response.setRc(true);
 	        response.setMsg("Visualizzazione lista utenti");
 		}catch(Exception e) {
