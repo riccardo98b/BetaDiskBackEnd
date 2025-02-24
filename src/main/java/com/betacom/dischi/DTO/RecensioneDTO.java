@@ -1,6 +1,7 @@
 package com.betacom.dischi.DTO;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class RecensioneDTO {
 
@@ -88,5 +89,6 @@ public class RecensioneDTO {
 	public LocalDate getDataCreazione() {
 		return dataCreazione;
 	}
-
+	
+	
 }

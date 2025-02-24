@@ -46,4 +46,39 @@ public class MailService {
         //message.setFrom("betadisk@betacom.com");
         mailSender.send(message);
      }
+     
+     public void mailConfermaRegistrazione(MailRequest request) throws CustomException{
+    	 StringBuilder testo = new StringBuilder();
+    	 
+    	 testo.append("Ciao, ")
+    	      .append(request.getNome()).append(" ")
+    	      .append(request.getCognome()).append(", \n")
+    	      .append("La tua registrazione su BetaDisk è andata a buon fine! \n" )
+    	      .append("Se hai bisogno di assistenza, non esitare a contattarci.\n")
+    	      .append( "Grazie per esserti registrato!"
+    	      		);
+    		SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(request.getToEmail());
+            message.setSubject("Registrazione confermata");
+            message.setText(testo.toString());
+    	    mailSender.send(message);
+     }
+     
+     public void mailSpedizioneOrdine(MailRequest request) throws CustomException {
+     	StringBuilder text = new StringBuilder();
+     	text.append("Ciao ")
+     		.append(request.getNome()).append(" ")
+     		.append(request.getCognome()).append(",\n")
+     		.append("Il tuo ordine del ")
+     		.append(request.getDataOrdine()).append("\n")
+     		.append("presso BetaDisk è stato spedito!")
+     		.append("\n")
+     		.append("Grazie dal team BetaDisk!");
+     	 
+     	SimpleMailMessage message = new SimpleMailMessage();
+         message.setTo(request.getToEmail());
+         message.setSubject("Ordine BetaDisk spedito");
+         message.setText(text.toString());
+         mailSender.send(message);
+      }
 }

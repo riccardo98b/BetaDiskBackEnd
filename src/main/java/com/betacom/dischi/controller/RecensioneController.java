@@ -82,7 +82,21 @@ public class RecensioneController {
 		return response;
 	}
 	
-
+	@PostMapping("/update")
+	public ResponseBase update(@RequestBody(required = true) RecensioneRequest req) {
+		ResponseBase response = new ResponseBase();
+		log.debug(req.toString());
+		try {
+			recensioneService.update(req);
+			response.setRc(true);
+	        response.setMsg("Recensione aggiornata con successo!");
+		}
+		catch(Exception e) {
+			response.setMsg(e.getMessage());
+			response.setRc(false);
+		}
+		return response;
+	}
 	
 	@PostMapping("/delete")
 	public ResponseBase delete(@RequestBody(required = true) RecensioneRequest req) {
@@ -98,6 +112,22 @@ public class RecensioneController {
 	    return response;
 	}
 	
-
+	@GetMapping("/lista-recensioni")
+	public ResponseList<RecensioneDTO>listaRecensioni(Integer id) {
+		log.debug("Lista di tutte le recensioni: " + id);
+		ResponseList<RecensioneDTO> response = new ResponseList<RecensioneDTO>();
+		response.setRc(true);
+		try {
+			response.setDati(recensioneService.listaProdottiDaRecensire(id)); 
+			response.setRc(true);
+	        response.setMsg("Visualizzazione lista recensioni");
+		}catch(Exception e) {
+			log.error(e.getMessage());
+			response.setMsg(e.getMessage());
+			response.setRc(false);
+		}
+		return response;
+		
+	}
 
 }

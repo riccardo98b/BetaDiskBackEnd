@@ -66,13 +66,14 @@ import com.betacom.dischi.services.interfaces.ClienteService;
 		
 		
 		@PostMapping("/create")
-		public ResponseBase create(@RequestBody(required = true) ClienteRequest req) {
-			ResponseBase response = new ResponseBase();
+		public ResponseObject<ClienteDTO> create(@RequestBody(required = true) ClienteRequest req) {
+			ResponseObject<ClienteDTO> response = new ResponseObject<ClienteDTO>();
 			log.debug(req.toString());
 			try {
-				clienteService.create(req);
+		        ClienteDTO clienteDTO = clienteService.create(req);  
 				response.setRc(true);
-		        response.setMsg("Cliente creato con successo!");
+				response.setDati(clienteDTO);
+				response.setMsg("Cliente creato con successo!");
 			}
 			catch(Exception e) {
 				response.setMsg(e.getMessage());

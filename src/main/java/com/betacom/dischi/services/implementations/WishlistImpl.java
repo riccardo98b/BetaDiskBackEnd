@@ -59,9 +59,16 @@ public class WishlistImpl implements WishlistService {
         
         Cliente cliente = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new CustomException("Cliente con ID: " + idCliente + " non trovato."));
-        
+
+        // Controlla se la wishlist esiste, altrimenti la crea
         Wishlist wishlist = wishlistRepository.findByCliente(cliente)
-                .orElseThrow(() -> new CustomException("Wishlist non trovata per il cliente ID: " + idCliente));
+                .orElseGet(() -> {
+                    log.debug("Wishlist non trovata per il cliente ID: " + idCliente + ", creazione in corso...");
+                    Wishlist nuovaWishlist = new Wishlist();
+                    nuovaWishlist.setCliente(cliente);
+                    nuovaWishlist.setProdotti(new ArrayList<>());
+                    return wishlistRepository.save(nuovaWishlist);  // Salva la nuova wishlist
+                });
 
         Prodotto prodotto = prodottoRepository.findById(idProdotto)
                 .orElseThrow(() -> new CustomException("Prodotto con ID: " + idProdotto + " non trovato."));
@@ -74,6 +81,7 @@ public class WishlistImpl implements WishlistService {
             log.debug("Prodotto ID " + idProdotto + " già presente nella Wishlist del cliente ID " + idCliente);
         }
     }
+
 
     @Override
     public void removeProductFromWishlist(Integer idCliente, Integer idProdotto) throws CustomException {
