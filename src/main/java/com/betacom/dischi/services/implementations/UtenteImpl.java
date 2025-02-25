@@ -45,6 +45,7 @@ public class UtenteImpl implements UtenteService{
 
 
 	@Override
+	@Transactional
 	public SignInDTO signIn(SignInRequest req)  {
 	    log.debug("Signin utente: " + req.getUsername());
 	    SignInDTO resp = new SignInDTO();
@@ -131,6 +132,7 @@ public class UtenteImpl implements UtenteService{
 	}
 
 	@Override
+	@Transactional
 	public void updateUtente(UtenteRequest req) throws CustomException{
 		log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
 		Utente utente =  utenteRepo.findById(req.getIdUtente())
