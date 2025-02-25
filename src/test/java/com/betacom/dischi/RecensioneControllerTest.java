@@ -121,5 +121,27 @@ public class RecensioneControllerTest {
 		Assertions.assertThatExceptionOfType(CustomException.class)
 		.isThrownBy(() -> recensioneController.create(reqInvalid));
 	}
+	
+	@Test
+	@Order(9)
+	public void createRecensione_withValidData_shouldCreateRecensione2()  {
+		reqRecensione = new RecensioneRequest();
+		reqRecensione.setIdCliente(VALID_ID);
+		reqRecensione.setIdProdotto(VALID_ID);
+		reqRecensione.setDescrizione("Prodotto di alta qualità");
+		reqRecensione.setStelle(5);
+		ResponseBase responseRecensione = recensioneController.create(reqRecensione);
+		  Assertions.assertThatCode(() -> recensioneController.create(reqRecensione))
+          .doesNotThrowAnyException();	
+	}
+	
+	@Test
+	@Order(10)
+	public void listaRecensioniDaAcquisti() {
+		ResponseList<RecensioneDTO> responseList = recensioneController.listaRecensioni(2);
+		Assertions.assertThat(responseList.getDati().size()).isGreaterThan(0);
+	}
+	
+	
 
 }

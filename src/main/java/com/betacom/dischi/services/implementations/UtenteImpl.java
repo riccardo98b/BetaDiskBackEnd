@@ -45,6 +45,7 @@ public class UtenteImpl implements UtenteService{
 
 
 	@Override
+	@Transactional
 	public SignInDTO signIn(SignInRequest req)  {
 	    log.debug("Signin utente: " + req.getUsername()+" "+req.getPassword()+" ");
 	    SignInDTO resp = new SignInDTO();
@@ -133,6 +134,7 @@ public void changePassword(Integer idUtente, String currentPassword, String newP
 	}
 
 	@Override
+	@Transactional
 	public List<UtenteDTO> listAll(String username,String email) {
 	    List<Utente> listaUtenti = utenteRepo.filteredUsers(username, email);
 	    return listaUtenti.stream()
@@ -156,6 +158,7 @@ public void changePassword(Integer idUtente, String currentPassword, String newP
 	}
 
 	@Override
+	@Transactional
 	public void updateUtente(UtenteRequest req) throws CustomException{
 		log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
 	
@@ -185,6 +188,7 @@ public void changePassword(Integer idUtente, String currentPassword, String newP
 	}
 
 	@Override
+	@Transactional
 	public UtenteDTO listById(Integer id) throws CustomException {
 		log.debug("Visualizzazione dati utente con ID: " + id);
 	    Utente utente = utenteRepo.findById(id)
