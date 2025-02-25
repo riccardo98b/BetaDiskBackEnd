@@ -45,7 +45,6 @@ public class UtenteImpl implements UtenteService{
 
 
 	@Override
-	@Transactional
 	public SignInDTO signIn(SignInRequest req)  {
 	    log.debug("Signin utente: " + req.getUsername()+" "+req.getPassword()+" ");
 	    SignInDTO resp = new SignInDTO();
@@ -86,56 +85,54 @@ public void changePassword(Integer idUtente, String currentPassword, String newP
         throw new CustomException("Password corrente non corretta");
     }
     
+    // Recupera l'utente dal database
     Utente utente = utenteRepo.findById(idUtente)
             .orElseThrow(() -> new CustomException("Utente non trovato"));
 
+    // Imposta la nuova password
     utente.setPassword(passwordEncoder.encode(newPassword));
     utenteRepo.save(utente);
 }
 
 
-@Transactional
-@Override
-public void createUser(UtenteRequest req) throws CustomException {
-    log.debug("Crea utente: " + req);
-    Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
-    if (optUtente.isPresent()) {
-        throw new CustomException("Utente con questo username già esistente");
-    }
-    if (req.getRoles() == null) {
-        req.setRoles("UTENTE");
-    }
+	@Transactional
+	@Override
+	public void createUser(UtenteRequest req) throws CustomException {
+	 log.debug("Crea utente: "+req);
+     Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
+     if(optUtente.isPresent()) {
+    	 throw new CustomException("Utente con questo username già esistente");
 
-    Utente utente = new Utente();
+     }
+     if(req.getRoles() == null) {
+    	 req.setRoles("UTENTE");
+     }
+     Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
+     if(optCliente.isEmpty()) {
+         log.debug("Cliente con ID: "+req.getIdCliente()+ "non trovato");
+    	 throw new CustomException("Cliente non trovato");
+     }
+     Cliente cliente = optCliente.get();
+     if(cliente.getUtente() != null) {
+    	 throw new CustomException("Cliente già associato a un altro utente");
+     }
+     Utente utente = new Utente();
 
-    if (req.getIdCliente() != null) {
-        Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
-        if (optCliente.isPresent()) {
-            Cliente cliente = optCliente.get();
-            if (cliente.getUtente() != null) {
-                throw new CustomException("Cliente già associato a un altro utente");
-            }
-            utente.setCliente(cliente);
-            cliente.setUtente(utente);
-            clienteRepo.save(cliente); 
-        } else {
-            throw new CustomException("Cliente non trovato");
-        }
-    }
-    utente.setPassword(passwordEncoder.encode(req.getPassword()));
-    utente.setRoles(Roles.valueOf(req.getRoles()));
-    utente.setEmail(req.getEmail());
-    utente.setUsername(req.getUsername());
+     utente.setPassword(passwordEncoder.encode(req.getPassword()));
 
-    utenteRepo.save(utente);
+     utente.setRoles(Roles.valueOf(req.getRoles()));
+     utente.setEmail(req.getEmail());
+     utente.setUsername(req.getUsername());
+     utente.setCliente(cliente);
+     //se cliente e gia legato a dati di un altro utente allora lancio
+     // eccezione
+     utenteRepo.save(utente);
 
-    // Se non ci sono problemi con il cliente, l'utente è stato creato correttamente
-    // altrimenti, non avendo il cliente, l'utente viene creato senza associarlo a un cliente.
-}
-
+     cliente.setUtente(utente);
+     clienteRepo.save(cliente);
+	}
 
 	@Override
-	@Transactional
 	public List<UtenteDTO> listAll(String username,String email) {
 	    List<Utente> listaUtenti = utenteRepo.filteredUsers(username, email);
 	    return listaUtenti.stream()
@@ -159,7 +156,6 @@ public void createUser(UtenteRequest req) throws CustomException {
 	}
 
 	@Override
-	@Transactional
 	public void updateUtente(UtenteRequest req) throws CustomException{
 		log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
 	
@@ -189,7 +185,6 @@ public void createUser(UtenteRequest req) throws CustomException {
 	}
 
 	@Override
-	@Transactional
 	public UtenteDTO listById(Integer id) throws CustomException {
 		log.debug("Visualizzazione dati utente con ID: " + id);
 	    Utente utente = utenteRepo.findById(id)
