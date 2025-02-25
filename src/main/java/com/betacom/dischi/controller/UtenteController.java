@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.dischi.DTO.SignInDTO;
 import com.betacom.dischi.DTO.UtenteDTO;
+import com.betacom.dischi.request.CambiaPasswordRequest;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
 import com.betacom.dischi.response.ResponseBase;
@@ -84,12 +85,31 @@ public class UtenteController {
 		return response;
 	}
 	
+	
 
 	
 	@PostMapping("/signin")
 	public SignInDTO signIn(@RequestBody(required = true) SignInRequest req) {
 		return utenteService.signIn(req);
 	}
+	
+	@PostMapping("/changePassword")
+    public ResponseBase changePassword(@RequestBody(required = true) CambiaPasswordRequest req) {
+        ResponseBase response = new ResponseBase();
+        log.debug("Cambio password utente con ID: " + req.getIdUtente());
+
+        try {
+            utenteService.changePassword(req.getIdUtente(), req.getPasswordCorrente(), req.getNuovaPassword());
+            response.setRc(true);
+            response.setMsg("Password cambiata con successo!");
+        } catch (Exception e) {
+            log.error("Errore durante il cambio della password: ", e);
+            response.setRc(false);
+            response.setMsg(e.getMessage());
+        }
+        return response;
+    
+}
 	
 	@GetMapping("/listById")
 	public ResponseObject<UtenteDTO> listById(@RequestParam Integer id) {

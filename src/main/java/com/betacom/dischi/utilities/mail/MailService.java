@@ -54,6 +54,7 @@ public class MailService {
     	      .append(request.getNome()).append(" ")
     	      .append(request.getCognome()).append(", \n")
     	      .append("La tua registrazione su BetaDisk è andata a buon fine! \n" )
+    	      .append("La tua password temporanea è: "+request.getPassword()+" ,ricordati di cambiarla! \n")
     	      .append("Se hai bisogno di assistenza, non esitare a contattarci.\n")
     	      .append( "Grazie per esserti registrato!"
     	      		);
