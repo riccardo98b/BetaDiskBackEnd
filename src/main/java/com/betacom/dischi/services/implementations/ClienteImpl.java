@@ -15,6 +15,9 @@ import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.request.ClienteRequest;
 import com.betacom.dischi.services.interfaces.ClienteService;
 import com.betacom.dischi.utilities.Utility;
+
+import jakarta.transaction.Transactional;
+
 import static com.betacom.dischi.utilities.Utility.*;
 @Service
 public class ClienteImpl implements ClienteService {
@@ -27,6 +30,7 @@ public class ClienteImpl implements ClienteService {
 
 	
 	@Override
+	@Transactional
 	public List<ClienteDTO> listAll(Integer idCliente,String nome,String cognome,String cap,String comune,String provincia) {
 		List<Cliente> listaClienti = clienteRepo.filteredClients(idCliente, nome, cognome,cap,comune,provincia);
 		return listaClienti.stream()
@@ -71,6 +75,7 @@ public class ClienteImpl implements ClienteService {
 	}
 
 	@Override
+	@Transactional
 	public ClienteDTO listById(Integer id) throws CustomException {
 		log.debug("Visualizzazione dati cliente con ID: " + id);
 		Cliente cliente = clienteRepo.findById(id)

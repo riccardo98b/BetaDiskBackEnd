@@ -107,6 +107,7 @@ public class UtenteImpl implements UtenteService{
 	}
 
 	@Override
+	@Transactional
 	public List<UtenteDTO> listAll(String username,String email) {
 	    List<Utente> listaUtenti = utenteRepo.filteredUsers(username, email);
 	    return listaUtenti.stream()
@@ -155,6 +156,7 @@ public class UtenteImpl implements UtenteService{
 	}
 
 	@Override
+	@Transactional
 	public UtenteDTO listById(Integer id) throws CustomException {
 		log.debug("Visualizzazione dati utente con ID: " + id);
 	    Utente utente = utenteRepo.findById(id)

@@ -180,6 +180,7 @@ public class ProdottoImpl implements ProdottoService{
 		List<Formato> listaFormati = Arrays.asList(Formato.values());
 		return listaFormati;
 		
+		
 	}
 
 	
