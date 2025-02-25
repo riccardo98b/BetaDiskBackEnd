@@ -119,6 +119,21 @@ public class ProdottoController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/formati")
+	public ResponseList<Formato> getFormati(){
+		ResponseList<Formato> response = new ResponseList<Formato>();
+		response.setRc(true);
+		try {
+			response.setDati(prodottoService.listaDeiFormati());
+	
+		}catch(Exception e) {
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
+	
 }
 	
 	
