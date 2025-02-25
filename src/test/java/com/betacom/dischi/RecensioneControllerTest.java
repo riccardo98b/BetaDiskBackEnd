@@ -121,5 +121,14 @@ public class RecensioneControllerTest {
 		Assertions.assertThatExceptionOfType(CustomException.class)
 		.isThrownBy(() -> recensioneController.create(reqInvalid));
 	}
+	
+	@Test
+	@Order(8)
+	public void listaRecensioniDaAcquisti() {
+		ResponseList<RecensioneDTO> responseList = recensioneController.listaRecensioni(1);
+		Assertions.assertThat(responseList.getDati().size()).isGreaterThan(0);
+	}
+	
+	
 
 }

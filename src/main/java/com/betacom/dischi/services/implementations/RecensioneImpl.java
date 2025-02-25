@@ -25,6 +25,8 @@ import com.betacom.dischi.services.interfaces.OrdineService;
 import com.betacom.dischi.services.interfaces.RecensioneService;
 import com.betacom.dischi.utilities.Utility;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class RecensioneImpl implements RecensioneService {
 	
@@ -46,6 +48,7 @@ public class RecensioneImpl implements RecensioneService {
 
 
 	@Override
+	@Transactional
 	public List<RecensioneDTO> listAll(Integer idRecensione,Integer stelle) {
 	    List<Recensione> listaRecensioni = recensioneRepo.filteredReviews(idRecensione, stelle); 
 	    return listaRecensioni.stream()
@@ -56,6 +59,7 @@ public class RecensioneImpl implements RecensioneService {
 	
 	
 	@Override
+	@Transactional
 	public void create(RecensioneRequest req) throws CustomException {
 		log.debug("Create recensione: "+req);
 		Recensione recensione = new Recensione();
@@ -65,6 +69,7 @@ public class RecensioneImpl implements RecensioneService {
 	}
 
 	@Override
+	@Transactional
 	public void update(RecensioneRequest req) throws CustomException {
 		Recensione recensione = recensioneRepo.findById(req.getIdRecensione())
 				.orElseThrow(() -> new CustomException("Recensione non trovata"));
@@ -84,6 +89,7 @@ public class RecensioneImpl implements RecensioneService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(RecensioneRequest req) throws CustomException {
 		log.debug("Delete recensione: "+req);
 		  Recensione recensione = recensioneRepo.findById(req.getIdRecensione())
@@ -141,6 +147,7 @@ public class RecensioneImpl implements RecensioneService {
 	}
 	
 	@Override
+	@Transactional
 	public RecensioneDTO listById(Integer id) throws CustomException {
 	    Recensione recensione = recensioneRepo.findById(id)
 	            .orElseThrow(() -> new CustomException("Recensione non trovata"));
@@ -150,6 +157,7 @@ public class RecensioneImpl implements RecensioneService {
 
 
 	@Override
+	@Transactional
 	public List<RecensioneDTO> listaProdottiDaRecensire(Integer idCliente) throws CustomException {
 		List<OrdineDTO> listaOrdini = ordineServ.listaByCliente(idCliente);
 		List<RecensioneDTO> listaRecensioni = new ArrayList<RecensioneDTO>();

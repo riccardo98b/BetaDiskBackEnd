@@ -170,9 +170,4 @@ public class CarrelloImpl implements CarrelloService {
 				.build();
 	}
 
-//	@Override
-//	public List<CarrelloDTO> listaProdotti(Integer idCliente) throws CustomException {
-//		List<Cliente> listaCompleta = clienteRepo.findAll();
-//		return listaCompleta.stream().map(cliente -> new CarrelloDTO.Builder().build()).toList();
-//	}
 }
