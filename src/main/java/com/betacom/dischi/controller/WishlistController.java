@@ -29,18 +29,20 @@ public class WishlistController {
     @PostMapping("/create")
     public ResponseBase create(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
-        response.setRc(true);  
         try {
-            wishlistService.create(req); 
+            wishlistService.create(req);  // Attempt to create the wishlist
+            response.setRc(true);  // If successful, set rc to true
+            response.setMsg("Wishlist create con successo");  // Success message
         } catch (CustomException e) {
-            response.setRc(false);
-            response.setMsg("Wishlist create con successo: " + e.getMessage());
-        } catch (Exception e) {  
-            response.setRc(false);
-            response.setMsg("Errore interno nel server: " + e.getMessage());
+            response.setRc(false);  // Set rc to false if there's a CustomException
+            response.setMsg("Errore durante la creazione della wishlist: " + e.getMessage());  // Correct error message
+        } catch (Exception e) {
+            response.setRc(false);  // Set rc to false for any unexpected exception
+            response.setMsg("Errore interno nel server: " + e.getMessage());  // Internal server error message
         }
         return response;
     }
+
 
     @PostMapping("/addProduct")
     public ResponseBase addProduct(@RequestBody WishlistRequest req) {
@@ -60,8 +62,12 @@ public class WishlistController {
     public ResponseBase removeProduct(@RequestBody WishlistRequest req) {
         ResponseBase response = new ResponseBase();
         try {
+            // Log the input to ensure correct product and client IDs are received
+            log.info("Removing product for client: {} with product ID: {}", req.getIdCliente(), req.getIdProdotti());
+
             // Passiamo idCliente e idProdotti (primo prodotto) al servizio
-            wishlistService.removeProductFromWishlist(req.getIdCliente(), req.getIdProdotti().get(0)); 
+            wishlistService.removeProductFromWishlist(req.getIdCliente(), req.getIdProdotti().get(0));
+
             response.setRc(true);
             response.setMsg("Prodotto rimosso dalla wishlist con successo.");
         } catch (CustomException e) {
@@ -71,8 +77,11 @@ public class WishlistController {
             response.setRc(false);
             response.setMsg("Errore interno nel server: " + e.getMessage());
         }
+        // Log the response to see the outcome
+        log.info("Response: {}", response);
         return response;
     }
+
 
     
     @PostMapping("/clearWishlist")
