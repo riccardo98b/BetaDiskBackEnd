@@ -86,52 +86,53 @@ public void changePassword(Integer idUtente, String currentPassword, String newP
         throw new CustomException("Password corrente non corretta");
     }
     
-    // Recupera l'utente dal database
     Utente utente = utenteRepo.findById(idUtente)
             .orElseThrow(() -> new CustomException("Utente non trovato"));
 
-    // Imposta la nuova password
     utente.setPassword(passwordEncoder.encode(newPassword));
     utenteRepo.save(utente);
 }
 
 
-	@Transactional
-	@Override
-	public void createUser(UtenteRequest req) throws CustomException {
-	 log.debug("Crea utente: "+req);
-     Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
-     if(optUtente.isPresent()) {
-    	 throw new CustomException("Utente con questo username già esistente");
+@Transactional
+@Override
+public void createUser(UtenteRequest req) throws CustomException {
+    log.debug("Crea utente: " + req);
+    Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
+    if (optUtente.isPresent()) {
+        throw new CustomException("Utente con questo username già esistente");
+    }
+    if (req.getRoles() == null) {
+        req.setRoles("UTENTE");
+    }
 
-     }
-     if(req.getRoles() == null) {
-    	 req.setRoles("UTENTE");
-     }
-     Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
-     if(optCliente.isEmpty()) {
-         log.debug("Cliente con ID: "+req.getIdCliente()+ "non trovato");
-    	 throw new CustomException("Cliente non trovato");
-     }
-     Cliente cliente = optCliente.get();
-     if(cliente.getUtente() != null) {
-    	 throw new CustomException("Cliente già associato a un altro utente");
-     }
-     Utente utente = new Utente();
+    Utente utente = new Utente();
 
-     utente.setPassword(passwordEncoder.encode(req.getPassword()));
+    if (req.getIdCliente() != null) {
+        Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
+        if (optCliente.isPresent()) {
+            Cliente cliente = optCliente.get();
+            if (cliente.getUtente() != null) {
+                throw new CustomException("Cliente già associato a un altro utente");
+            }
+            utente.setCliente(cliente);
+            cliente.setUtente(utente);
+            clienteRepo.save(cliente); 
+        } else {
+            throw new CustomException("Cliente non trovato");
+        }
+    }
+    utente.setPassword(passwordEncoder.encode(req.getPassword()));
+    utente.setRoles(Roles.valueOf(req.getRoles()));
+    utente.setEmail(req.getEmail());
+    utente.setUsername(req.getUsername());
 
-     utente.setRoles(Roles.valueOf(req.getRoles()));
-     utente.setEmail(req.getEmail());
-     utente.setUsername(req.getUsername());
-     utente.setCliente(cliente);
-     //se cliente e gia legato a dati di un altro utente allora lancio
-     // eccezione
-     utenteRepo.save(utente);
+    utenteRepo.save(utente);
 
-     cliente.setUtente(utente);
-     clienteRepo.save(cliente);
-	}
+    // Se non ci sono problemi con il cliente, l'utente è stato creato correttamente
+    // altrimenti, non avendo il cliente, l'utente viene creato senza associarlo a un cliente.
+}
+
 
 	@Override
 	@Transactional
