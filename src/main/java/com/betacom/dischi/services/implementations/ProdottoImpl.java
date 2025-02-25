@@ -3,7 +3,6 @@ package com.betacom.dischi.services.implementations;
 import static com.betacom.dischi.utilities.Utility.buildProdottoDTO;
 import static com.betacom.dischi.utilities.Utility.validazioneValoriProdotto;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.DTO.ProdottoDTO;
-import com.betacom.dischi.DTO.RecensioneDTO;
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Recensione;
@@ -24,7 +22,6 @@ import com.betacom.dischi.repository.IRecensioneRepository;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.services.interfaces.ProdottoService;
 import com.betacom.dischi.services.interfaces.SystemMsgServices;
-import com.betacom.dischi.utilities.Utility;
 import com.betacom.dischi.utilities.enums.Formato;
 
 import jakarta.transaction.Transactional;
@@ -175,6 +172,7 @@ public class ProdottoImpl implements ProdottoService{
 
 
 	@Override
+	@Transactional
 	public List<Formato> listaDeiFormati() throws CustomException {
 		
 		List<Formato> listaFormati = Arrays.asList(Formato.values());

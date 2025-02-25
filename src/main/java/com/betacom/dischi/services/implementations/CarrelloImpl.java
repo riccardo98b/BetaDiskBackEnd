@@ -46,6 +46,7 @@ public class CarrelloImpl implements CarrelloService {
 	
 	
 	@Override
+	@Transactional
 	public Carrello create(CarrelloRequest request) throws CustomException {
 		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
 		if (cliente.isEmpty()) {
