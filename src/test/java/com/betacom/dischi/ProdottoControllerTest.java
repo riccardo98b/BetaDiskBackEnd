@@ -246,20 +246,97 @@ public class ProdottoControllerTest {
 	
 	@Test
 	@Order(13)
-	public void updateProdottoError() {
+	public void updateProdottoErrorTitolo() {
 		
 		ProdottoRequest req = createProdottoGeneralRequest();
 		req.setTitolo("");
 		ResponseBase response = prodottoController.update(req);
 		Assertions.assertThat(response.getRc()).isEqualTo(false);
-		
-									
+		Assertions.assertThat(response.getMsg()).isEqualTo("Inserisci il titolo del prodotto");							
 	}
-	
-	
 	
 	@Test
 	@Order(14)
+	public void updateProdottoErrorFormato() {
+		
+		ProdottoRequest req = createProdottoGeneralRequest();
+		req.setFormato("");
+		ResponseBase response = prodottoController.update(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+		Assertions.assertThat(response.getMsg()).isEqualTo("Inserisci il formato del prodotto");							
+	}
+	
+	@Test
+	@Order(15)
+	public void updateProdottoErrorArtista() {
+		
+		ProdottoRequest req = createProdottoGeneralRequest();
+		req.setArtista("");
+		ResponseBase response = prodottoController.update(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+		Assertions.assertThat(response.getMsg()).isEqualTo("Inserisci l'artista del prodotto");							
+	}
+	
+	@Test
+	@Order(16)
+	public void updateProdottoErrorGenere() {
+		
+		ProdottoRequest req = createProdottoGeneralRequest();
+		req.setGenere("");
+		ResponseBase response = prodottoController.update(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+		Assertions.assertThat(response.getMsg()).isEqualTo("Inserisci il genere del prodotto");							
+	}
+	
+	@Test
+	@Order(17)
+	public void updateProdottoErrorDescrizione() {
+		
+		ProdottoRequest req = createProdottoGeneralRequest();
+		req.setDescrizione("");
+		ResponseBase response = prodottoController.update(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+		Assertions.assertThat(response.getMsg()).isEqualTo("Inserisci una descrizione del prodotto");							
+	}
+	
+	
+	@Test
+	@Order(18)
+	public void updateProdottoErrorAnnoPubblicazione() {
+		
+		ProdottoRequest req = createProdottoGeneralRequest();
+		req.setAnnoPubblicazione(null);
+		ResponseBase response = prodottoController.update(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+		Assertions.assertThat(response.getMsg()).isEqualTo("Inserisci l'anno di pubblicazione del prodotto");							
+	}
+	
+	@Test
+	@Order(19)
+	public void updateProdottoErrorPrezzo() {
+		
+		ProdottoRequest req = createProdottoGeneralRequest();
+		req.setPrezzo(null);
+		ResponseBase response = prodottoController.update(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+		Assertions.assertThat(response.getMsg()).isEqualTo("Inserisci il prezzo del prodotto");							
+	}
+	
+	
+	@Test
+	@Order(20)
+	public void updateProdottoErrorQuantita() {
+		
+		ProdottoRequest req = createProdottoGeneralRequest();
+		req.setQuantita(null);
+		ResponseBase response = prodottoController.update(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+		Assertions.assertThat(response.getMsg()).isEqualTo("Inserisci una quantità disponibile del prodotto");							
+	}
+	
+	
+	@Test
+	@Order(21)
 	public void deleteProdotto() {
 	
 		ProdottoRequest req = createProdottoGeneralRequest();
@@ -270,7 +347,7 @@ public class ProdottoControllerTest {
 	}
 	
 	@Test
-	@Order(15)
+	@Order(22)
 	public void listProdottiError()throws Exception {
 		prodottoRepository.deleteAll(); 
 	    ResponseList<ProdottoDTO> lista = prodottoController.listAll(null, null, null, null, null);
@@ -279,7 +356,7 @@ public class ProdottoControllerTest {
 	
 	
 	@Test
-	@Order(16)
+	@Order(23)
 	public void deleteError()throws Exception {
 		ProdottoRequest req = createProdottoGeneralRequest();
 		prodottoRepository.deleteAll(); 
@@ -288,7 +365,7 @@ public class ProdottoControllerTest {
 	}
 	
 	@Test
-	@Order(17)
+	@Order(24)
 	public void listTopTenProdottiError() {
 		prodottoRepository.deleteAll(); 
 		ResponseList<ProdottoDTO> listaFormati = prodottoController.topTenProdotti();
@@ -296,7 +373,7 @@ public class ProdottoControllerTest {
 	}
 	
 	@Test
-	@Order(18)
+	@Order(25)
 	public void createProdottoTestPerSuccessivo(){
 		ProdottoRequest req = createProdottoGeneralRequest();
 		
@@ -306,7 +383,7 @@ public class ProdottoControllerTest {
 	
 	
 	@Test
-	@Order(19)
+	@Order(26)
 	public void createProdottoTestPerSuccessivo2(){
 		ProdottoRequest req = createProdottoGeneralRequest();
 		req.setTitolo("Among the Living2");
@@ -317,7 +394,7 @@ public class ProdottoControllerTest {
 	
 	
 	@Test
-	@Order(20)
+	@Order(27)
 	public void listAllFormati() {
 		
 		ResponseList<Formato> listaFormati = prodottoController.getFormati();
@@ -327,7 +404,7 @@ public class ProdottoControllerTest {
 		
 
 	@Test
-	@Order(21)
+	@Order(28)
 	public void listTopTenProdotti()throws CustomException {
 		
 		ResponseList<ProdottoDTO> listaFormati = prodottoController.topTenProdotti();
