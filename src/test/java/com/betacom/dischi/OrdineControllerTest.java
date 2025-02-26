@@ -29,12 +29,27 @@ public class OrdineControllerTest {
 	CarrelloController controllerP;
 	
 	@Test
+	@Order(0)
+	public void listaOrdiniAdminErr() {
+		ResponseList<OrdineDTO> response = controller.listAll(LocalDate.now().toString());
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+	}
+	
+	@Test
 	@Order(1)
 	public void creaOrdine(){
 		OrdineRequest request = new OrdineRequest();
 		request.setIdCliente(2);
 		ResponseBase response = controller.create(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
+	}
+	@Test
+	@Order(10)
+	public void creaOrdineErr(){
+		OrdineRequest request = new OrdineRequest();
+		request.setIdCliente(2);
+		ResponseBase response = controller.create(request);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
 	}
 	
 	@Test
@@ -45,6 +60,24 @@ public class OrdineControllerTest {
 		request.setSpedito(true);
 		ResponseBase response = controller.update(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
+	}
+	
+	@Test
+	@Order(3)
+	public void updateOrdineErr(){
+		OrdineRequest request = new OrdineRequest();
+		request.setIdOrdine(1);
+		request.setSpedito(false);
+		ResponseBase response = controller.update(request);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
+	}
+	@Test
+	@Order(11)
+	public void deleteOrdineErr(){
+		OrdineRequest request = new OrdineRequest();
+		request.setIdOrdine(1);
+		ResponseBase response = controller.delete(request);
+		Assertions.assertThat(response.getRc()).isEqualTo(false);
 	}
 	
 	@Test
@@ -98,6 +131,13 @@ public class OrdineControllerTest {
 	@Order(9)
 	public void listaOrdiniAdmin() {
 		ResponseList<OrdineDTO> response = controller.listAll(LocalDate.now().toString());
+		Assertions.assertThat(response.getRc()).isEqualTo(true);
+		Assertions.assertThat(response.getDati().size()).isGreaterThan(0);
+	}
+	@Test
+	@Order(9)
+	public void listaOrdiniAdmin2() {
+		ResponseList<OrdineDTO> response = controller.listAll("");
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 		Assertions.assertThat(response.getDati().size()).isGreaterThan(0);
 	}
