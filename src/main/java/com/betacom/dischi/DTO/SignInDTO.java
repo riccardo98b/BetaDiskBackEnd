@@ -10,6 +10,7 @@ public class SignInDTO {
     private Integer idCliente;
     private LocalDate dataRegistrazione;
     private String username;
+    private String email;
 
 	public SignInDTO() {
 		super();
@@ -57,6 +58,12 @@ public class SignInDTO {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 
