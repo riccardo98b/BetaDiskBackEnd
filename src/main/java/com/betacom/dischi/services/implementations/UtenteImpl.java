@@ -170,32 +170,37 @@ public void createUser(UtenteRequest req) throws CustomException {
 
 	@Override
 	public void updateUtente(UtenteRequest req) throws CustomException{
-		log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
-	
-		Utente utente =  utenteRepo.findById(req.getIdUtente())
-				.orElseThrow(() -> new CustomException("Utente non trovato"));
-        Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
-		if(!utente.getUsername().equals(req.getUsername())){
-			if(optUtente.isPresent()) {
-				throw new CustomException("Utente con questo username già esistente");
-			}
-			utente.setUsername(req.getUsername());
-		}
-		if(req.getPassword() != null && !req.getPassword().isEmpty()) {
-			utente.setPassword(passwordEncoder.encode(req.getPassword()));
-		}
-		utente.setRoles(Roles.valueOf(req.getRoles()));
-        if(req.getRoles() == null || req.getRoles().isEmpty()) {
-        	if(utente.getRoles() == Roles.ADMIN) {
-        		req.setRoles("ADMIN");
-        	}else {
-        		req.setRoles("UTENTE");
-        	}
-        }
-		utente.setEmail(req.getEmail());
-		utenteRepo.save(utente);
+	    log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
+	    Utente utente = utenteRepo.findById(req.getIdUtente())
+	            .orElseThrow(() -> new CustomException("Utente non trovato"));
 
+	    Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
+	    if (!utente.getUsername().equals(req.getUsername())) {
+	        if (optUtente.isPresent()) {
+	            throw new CustomException("Utente con questo username già esistente");
+	        }
+	        utente.setUsername(req.getUsername());
+	    }
+
+	    if (req.getPassword() != null && !req.getPassword().isEmpty()) {
+	        utente.setPassword(passwordEncoder.encode(req.getPassword()));
+	    }
+	    if (req.getRoles() == null || req.getRoles().isEmpty()) {
+	        req.setRoles(utente.getRoles() == Roles.ADMIN ? "ADMIN" : "UTENTE");
+	    }
+	    utente.setRoles(Roles.valueOf(req.getRoles()));
+
+	    if (req.getIdCliente() != null) {
+	        Cliente cliente = clienteRepo.findById(req.getIdCliente())
+	                .orElseThrow(() -> new CustomException("Cliente non trovato"));
+	        utente.setCliente(cliente); 
+	    }
+
+	    utente.setEmail(req.getEmail());
+
+	    utenteRepo.save(utente);
 	}
+
 
 	@Override
 	public UtenteDTO listById(Integer id) throws CustomException {
