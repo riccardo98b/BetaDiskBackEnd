@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.dischi.DTO.ProdottoDTO;
-import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.request.ProdottoRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
