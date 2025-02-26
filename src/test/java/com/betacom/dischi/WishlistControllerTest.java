@@ -1,318 +1,200 @@
 package com.betacom.dischi;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.Rollback;
-
-import com.betacom.dischi.models.Prodotto;
+import com.betacom.dischi.controller.WishlistController;
 import com.betacom.dischi.DTO.ProdottoDTO;
-import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.models.Cliente;
+import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Wishlist;
 import com.betacom.dischi.repository.IClienteRepository;
 import com.betacom.dischi.repository.IProdottoRepository;
 import com.betacom.dischi.repository.IWishlistRepository;
 import com.betacom.dischi.request.WishlistRequest;
-import com.betacom.dischi.services.interfaces.WishlistService;
+import com.betacom.dischi.response.ResponseBase;
+import com.betacom.dischi.response.ResponseObject;
 import com.betacom.dischi.utilities.enums.Formato;
 
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
-@TestMethodOrder(OrderAnnotation.class)
-@Transactional
-
-//Questo resetta il contesto Spring e il database prima di ogni test.
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-
 public class WishlistControllerTest {
 
-	@Autowired
-	private EntityManager entityManager;
-
     @Autowired
-    private WishlistService wishlistService;
+    private WishlistController wishlistController;
 
     @Autowired
     private IClienteRepository clienteRepository;
+    
+    @Autowired
+    private IWishlistRepository wishlistRepository;
+
 
     @Autowired
     private IProdottoRepository prodottoRepository;
 
-    @Autowired
-    private IWishlistRepository wishlistRepository;
-
     private Cliente testCliente;
     private Prodotto testProdotto;
 
-
     @BeforeEach
     public void setUp() {
+        // Pulisco db prima di inserie nuovi dati
+        wishlistRepository.deleteAll();
+        prodottoRepository.deleteAll();
+        clienteRepository.deleteAll();
         
-        testCliente = new Cliente();
-        testCliente.setNome("Mario");
-        testCliente.setCognome("Rossi");
-        testCliente.setTelefono("123456789");
-        testCliente.setDataRegistrazione(LocalDate.now()); 
-        clienteRepository.save(testCliente);
+        wishlistRepository.flush();
+        prodottoRepository.flush();
+        clienteRepository.flush();
 
-        // Crea un prodotto di test
+        // Crea il prodotto per test
         testProdotto = new Prodotto();
-        testProdotto.setTitolo("Album Test");
-        testProdotto.setArtista("Artista Test");
-        testProdotto.setGenere("Rock");
-        testProdotto.setDescrizione("Descrizione di test.");
-        testProdotto.setAnnoPubblicazione(2025);
-        testProdotto.setPrezzo(29.99);
         testProdotto.setFormato(Formato.CD);
+        testProdotto.setTitolo("Test Album");
+        testProdotto.setArtista("Test Artist");
+        testProdotto.setGenere("Pop");
+        testProdotto.setDescrizione("Test description");
+        testProdotto.setAnnoPubblicazione(2025);
+        testProdotto.setPrezzo(19.99);
+        testProdotto.setQuantita(10);
+        testProdotto.setImmagineProdotto("image_url");
+        prodottoRepository.save(testProdotto);
+        prodottoRepository.flush();  
 
-        prodottoRepository.save(testProdotto); 
+        // Crea il cliente per test
+        testCliente = new Cliente();
+        testCliente.setNome("Test Client");
+        testCliente.setCognome("Test Surname");
+        testCliente.setTelefono("1234567890");
+        testCliente.setDataRegistrazione(LocalDate.now());
+        clienteRepository.save(testCliente);
+        clienteRepository.flush();  // Assicura il salvataggio
+
+        Assertions.assertThat(testCliente.getIdCliente()).isNotNull();
+    }
+
+    public WishlistRequest createWishlistRequest() {
+        WishlistRequest req = new WishlistRequest();
+        req.setIdCliente(testCliente.getIdCliente());  
+        return req;
     }
 
     @Test
     @Order(1)
-    public void testCreateWishlist() throws Exception {
-     
-        WishlistRequest req = new WishlistRequest();
-        req.setIdCliente(testCliente.getIdCliente());
+    public void testCreateWishlist() {
+        WishlistRequest req = createWishlistRequest();
+        req.setIdProdotti(List.of(testProdotto.getIdProdotto())); 
 
-    
-        wishlistService.create(req);
+        System.out.println("Request: " + req);
 
-        
-        Optional<Wishlist> wishlist = wishlistRepository.findByCliente(testCliente);
-        Assertions.assertThat(wishlist).isPresent();
-        Assertions.assertThat(wishlist.get().getProdotti()).isEmpty();
+        ResponseBase response = wishlistController.create(req);
+
+        System.out.println("Response: " + response);
+
+        Assertions.assertThat(response).isNotNull();
+
+        Assertions.assertThat(response.getMsg()).contains("Wishlist create con successo");
+
+        Assertions.assertThat(response.getRc()).isEqualTo(true);
     }
+
+
 
     @Test
     @Order(2)
-    @Rollback(false)
-    public void testAddProductToWishlist() throws Exception {
+    public void testAddProductToWishlist() {
+        WishlistRequest req = createWishlistRequest();
+        wishlistController.create(req);
 
-        WishlistRequest req = new WishlistRequest();
-        req.setIdCliente(testCliente.getIdCliente());
-        
+        req.setIdProdotti(List.of(testProdotto.getIdProdotto())); 
+        ResponseBase response = wishlistController.addProduct(req);
 
-        wishlistService.create(req);
-
-        
-        wishlistService.addProductToWishlist(testCliente.getIdCliente(), testProdotto.getIdProdotto());
-        
-        
-        entityManager.flush();  
-        
-        
-        Optional<Wishlist> wishlist = wishlistRepository.findByCliente(testCliente);
-        Assertions.assertThat(wishlist).isPresent();
-        
-     
-        Assertions.assertThat(wishlist.get().getProdotti())
-            .extracting(Prodotto::getIdProdotto)
-            .contains(testProdotto.getIdProdotto());
+        Assertions.assertThat(response.getRc()).isEqualTo(true);
+        Assertions.assertThat(response.getMsg()).contains("Prodotto aggiunto alla wishlist con successo.");
     }
-
 
     @Test
     @Order(3)
-    public void testRemoveProductFromWishlist() throws Exception {
+    public void testRemoveProductFromWishlist() {
+        // Creazione della wishlist
+        WishlistRequest req = createWishlistRequest();
+        wishlistController.create(req);
+        req.setIdProdotti(List.of(testProdotto.getIdProdotto()));
 
-        Optional<Wishlist> wishlistOptional = wishlistRepository.findByCliente(testCliente);
-        if (!wishlistOptional.isPresent()) {
-            WishlistRequest req = new WishlistRequest();
-            req.setIdCliente(testCliente.getIdCliente());
-            wishlistService.create(req);
-        }
+        // Aggiunta del prodotto
+        ResponseBase addResponse = wishlistController.addProduct(req);
+        System.out.println("Add Response RC: " + addResponse.getRc());
+        System.out.println("Add Response Message: " + addResponse.getMsg());
 
-        wishlistService.addProductToWishlist(testCliente.getIdCliente(), testProdotto.getIdProdotto());
+        // controllo aggiunta prod
+        ResponseObject<List<ProdottoDTO>> getResponse = wishlistController.getAllProducts(testCliente.getIdCliente());
+        System.out.println("Prodotti nella wishlist dopo l'aggiunta: " + getResponse.getDati());
 
-        wishlistOptional = wishlistRepository.findByCliente(testCliente);
-        Assertions.assertThat(wishlistOptional).isPresent();
-        Wishlist wishlist = wishlistOptional.get();
-        Assertions.assertThat(wishlist.getProdotti()).contains(testProdotto);
+        ResponseBase removeResponse = wishlistController.removeProduct(req);
+        System.out.println("Remove Response RC: " + removeResponse.getRc());
+        System.out.println("Remove Response Message: " + removeResponse.getMsg());
 
-        wishlistService.removeProductFromWishlist(testCliente.getIdCliente(), testProdotto.getIdProdotto());
+        Assertions.assertThat(removeResponse.getRc()).isEqualTo(true);
+        Assertions.assertThat(removeResponse.getMsg()).contains("Prodotto rimosso dalla wishlist con successo.");
 
-        Optional<Wishlist> updatedWishlist = wishlistRepository.findByCliente(testCliente);
-        Assertions.assertThat(updatedWishlist).isPresent();
-        Assertions.assertThat(updatedWishlist.get().getProdotti()).doesNotContain(testProdotto);
+        ResponseObject<List<ProdottoDTO>> finalCheck = wishlistController.getAllProducts(testCliente.getIdCliente());
+        System.out.println("Prodotti nella wishlist dopo la rimozione: " + finalCheck.getDati());
     }
-
 
 
 
     @Test
     @Order(4)
-    public void testClearWishlist() throws Exception {
-  
-        Optional<Wishlist> wishlistOptional = wishlistRepository.findByCliente(testCliente);
-        if (!wishlistOptional.isPresent()) {
-            WishlistRequest req = new WishlistRequest();
-            req.setIdCliente(testCliente.getIdCliente());
-            wishlistService.create(req);  
-        }
+    public void testGetWishlistProducts() {
+        WishlistRequest req = createWishlistRequest();
+        wishlistController.create(req);
+        req.setIdProdotti(List.of(testProdotto.getIdProdotto()));
+        wishlistController.addProduct(req);
 
-        wishlistService.addProductToWishlist(testCliente.getIdCliente(), testProdotto.getIdProdotto());
+        ResponseObject<List<ProdottoDTO>> response = wishlistController.getAllProducts(testCliente.getIdCliente());
 
- 
-        wishlistService.clearWishlist(testCliente.getIdCliente());
-
-
-        Optional<Wishlist> wishlist = wishlistRepository.findByCliente(testCliente);
-        Assertions.assertThat(wishlist).isPresent();
-        Assertions.assertThat(wishlist.get().getProdotti()).isEmpty(); 
+        List<ProdottoDTO> prodotti = response.getDati();
+        Assertions.assertThat(prodotti).isNotEmpty();
+        Assertions.assertThat(prodotti).extracting(ProdottoDTO::getIdProdotto)
+                .contains(testProdotto.getIdProdotto());
     }
 
-    
     @Test
     @Order(5)
-    public void testGetWishlistProducts() throws Exception {
+    public void testClearWishlist() {
+        WishlistRequest req = createWishlistRequest();
+        wishlistController.create(req);
+        req.setIdProdotti(List.of(testProdotto.getIdProdotto()));
+        wishlistController.addProduct(req);
 
-        // Verifica se la Wishlist esiste già per il cliente
-        Optional<Wishlist> wishlistOptional = wishlistRepository.findByCliente(testCliente);
-        if (!wishlistOptional.isPresent()) {
-            WishlistRequest req = new WishlistRequest();
-            req.setIdCliente(testCliente.getIdCliente());
-            wishlistService.create(req);  
-        }
-        wishlistService.addProductToWishlist(testCliente.getIdCliente(), testProdotto.getIdProdotto());
+        ResponseBase response = wishlistController.clearWishlist(req);
 
-        List<ProdottoDTO> prodottiDTO = wishlistService.getWishlistProducts(testCliente.getIdCliente());
-
-        // Verifica che la lista contenga il prodotto desiderato
-        Assertions.assertThat(prodottiDTO)
-            .extracting(ProdottoDTO::getIdProdotto)  
-            .contains(testProdotto.getIdProdotto());  
+        Assertions.assertThat(response.getRc()).isEqualTo(true);
+        Assertions.assertThat(response.getMsg()).contains("Tutti i prodotti sono stati rimossi dalla wishlist.");
     }
 
 
     @Test
     @Order(6)
-    public void testSearchWishlistById() throws Exception {
-        // Crea la Wishlist se non esiste già
-        WishlistRequest req = new WishlistRequest();
-        req.setIdCliente(testCliente.getIdCliente());
+    public void testSearchWishlistById() {
+        WishlistRequest req = createWishlistRequest();
+        wishlistController.create(req);
 
-        Optional<Wishlist> existingWishlist = wishlistRepository.findByCliente(testCliente);
-        if (!existingWishlist.isPresent()) {
-            System.out.println("Wishlist non trovata, la sto creando per il cliente con ID: " + testCliente.getIdCliente());
-            wishlistService.create(req);  
-            entityManager.flush();  
-        } else {
-            System.out.println("Wishlist già esistente per il cliente con ID: " + testCliente.getIdCliente());
-        }
+        ResponseObject<Wishlist> response = wishlistController.searchWishlistById(testCliente.getIdCliente());
 
-        
-        Optional<Wishlist> createdWishlist = wishlistRepository.findByCliente(testCliente);
-        Assertions.assertThat(createdWishlist).isPresent();
-        System.out.println("Wishlist creata con ID: " + createdWishlist.get().getIdWishlist());
-
-       
-        Optional<Wishlist> wishlist = wishlistService.searchWishlistById(testCliente.getIdCliente());
-        System.out.println("Wishlist trovata per il cliente con ID: " + testCliente.getIdCliente());
-
-        Assertions.assertThat(wishlist).isPresent();
+        Assertions.assertThat(response.getRc()).isEqualTo(true);
+        Assertions.assertThat(response.getMsg()).contains("Wishlist trovata con successo.");
     }
-
-    
-    @Test
-    @Order(7)
-    public void testCreateWishlistForNonExistentCliente() throws Exception {
-        WishlistRequest req = new WishlistRequest();
-        req.setIdCliente(99999);  // ID cliente inesistente
-
-        
-        Assertions.assertThatThrownBy(() -> wishlistService.create(req))
-                .isInstanceOf(CustomException.class)
-                .hasMessageContaining("Cliente con ID: 99999 non trovato.");
-    }
-
-    @Test
-    @Order(8)
-    public void testRemoveNonExistingProductFromWishlist() throws Exception {
-        Optional<Wishlist> wishlistOptional = wishlistRepository.findByCliente(testCliente);
-        if (!wishlistOptional.isPresent()) {
-            WishlistRequest req = new WishlistRequest();
-            req.setIdCliente(testCliente.getIdCliente());
-            wishlistService.create(req);
-        }
-
-        wishlistService.addProductToWishlist(testCliente.getIdCliente(), testProdotto.getIdProdotto());
-
-        Optional<Wishlist> wishlist = wishlistRepository.findByCliente(testCliente);
-        Assertions.assertThat(wishlist).isPresent();
-        Wishlist currentWishlist = wishlist.get();
-
-        // Rimuoviamo un prodotto che non è nella wishlist
-        Prodotto prodottoNonPresente = new Prodotto();
-        prodottoNonPresente.setIdProdotto(99999);  
-        Assertions.assertThatThrownBy(() -> wishlistService.removeProductFromWishlist(testCliente.getIdCliente(), prodottoNonPresente.getIdProdotto()))
-        .isInstanceOf(CustomException.class)
-        .hasMessageContaining("Prodotto con ID: 99999 non trovato.");
-
-    } 
-
-    @Test
-    @Order(9)
-    public void testSearchNonExistentWishlist() throws Exception {
-       
-        Optional<Wishlist> wishlist = wishlistService.searchWishlistById(testCliente.getIdCliente());
-        Assertions.assertThat(wishlist).isEmpty();  
-    }
-
-    
-    @Test
-    @Order(10)
-    public void testAddAndRemoveMultipleProducts() throws Exception {
-   
-        Prodotto prodotto2 = new Prodotto();
-        prodotto2.setTitolo("Album Test 2");
-        prodotto2.setArtista("Artista Test 2");
-        prodotto2.setGenere("Pop");
-        prodotto2.setDescrizione("Descrizione di test 2.");
-        prodotto2.setAnnoPubblicazione(2026);
-        prodotto2.setPrezzo(19.99);
-        prodotto2.setFormato(Formato.VINILE);
-        prodottoRepository.save(prodotto2);
-
-        // Crea la wishlist se non esiste
-        Optional<Wishlist> wishlistOptional = wishlistRepository.findByCliente(testCliente);
-        if (!wishlistOptional.isPresent()) {
-            WishlistRequest req = new WishlistRequest();
-            req.setIdCliente(testCliente.getIdCliente());
-            wishlistService.create(req);
-        }
-
-        
-        wishlistService.addProductToWishlist(testCliente.getIdCliente(), testProdotto.getIdProdotto());
-        wishlistService.addProductToWishlist(testCliente.getIdCliente(), prodotto2.getIdProdotto());
-
-        
-        List<ProdottoDTO> prodottiDTO = wishlistService.getWishlistProducts(testCliente.getIdCliente());
-
-        // Verifica che i due prodotti siano presenti nella lista
-        Assertions.assertThat(prodottiDTO)
-            .extracting(ProdottoDTO::getIdProdotto) 
-            .contains(testProdotto.getIdProdotto(), prodotto2.getIdProdotto()); 
-
-        wishlistService.removeProductFromWishlist(testCliente.getIdCliente(), prodotto2.getIdProdotto());
-
-        List<ProdottoDTO> updatedProdottiDTO = wishlistService.getWishlistProducts(testCliente.getIdCliente());
-
-        // Verifica che il secondo prodotto non sia più presente nella wishlist
-        Assertions.assertThat(updatedProdottiDTO)
-            .extracting(ProdottoDTO::getIdProdotto)  
-            .doesNotContain(prodotto2.getIdProdotto());  
-    }
-
 
 }

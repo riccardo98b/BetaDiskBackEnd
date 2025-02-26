@@ -37,6 +37,7 @@ public class WishlistImpl implements WishlistService {
     Logger log;
 
     @Override
+    @Transactional
     public void create(WishlistRequest req) throws CustomException {
         log.debug("Creazione della Wishlist per il cliente con ID: " + req.getIdCliente());
         
@@ -84,29 +85,31 @@ public class WishlistImpl implements WishlistService {
 
 
     @Override
+    @Transactional
     public void removeProductFromWishlist(Integer idCliente, Integer idProdotto) throws CustomException {
-        log.debug("Rimozione del prodotto ID " + idProdotto + " dalla Wishlist del cliente ID " + idCliente);
+        log.debug("Tentativo di rimozione del prodotto ID " + idProdotto + " dalla Wishlist del cliente ID " + idCliente);
 
         Cliente cliente = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new CustomException("Cliente con ID: " + idCliente + " non trovato."));
 
-    
         Wishlist wishlist = wishlistRepository.findByCliente(cliente)
                 .orElseThrow(() -> new CustomException("Wishlist non trovata per il cliente ID: " + idCliente));
 
         Prodotto prodotto = prodottoRepository.findById(idProdotto)
                 .orElseThrow(() -> new CustomException("Prodotto con ID: " + idProdotto + " non trovato."));
 
-       
+        log.debug("Prodotti attualmente nella Wishlist: " + wishlist.getProdotti());
+
         if (wishlist.getProdotti().contains(prodotto)) {
             wishlist.getProdotti().remove(prodotto);
-            wishlistRepository.save(wishlist); 
-            log.debug("Prodotto ID " + idProdotto + " rimosso dalla Wishlist del cliente ID " + idCliente);
+            wishlistRepository.save(wishlist);
+            log.debug("Prodotto ID " + idProdotto + " rimosso con successo.");
         } else {
-            log.debug("Il prodotto ID " + idProdotto + " non è presente nella Wishlist del cliente ID " + idCliente);
+            log.debug("Il prodotto ID " + idProdotto + " non è presente nella Wishlist!");
             throw new CustomException("Il prodotto non è presente nella wishlist del cliente.");
         }
     }
+
  
     @Override
     public void clearWishlist(Integer idCliente) throws CustomException {
