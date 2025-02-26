@@ -46,11 +46,11 @@ public class UtenteImpl implements UtenteService{
 
 	@Override
 	public SignInDTO signIn(SignInRequest req)  {
-	    log.debug("Signin utente: " + req.getUsername());
+	    log.debug("Signin utente: " + req.getUsername()+" "+req.getPassword()+" ");
 	    SignInDTO resp = new SignInDTO();
 
 	    Optional<Utente> utente = utenteRepo.findByUsername(req.getUsername());
-
+	    log.debug(utente.get().getPassword()+" e questa");
 	    if (utente.isEmpty()) {
 	        resp.setLogged(false);
 	    } else {
@@ -60,6 +60,7 @@ public class UtenteImpl implements UtenteService{
 	            resp.setIdUtente(utente.get().getIdUtente());
                 resp.setIdCliente(utente.get().getCliente().getIdCliente());
                 resp.setDataRegistrazione(utente.get().getCliente().getDataRegistrazione());
+	            resp.setUsername(utente.get().getUsername());
 	        } else {
 	            resp.setLogged(false);
 	        }
@@ -67,6 +68,31 @@ public class UtenteImpl implements UtenteService{
 
 	    return resp;
 	}
+	
+@Transactional
+public boolean verifyCurrentPassword(Integer id, String currentPassword) throws CustomException{
+	Utente utente = utenteRepo.findById(id)
+			.orElseThrow(() -> new CustomException("Utente non trovato"));
+	if(!passwordEncoder.matches(currentPassword, utente.getPassword())) {
+		throw new CustomException("Password corrente non corretta");
+	}
+	return true;
+}
+@Transactional
+@Override
+public void changePassword(Integer idUtente, String currentPassword, String newPassword) throws CustomException {
+    if (!verifyCurrentPassword(idUtente, currentPassword)) {
+        throw new CustomException("Password corrente non corretta");
+    }
+    
+    // Recupera l'utente dal database
+    Utente utente = utenteRepo.findById(idUtente)
+            .orElseThrow(() -> new CustomException("Utente non trovato"));
+
+    // Imposta la nuova password
+    utente.setPassword(passwordEncoder.encode(newPassword));
+    utenteRepo.save(utente);
+}
 
 
 	@Transactional
@@ -132,6 +158,7 @@ public class UtenteImpl implements UtenteService{
 	@Override
 	public void updateUtente(UtenteRequest req) throws CustomException{
 		log.debug("Aggiornamento utente con ID: "+req.getIdUtente());
+	
 		Utente utente =  utenteRepo.findById(req.getIdUtente())
 				.orElseThrow(() -> new CustomException("Utente non trovato"));
         Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
@@ -145,10 +172,13 @@ public class UtenteImpl implements UtenteService{
 			utente.setPassword(passwordEncoder.encode(req.getPassword()));
 		}
 		utente.setRoles(Roles.valueOf(req.getRoles()));
-		// se utente ha ruolo admin allora puoi cambiare il ruolo e non viceversa
-//		if(req.getIsAdmin()){//valueof
-//			utente.setRoles(Roles.valueOf(req.getRoles()));
-//		}
+        if(req.getRoles() == null || req.getRoles().isEmpty()) {
+        	if(utente.getRoles() == Roles.ADMIN) {
+        		req.setRoles("ADMIN");
+        	}else {
+        		req.setRoles("UTENTE");
+        	}
+        }
 		utente.setEmail(req.getEmail());
 		utenteRepo.save(utente);
 

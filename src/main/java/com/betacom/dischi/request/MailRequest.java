@@ -11,6 +11,8 @@ public class MailRequest {
 	private String cognome;
 	private Double totale;
 	private String dataOrdine;
+	private String password;
+	private String username;
 	private List<ProdottoCarrelloDTO> prodotti;
 	public String getToEmail() {
 		return toEmail;
@@ -48,6 +50,19 @@ public class MailRequest {
 	public void setDataOrdine(String dataOrdine) {
 		this.dataOrdine = dataOrdine;
 	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 
 	
 }

@@ -113,7 +113,7 @@ public class RecensioneController {
 	}
 	
 	@GetMapping("/lista-recensioni")
-	public ResponseList<RecensioneDTO>listaRecensioni(Integer id) {
+	public ResponseList<RecensioneDTO> listaRecensioni(Integer id) {
 		log.debug("Lista di tutte le recensioni: " + id);
 		ResponseList<RecensioneDTO> response = new ResponseList<RecensioneDTO>();
 		response.setRc(true);

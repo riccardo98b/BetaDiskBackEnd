@@ -24,6 +24,8 @@ public interface UtenteService {
 	void updateUtente(UtenteRequest req) throws CustomException;
 
 	List<UtenteDTO> listPerRoles(Roles roles) throws CustomException;
+
+	void changePassword(Integer idUtente, String currentPassword, String newPassword) throws CustomException;
 	
 	
 }

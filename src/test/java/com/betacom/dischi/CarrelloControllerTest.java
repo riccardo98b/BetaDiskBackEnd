@@ -88,4 +88,14 @@ public class CarrelloControllerTest {
 		ResponseBase response = controller.addProdotto(request);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);
 	}
+	@Test
+	@Order(7)
+	public void addProdottoPerSuccessivo2(){
+		CarrelloRequest request = new CarrelloRequest();
+		request.setIdCliente(2);
+		request.setIdProdotto(3);
+		request.setQuantita(1);
+		ResponseBase response = controller.addProdotto(request);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);
+	}
  }
