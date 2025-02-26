@@ -49,7 +49,7 @@ public class WishlistControllerTest {
 
     @BeforeEach
     public void setUp() {
-        // Pulisce il database PRIMA di inserire nuovi dati
+        // Pulisco db prima di inserie nuovi dati
         wishlistRepository.deleteAll();
         prodottoRepository.deleteAll();
         clienteRepository.deleteAll();
@@ -84,8 +84,6 @@ public class WishlistControllerTest {
         Assertions.assertThat(testCliente.getIdCliente()).isNotNull();
     }
 
-
- // Method to create the WishlistRequest for testing
     public WishlistRequest createWishlistRequest() {
         WishlistRequest req = new WishlistRequest();
         req.setIdCliente(testCliente.getIdCliente());  
@@ -95,7 +93,6 @@ public class WishlistControllerTest {
     @Test
     @Order(1)
     public void testCreateWishlist() {
-        // Usa il metodo createWishlistRequest che restituirà un oggetto con l'ID cliente corretto
         WishlistRequest req = createWishlistRequest();
         req.setIdProdotti(List.of(testProdotto.getIdProdotto())); 
 
@@ -117,7 +114,6 @@ public class WishlistControllerTest {
     @Test
     @Order(2)
     public void testAddProductToWishlist() {
-        // Add product to wishlist
         WishlistRequest req = createWishlistRequest();
         wishlistController.create(req);
 
@@ -141,7 +137,7 @@ public class WishlistControllerTest {
         System.out.println("Add Response RC: " + addResponse.getRc());
         System.out.println("Add Response Message: " + addResponse.getMsg());
 
-        // Verifica che il prodotto sia stato aggiunto
+        // controllo aggiunta prod
         ResponseObject<List<ProdottoDTO>> getResponse = wishlistController.getAllProducts(testCliente.getIdCliente());
         System.out.println("Prodotti nella wishlist dopo l'aggiunta: " + getResponse.getDati());
 
