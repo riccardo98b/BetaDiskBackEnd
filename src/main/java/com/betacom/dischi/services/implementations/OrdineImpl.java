@@ -145,12 +145,12 @@ public class OrdineImpl implements OrdineService{
 
 	@Override
 	@Transactional
-	public List<OrdineDTO> listAll(String request) throws CustomException {
+	public List<OrdineDTO> listAll(String data) throws CustomException {
 		List<Ordine> lista = new ArrayList<Ordine>();
-		if (request == null || request == "") {
+		if (data == null || data == "") {
 			lista = ordineRepo.findAll();
 		} else {
-			lista = ordineRepo.findByDataOrdineAfter(LocalDate.parse(request).minusDays(1));
+			lista = ordineRepo.findByDataOrdineAfter(LocalDate.parse(data).minusDays(1));
 		}
 		if (lista.isEmpty()) {
 			throw new CustomException(msgServ.getSysMsg("no_orders"));
