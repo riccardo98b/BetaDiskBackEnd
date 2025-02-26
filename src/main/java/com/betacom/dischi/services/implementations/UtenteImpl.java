@@ -43,31 +43,41 @@ public class UtenteImpl implements UtenteService{
         this.msgServ = msgServ;
     }
 
+    @Override
+    @Transactional
+    public SignInDTO signIn(SignInRequest req) {
+        log.debug("Signin utente: " + req.getUsername() + " " + req.getPassword());
+        SignInDTO resp = new SignInDTO();
 
-	@Override
-	public SignInDTO signIn(SignInRequest req)  {
-	    log.debug("Signin utente: " + req.getUsername()+" "+req.getPassword()+" ");
-	    SignInDTO resp = new SignInDTO();
+        Optional<Utente> utenteOpt = utenteRepo.findByUsername(req.getUsername());
+        
+        if (utenteOpt.isEmpty()) {
+            resp.setLogged(false);
+        } else {
+            Utente utente = utenteOpt.get();
+            
+            if (passwordEncoder.matches(req.getPassword(), utente.getPassword())) {
+                resp.setLogged(true);
+                resp.setRole(utente.getRoles().toString());
+                resp.setIdUtente(utente.getIdUtente());
 
-	    Optional<Utente> utente = utenteRepo.findByUsername(req.getUsername());
-	    log.debug(utente.get().getPassword()+" e questa");
-	    if (utente.isEmpty()) {
-	        resp.setLogged(false);
-	    } else {
-	        if (passwordEncoder.matches(req.getPassword(), utente.get().getPassword())) {
-	            resp.setLogged(true);
-	            resp.setRole(utente.get().getRoles().toString());
-	            resp.setIdUtente(utente.get().getIdUtente());
-                resp.setIdCliente(utente.get().getCliente().getIdCliente());
-                resp.setDataRegistrazione(utente.get().getCliente().getDataRegistrazione());
-	            resp.setUsername(utente.get().getUsername());
-	        } else {
-	            resp.setLogged(false);
-	        }
-	    }
+                if (utente.getCliente() != null) {
+                    Cliente cliente = utente.getCliente();
+                    resp.setIdCliente(cliente.getIdCliente());
+                    resp.setDataRegistrazione(cliente.getDataRegistrazione());
+                } else {
+                    resp.setIdCliente(null);
+                    resp.setDataRegistrazione(null);
+                }
+                
+                resp.setUsername(utente.getUsername());
+            } else {
+                resp.setLogged(false);
+            }
+        }
+        return resp;
+    }
 
-	    return resp;
-	}
 	
 @Transactional
 public boolean verifyCurrentPassword(Integer id, String currentPassword) throws CustomException{
@@ -85,52 +95,55 @@ public void changePassword(Integer idUtente, String currentPassword, String newP
         throw new CustomException("Password corrente non corretta");
     }
     
-    // Recupera l'utente dal database
     Utente utente = utenteRepo.findById(idUtente)
             .orElseThrow(() -> new CustomException("Utente non trovato"));
 
-    // Imposta la nuova password
     utente.setPassword(passwordEncoder.encode(newPassword));
     utenteRepo.save(utente);
 }
 
 
-	@Transactional
-	@Override
-	public void createUser(UtenteRequest req) throws CustomException {
-	 log.debug("Crea utente: "+req);
-     Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
-     if(optUtente.isPresent()) {
-    	 throw new CustomException("Utente con questo username già esistente");
 
-     }
-     if(req.getRoles() == null) {
-    	 req.setRoles("UTENTE");
-     }
-     Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
-     if(optCliente.isEmpty()) {
-         log.debug("Cliente con ID: "+req.getIdCliente()+ "non trovato");
-    	 throw new CustomException("Cliente non trovato");
-     }
-     Cliente cliente = optCliente.get();
-     if(cliente.getUtente() != null) {
-    	 throw new CustomException("Cliente già associato a un altro utente");
-     }
-     Utente utente = new Utente();
+/* è possibile creare un utente legato ad un cliente, altrimenti,
+ *  non avendo il cliente, l'utente viene creato senza associarlo 
+ *  a un cliente(vale solo per l'admin)*/
+@Transactional
+@Override
+public void createUser(UtenteRequest req) throws CustomException {
+    log.debug("Crea utente: " + req);
+    Optional<Utente> optUtente = utenteRepo.findByUsername(req.getUsername());
+    if (optUtente.isPresent()) {
+        throw new CustomException("Utente con questo username già esistente");
+    }
+    if (req.getRoles() == null) {
+        req.setRoles("UTENTE");
+    }
 
-     utente.setPassword(passwordEncoder.encode(req.getPassword()));
+    Utente utente = new Utente();
 
-     utente.setRoles(Roles.valueOf(req.getRoles()));
-     utente.setEmail(req.getEmail());
-     utente.setUsername(req.getUsername());
-     utente.setCliente(cliente);
-     //se cliente e gia legato a dati di un altro utente allora lancio
-     // eccezione
-     utenteRepo.save(utente);
+    if (req.getIdCliente() != null) {
+        Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
+        if (optCliente.isPresent()) {
+            Cliente cliente = optCliente.get();
+            if (cliente.getUtente() != null) {
+                throw new CustomException("Cliente già associato a un altro utente");
+            }
+            utente.setCliente(cliente);
+            cliente.setUtente(utente);
+            clienteRepo.save(cliente); 
+        } else {
+            throw new CustomException("Cliente non trovato");
+        }
+    }
+    utente.setPassword(passwordEncoder.encode(req.getPassword()));
+    utente.setRoles(Roles.valueOf(req.getRoles()));
+    utente.setEmail(req.getEmail());
+    utente.setUsername(req.getUsername());
 
-     cliente.setUtente(utente);
-     clienteRepo.save(cliente);
-	}
+    utenteRepo.save(utente);
+
+    
+}
 
 	@Override
 	public List<UtenteDTO> listAll(String username,String email) {
