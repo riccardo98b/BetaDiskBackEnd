@@ -45,18 +45,17 @@ public class CarrelloImpl implements CarrelloService {
 	}
 	
 	
-	@Override
 	@Transactional
-	public Carrello create(CarrelloRequest request) throws CustomException {
-		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
-		if (cliente.isEmpty()) {
-			throw new CustomException(msgServ.getSysMsg("no_customer"));
-		}
-		if (cliente.get().getCarrello() != null) {
-			throw new CustomException(msgServ.getSysMsg("yes_cart"));
-		}
+	public Carrello create(Cliente cliente) throws CustomException {
+//		Optional<Cliente> cliente = clienteRepo.findById(request.getIdCliente());
+//		if (cliente.isEmpty()) {
+//			throw new CustomException(msgServ.getSysMsg("no_customer"));
+//		}
+//		if (cliente.get().getCarrello() != null) {
+//			throw new CustomException(msgServ.getSysMsg("yes_cart"));
+//		}
 		Carrello carrello = new Carrello();
-		carrello.setCliente(cliente.get());
+		carrello.setCliente(cliente);
 		carrello.setIdCarrello(carrelloRepo.save(carrello).getIdCarrello());
 		return carrello;
 	}
@@ -70,7 +69,7 @@ public class CarrelloImpl implements CarrelloService {
 		}
 		Carrello carrello = new Carrello();
 		if (cliente.get().getCarrello() == null) {
-			carrello = create(request);
+			carrello = create(cliente.get());
 		} else {
 			carrello = cliente.get().getCarrello();
 		}
