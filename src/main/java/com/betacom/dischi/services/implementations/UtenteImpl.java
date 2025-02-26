@@ -60,7 +60,7 @@ public class UtenteImpl implements UtenteService{
                 resp.setLogged(true);
                 resp.setRole(utente.getRoles().toString());
                 resp.setIdUtente(utente.getIdUtente());
-
+                resp.setEmail(utente.getEmail());
                 if (utente.getCliente() != null) {
                     Cliente cliente = utente.getCliente();
                     resp.setIdCliente(cliente.getIdCliente());
@@ -118,9 +118,14 @@ public void createUser(UtenteRequest req) throws CustomException {
     if (req.getRoles() == null) {
         req.setRoles("UTENTE");
     }
-
+   
     Utente utente = new Utente();
-
+    Optional<Utente> optUtenteByEmail = utenteRepo.findByEmail(req.getEmail());
+    if (optUtenteByEmail.isPresent()) {
+        throw new CustomException("Un utente con questa email esiste già");
+    }else {
+        utente.setEmail(req.getEmail());
+    }
     if (req.getIdCliente() != null) {
         Optional<Cliente> optCliente = clienteRepo.findById(req.getIdCliente());
         if (optCliente.isPresent()) {
@@ -137,7 +142,6 @@ public void createUser(UtenteRequest req) throws CustomException {
     }
     utente.setPassword(passwordEncoder.encode(req.getPassword()));
     utente.setRoles(Roles.valueOf(req.getRoles()));
-    utente.setEmail(req.getEmail());
     utente.setUsername(req.getUsername());
 
     utenteRepo.save(utente);

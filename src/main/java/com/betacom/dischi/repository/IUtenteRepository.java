@@ -8,9 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.betacom.dischi.models.Prodotto;
 import com.betacom.dischi.models.Utente;
-import com.betacom.dischi.utilities.enums.Formato;
 import com.betacom.dischi.utilities.enums.Roles;
 
 @Repository
@@ -30,6 +28,9 @@ public interface IUtenteRepository extends JpaRepository<Utente, Integer> {
 	List<Utente> utentiPerRoles(
 			@Param("roles") Roles roles
 			);
+
+	Optional<Utente> findByEmail(String email);
+
 
 	
 }

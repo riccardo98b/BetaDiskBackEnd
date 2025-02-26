@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.dischi.DTO.SignInDTO;
 import com.betacom.dischi.DTO.UtenteDTO;
+import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.CambiaPasswordRequest;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
@@ -71,20 +72,22 @@ public class UtenteController {
 	
 	@PostMapping("/create")
 	public ResponseBase create(@RequestBody(required = true) UtenteRequest req) {
-		ResponseBase response = new ResponseBase();
-		log.debug(req.toString());
-		try {
-			utenteService.createUser(req);
-			response.setRc(true);
+	    ResponseBase response = new ResponseBase();
+	    log.debug(req.toString());
+	    try {
+	        utenteService.createUser(req);
+	        response.setRc(true);
 	        response.setMsg("Utente creato con successo!");
-		}
-		catch(Exception e) {
-			response.setMsg(e.getMessage());
-			response.setRc(false);
-		}
-		return response;
+	    } catch (CustomException e) { 
+	        response.setRc(false);
+	        response.setMsg(e.getMessage());
+	    } catch (Exception e) {
+	        response.setRc(false);
+	        response.setMsg("Errore generico durante la creazione dell'utente: " + e.getMessage());
+	    }
+	    return response;
 	}
-	
+
 	
 
 	
