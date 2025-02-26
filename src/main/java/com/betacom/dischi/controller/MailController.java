@@ -27,7 +27,7 @@ public class MailController {
 		try {
 			mailServ.mailConfermaOrdine(request);
 			response.setMsg("Mail inviata correttamente");
-		} catch (CustomException e) {
+		} catch (Exception e) {
 			response.setRc(false);
 			response.setMsg(e.getMessage());
 		}

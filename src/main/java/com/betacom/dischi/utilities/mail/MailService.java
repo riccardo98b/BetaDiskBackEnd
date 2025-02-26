@@ -1,18 +1,28 @@
 package com.betacom.dischi.utilities.mail;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.MailRequest;
+
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.util.ByteArrayDataSource;
 
 @Service
 public class MailService {
 
 	@Autowired
     private JavaMailSender mailSender;
+	
+	@Autowired
+	private PDFGenerator pdfGenerator;
 
 //    public void sendSimpleEmail(String to, String subject, String text) {
 //        SimpleMailMessage message = new SimpleMailMessage();
@@ -22,29 +32,41 @@ public class MailService {
 //        mailSender.send(message);
 //    }
 //    
-     public void mailConfermaOrdine(MailRequest request) throws CustomException {
-    	StringBuilder text = new StringBuilder();
-    	text.append("Ciao ")
+     public void mailConfermaOrdine(MailRequest request) throws Exception {
+    	StringBuilder testo = new StringBuilder();
+    	testo.append("<h1>Ciao <strong>")
     		.append(request.getNome()).append(" ")
-    		.append(request.getCognome()).append(",\n")
-    		.append("Il tuo ordine presso BetaDisk è stato confermato! \n Ecco il riepilogo del tuo ordine: \n");
-    	request.getProdotti().forEach(prodotto -> 
-    	   text.append("- ").append(prodotto.getProdotto().getTitolo()).append(": € ")
-    	            .append(prodotto.getProdotto().getPrezzo()).append(" x ")
-    	            .append(prodotto.getQuantita()).append("\n")
-    	);
-    	text.append("Il totale del tuo ordine è: ")
+    		.append(request.getCognome()).append("</strong></h1>")
+    		.append("<p>Il tuo ordine presso BetaDisk è stato confermato!</p>")
+    		.append("<p>Il tuo ordine sarà spedito a breve.</p>")
+    		.append("<p>In allegato trovi la ricevuta del tuo ordine</p>")
+    		.append("<h3><em>Grazie dal team BetaDisk!</em></h3>");
+    	
+    	StringBuilder ricevuta = new StringBuilder();
+    	ricevuta.append("<h1>Ricevuta BetaDisk</h1>")
+    		.append("<br><br><p>Ordine del: <em>" + LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "</em></p>")
+    		.append("<br><p> Riepilogo dell'ordine: </p>")
+    		.append("<ol>");
+    		request.getProdotti().forEach(prodotto -> 
+		     	   	ricevuta.append("<li>")
+		     	   			.append(prodotto.getProdotto().getTitolo()).append(": € ")
+		     	            .append(prodotto.getProdotto().getPrezzo()).append(" x ")
+		     	            .append(prodotto.getQuantita()).append("</li>"));
+    	ricevuta.append("</ol><br>")
+    		.append("<h4>Il totale del tuo ordine è: <strong>€ ")
     		.append(request.getTotale().toString())
-    		.append("\n");
-    	text.append("Il tuo ordine sarà spedito a breve. \n");
-    	text.append("Grazie dal team BetaDisk!");
-    	 
-    	SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(request.getToEmail());
-        message.setSubject("Ordine BetaDisk confermato");
-        message.setText(text.toString());
-        //message.setFrom("betadisk@betacom.com");
-        mailSender.send(message);
+    		.append("</strong></h4>");
+
+//    	SimpleMailMessage message = new SimpleMailMessage();
+    	MimeMessage msg = mailSender.createMimeMessage();
+    	MimeMessageHelper msgHelp = new MimeMessageHelper(msg, true, "UTF-8");
+    	byte[] allegato = pdfGenerator.generatePDF(ricevuta.toString());
+    		
+        msgHelp.setTo(request.getToEmail());
+        msgHelp.setSubject("Ordine BetaDisk confermato");
+        msgHelp.setText(testo.toString(), true);
+        msgHelp.addAttachment("riepilogo.pdf", new ByteArrayDataSource(allegato, "application/pdf"));
+        mailSender.send(msg);
      }
      
      public void mailConfermaRegistrazione(MailRequest request) throws CustomException{
