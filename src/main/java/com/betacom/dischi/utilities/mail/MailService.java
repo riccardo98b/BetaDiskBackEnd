@@ -54,12 +54,28 @@ public class MailService {
     	      .append(request.getNome()).append(" ")
     	      .append(request.getCognome()).append(", \n")
     	      .append("La tua registrazione su BetaDisk è andata a buon fine! \n" )
+    	      .append("La tua password temporanea è: "+request.getPassword()+" ,ricordati di cambiarla! \n")
     	      .append("Se hai bisogno di assistenza, non esitare a contattarci.\n")
     	      .append( "Grazie per esserti registrato!"
     	      		);
     		SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(request.getToEmail());
             message.setSubject("Registrazione confermata");
+            message.setText(testo.toString());
+    	    mailSender.send(message);
+     }
+     public void mailConfermaRegistrazioneAdminNonCliente(MailRequest request) throws CustomException{
+    	 StringBuilder testo = new StringBuilder();
+    	 testo.append("Ciao, \n ")
+    	      .append("La tua registrazione come Admin su BetaDisk è andata a buon fine! \n" )
+    	      .append("Il tuo username è: "+request.getUsername()+" \n")
+    	      .append("La tua password temporanea è: "+request.getPassword()+" ,ricordati di cambiarla! \n")
+    	      .append("Se hai bisogno di assistenza, non esitare a contattarci.\n")
+    	      .append( "Grazie per esserti registrato!"
+    	      		);
+    		SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(request.getToEmail());
+            message.setSubject("Registrazione Admin  confermata");
             message.setText(testo.toString());
     	    mailSender.send(message);
      }

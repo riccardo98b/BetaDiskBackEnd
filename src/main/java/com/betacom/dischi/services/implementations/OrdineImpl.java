@@ -144,6 +144,7 @@ public class OrdineImpl implements OrdineService{
 	}
 
 	@Override
+	@Transactional
 	public List<OrdineDTO> listAll(String request) throws CustomException {
 		List<Ordine> lista = new ArrayList<Ordine>();
 		if (request == null || request == "") {

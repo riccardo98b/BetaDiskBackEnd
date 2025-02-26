@@ -143,5 +143,14 @@ public class ProdottoControllerTest {
 		ResponseBase response = prodottoController.create(req);
 		Assertions.assertThat(response.getRc()).isEqualTo(true);	
 	}
+	@Test
+	@Order(8)
+	public void createProdottoTestPerSuccessivo2(){
+		ProdottoRequest req = createProdottoGeneralRequest();
+		req.setTitolo("Among the Living2");
+		
+		ResponseBase response = prodottoController.create(req);
+		Assertions.assertThat(response.getRc()).isEqualTo(true);	
+	}
 	
 }

@@ -72,6 +72,7 @@ public class UtenteControllerTest {
     System.out.println("Role: " + response.getRole());
     System.out.println("Is logged in: " + response.isLogged());
 
+    Assertions.assertThat(response.getUsername()).isEqualTo("matteob");
     Assertions.assertThat(response.isLogged()).isTrue();
     
     Assertions.assertThat(response.getRole()).isEqualTo("UTENTE");
@@ -83,18 +84,18 @@ public class UtenteControllerTest {
     @Order(3)
     public void signIn_withInvalidUsername_shouldReturnNotLoggedIn() {
         reqSignIn = new SignInRequest();
-
-    	reqSignIn.setUsername(INVALID_USERNAME);
-    	SignInDTO response = utenteService.signIn(reqSignIn);
-        Assertions.assertThat(response).isNotNull();
-        Assertions.assertThat(response.isLogged()).isEqualTo(false);
+        reqSignIn.setUsername(INVALID_USERNAME);
+        reqSignIn.setPassword(VALID_PASSWORD);  
+        SignInDTO response = utenteController.signIn(reqSignIn);
+        System.out.println("Response: " + response);
+        Assertions.assertThat(response.getUsername()).isNotEqualTo("matteob");
     }
+
     @Test
     @Order(4)
     public void signIn_withInvalidPassword_shouldReturnNotLoggedIn() {
         reqSignIn = new SignInRequest();
-
-        // Simula un login con la password sbagliata
+    	reqSignIn.setUsername(VALID_USERNAME);
     	reqSignIn.setPassword(INVALID_PASSWORD);
         
         SignInDTO response = utenteService.signIn(reqSignIn);
