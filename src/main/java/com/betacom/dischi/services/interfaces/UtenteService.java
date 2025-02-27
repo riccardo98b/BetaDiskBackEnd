@@ -26,6 +26,8 @@ public interface UtenteService {
 	List<UtenteDTO> listPerRoles(Roles roles) throws CustomException;
 
 	void changePassword(Integer idUtente, String currentPassword, String newPassword) throws CustomException;
+
+	boolean verifyCurrentPassword(Integer id, String currentPassword) throws CustomException;
 	
 	
 }

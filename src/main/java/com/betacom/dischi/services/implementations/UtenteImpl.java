@@ -80,6 +80,7 @@ public class UtenteImpl implements UtenteService{
 
 	
 @Transactional
+@Override
 public boolean verifyCurrentPassword(Integer id, String currentPassword) throws CustomException{
 	Utente utente = utenteRepo.findById(id)
 			.orElseThrow(() -> new CustomException("Utente non trovato"));
