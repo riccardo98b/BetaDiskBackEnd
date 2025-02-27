@@ -16,6 +16,7 @@ import com.betacom.dischi.exception.CustomException;
 import com.betacom.dischi.request.CambiaPasswordRequest;
 import com.betacom.dischi.request.SignInRequest;
 import com.betacom.dischi.request.UtenteRequest;
+import com.betacom.dischi.request.VerificaPasswordRequest;
 import com.betacom.dischi.response.ResponseBase;
 import com.betacom.dischi.response.ResponseList;
 import com.betacom.dischi.response.ResponseObject;
@@ -113,6 +114,34 @@ public class UtenteController {
         return response;
     
 }
+	
+	@PostMapping("/verifyCurrentPassword")
+	public ResponseBase verifyCurrentPassword(@RequestBody(required = true) VerificaPasswordRequest req) {
+	    ResponseBase response = new ResponseBase();
+	    log.debug("Verifica della password corrente per l'utente con ID: " + req.getIdUtente());
+
+	    try {
+	        boolean isPasswordValid = utenteService.verifyCurrentPassword(req.getIdUtente(), req.getPasswordCorrente());
+	        
+	        if (isPasswordValid) {
+	            response.setRc(true);
+	            response.setMsg("La password corrente è corretta!");
+	        } else {
+	            response.setRc(false);
+	            response.setMsg("La password corrente non è corretta!");
+	        }
+	    } catch (CustomException e) {
+	        log.error("Errore durante la verifica della password corrente: ", e);
+	        response.setRc(false);
+	        response.setMsg(e.getMessage());
+	    } catch (Exception e) {
+	        log.error("Errore generico durante la verifica della password: ", e);
+	        response.setRc(false);
+	        response.setMsg("Errore durante la verifica della password corrente");
+	    }
+	    return response;
+	}
+
 	
 	@GetMapping("/listById")
 	public ResponseObject<UtenteDTO> listById(@RequestParam Integer id) {
