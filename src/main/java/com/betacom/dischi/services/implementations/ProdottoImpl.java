@@ -124,6 +124,29 @@ public class ProdottoImpl implements ProdottoService{
 		 return risultato;
 	}
 
+	@Transactional(rollbackOn = CustomException.class)
+	@Override
+	public List<ProdottoDTO> listAllVetrina(Integer pag) throws CustomException {
+		
+		List<Prodotto> listaFiltrata = prodottoRepository.findAll();
+		if(listaFiltrata.isEmpty() || listaFiltrata == null)
+			throw new CustomException(msgServ.getSysMsg("product_not_found"));
+	
+		
+		List<ProdottoDTO> risultato = listaFiltrata.stream()
+				.map(p -> buildProdottoDTO(p))
+	            .collect(Collectors.toList());  
+		int inizio = 0;
+		if (pag > 1) {
+			inizio = 12;
+		}
+		inizio = inizio * (pag-1);
+		int fine = 12 * pag;
+		if (fine > risultato.size()) {
+			fine = risultato.size();
+		}
+		 return risultato.subList(inizio,fine);
+	}
 
 	@Transactional(rollbackOn = CustomException.class)
 	@Override
