@@ -91,7 +91,7 @@ public class ProdottoController {
 	
 	
 	@GetMapping("/list-vetrina")
-	public ResponseList<ProdottoDTO> listAll1(Integer pag){
+	public ResponseList<ProdottoDTO> listAllVetrina(Integer pag){
 		ResponseList<ProdottoDTO> response = new ResponseList<ProdottoDTO>();
 		response.setRc(true);
 		try {
