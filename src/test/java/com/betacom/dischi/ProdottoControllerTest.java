@@ -411,6 +411,11 @@ public class ProdottoControllerTest {
 		Assertions.assertThat(listaFormati.getRc()).isEqualTo(true);	
 	}
 
-	
+	@Test
+	@Order(29)
+	public void vetrina() {
+		ResponseList<ProdottoDTO> vetrina = prodottoController.listAllVetrina(1);
+		Assertions.assertThat(vetrina.getRc()).isEqualTo(true);
+	}
 
 }
