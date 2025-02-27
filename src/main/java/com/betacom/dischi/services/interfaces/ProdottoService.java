@@ -19,6 +19,8 @@ public interface ProdottoService {
 	List<ProdottoDTO> listAll(Integer idProdotto, String titolo, String artista, String genere,
 			Integer annoPubblicazione) throws CustomException;
 	
+	List<ProdottoDTO> listAllVetrina(Integer pag) throws CustomException;
+	
 	List<ProdottoDTO> listPerFormato(Formato formato) throws CustomException;
 	
 	List<ProdottoDTO> topTenProdotti() throws CustomException;

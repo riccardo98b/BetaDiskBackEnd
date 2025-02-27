@@ -39,7 +39,7 @@ public class ProdottoController {
 		}catch(Exception e) {
 			response.setMsg(e.getMessage());
 			response.setRc(false);
-		}
+		} 
 		return response;
 		
 	}
@@ -81,6 +81,21 @@ public class ProdottoController {
 		response.setRc(true);
 		try {
 			response.setDati(prodottoService.listAll(idProdotto, titolo, artista, genere, annoPubblicazione));
+	
+		}catch(Exception e) {
+			response.setRc(false);
+			response.setMsg(e.getMessage());
+		}
+		return response;
+	}
+	
+	
+	@GetMapping("/list-vetrina")
+	public ResponseList<ProdottoDTO> listAll1(Integer pag){
+		ResponseList<ProdottoDTO> response = new ResponseList<ProdottoDTO>();
+		response.setRc(true);
+		try {
+			response.setDati(prodottoService.listAllVetrina(pag));
 	
 		}catch(Exception e) {
 			response.setRc(false);
