@@ -11,7 +11,7 @@ Il progetto è stato sviluppato in Java con Spring Boot e segue l'architettura R
 - 📝 **Recensioni utenti** sui prodotti acquistati
 - 💸 **Possibilità Acquisti con contrassegno**
 - 🔍 **Filtri di ricerca ** per i prodotti
-- - ❌ **Cancellazione ordini** disponibile **fino a quando l’ordine non viene spedito**
+- ❌ **Cancellazione ordini** disponibile **fino a quando l’ordine non viene spedito**
 - 💖 **Wishlist** per salvare i prodotti preferiti
 - 🛒 **Carrello** integrato con supporto alla fase di checkout
 
